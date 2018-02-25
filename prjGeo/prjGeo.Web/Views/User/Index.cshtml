@@ -1,0 +1,239 @@
+﻿@using prjGeo.Commons;
+@using prjGeo.Models.Sys;
+@using prjGeo.Models;
+@using prjGeo.Web;
+@{
+    Layout = "~/Views/Shared/_Index_Layout.cshtml";
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script> 
+    <title>@ViewBag.Title</title>
+    <style type="text/css">
+    table.gridtable {
+        font-family: verdana,arial,sans-serif;
+        font-size: 11px;
+        color: #333333;
+        border-width: 1px;
+        border-color: #666666;
+        border-collapse: collapse;
+    }
+ 
+        table.gridtable th {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #dedede;
+        }
+ 
+        table.gridtable td {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #ffffff;
+        }
+</style>
+
+
+    <script type="text/javascript">
+        var modelData=@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        $(function () {            
+            $('#UserGrid').datagrid({
+                url: '/User/GetList',
+                //width: $(window).width()-100,
+                methord: 'post',
+                height: $(window).height() -133,
+                fitColumns: false,
+                sortName: 'id',
+                sortOrder: 'desc',
+                idField: modelData.GridInfo.idField,
+                pageSize: 5,
+                pageList: [5, 10, 20, 30, 40],
+                pagination: true,
+                striped: true, //奇偶行是否区分
+                singleSelect: true,//单选模式
+                rownumbers: true,//行号
+                toolbar:'#tb',
+                columns: eval(modelData.GridInfo.ColInfo)
+                //onLoadSuccess: function (data) {   //隐藏表头的checkbox
+                //    $("#UserGrid").parent().find("div .datagrid-header-check").children("input[type=\"checkbox\"]").eq(0).attr("style", "display:none;");
+                    
+                //    if (data){
+                //        var rowData = data.rows;
+                //        $.each(rowData, function (idx, val) {
+                //            if (val.IsEnable) {
+                //                $("#UserGrid").datagrid("selectRow", idx);
+                //            }
+                //        });           
+                //    }
+                //}
+            }); 
+            InitGridSet(modelData.GridColInfo);
+        });
+     
+        function InitGridSet(json)
+        {
+            if (json==undefined) return;
+       
+            var th='';
+            $.each(json.columns, function (colIndex, col) {
+                if (col.Title!=undefined)                
+                {
+                    th+='<th style="font-size:12px; line-height:21.3px">' + col.Title + '</th>';
+                }
+            });
+            
+            $("#myTb").append("<tr>" + th + "</tr>"); 
+            //行遍历
+            $('#myTb').append('<tbody id="lstCols">')
+            $.each(json.rows, function (rowIndex, row) {
+                var tr='';
+                
+                //列遍历
+                if (row.fldType='CHK')
+                {
+                    tr+='<td><input type="checkbox" id="chksel" /></td>';
+                }
+                if (row.Title!=undefined)
+                {
+                    tr+='<td align="left" style="font-size:10px; line-height:21.3px">'+row.Title+'</td>';
+                }
+                else
+                {
+                    tr+='<td align="center" style="font-size:10px; line-height:21.3px"></td>';
+                }
+                if (row.fldName!=undefined)
+                {
+                    tr+='<td align="left" style="font-size:10px; line-height:21.3px">'+row.fldName+'</td>';
+                }
+                else
+                {
+                    tr+='<td align="center" style="font-size:10px; line-height:21.3px"></td>';
+                }
+             
+                $("#myTb").append('<tr>'+tr+'</tr>');                 
+            });
+            $('#myTb').append('</tbody>');
+
+            //$("#myTb").append('</tbody>');
+            //$("#myTb").append('<tr>');
+            //$("#myTb").append('<td></td>');
+            //$("#myTb").append('<td><input type="button" value="确定" id="btnOk" /></td>');
+            //$("#myTb").append('<td></td>');
+            //$("#myTb").append('</tr>');
+        }
+        //隐藏某列的方法：     $('#tt').datagrid('hideColumn', 'XXX');  -----其中 XXX 是隐藏列的  field 属性值
+        //展示某列的方法：     $('#tt').datagrid('showColumn', 'XXX');  -----其中 XXX 是隐藏列的  field 属性值
+        function SetGridStyle(grid)
+        {
+            var mytable = document.getElementById('myTb');
+            var data = [];
+            var cols=[];
+            var strCol="";
+            debugger
+            for(var i=1,rows=mytable.rows.length; i<rows; i++){
+                for(var j=0,cells=mytable.rows[i].cells.length; j<cells; j++){
+                    if(!data[i]){
+                        data[i] = new Array();
+                    }
+                    if (j==0)
+                    {
+                        if (document.getElementById('chksel').checked)
+                        {
+                            strCol=mytable.rows[i].cells[2].innerHTML;
+                            $("'#UserGrid").datagrid('hideColumn',''+strCol);
+                        }
+                        else
+                        {
+                            data[i][j] =0;
+                        }
+                    }
+                    else
+                    {
+                        data[i][j] = mytable.rows[i].cells[j].innerHTML;
+                    }
+                }
+            }
+            return data;
+
+
+            //var strVar='';
+            //debugger
+            //var vTable=$("#myTb");
+           
+            //var chkSel=$('lstCols').find('input:checked') ;
+            //$("#myTb").each(function (){ 
+            //   // var thisObj = this.parentNode.parentNode; 
+            //    var a = $("#myTb").children(); 
+            //    for(var i=0;i<a.length;i++){ 
+            //        if (chkSel.is('input:checked'))
+            //        {
+            //            strVar=a.eq(i).text();
+            //        }
+            //    }
+
+            //});
+           
+
+            //vgrid.datagrid('hideColumn','OrganizeName');
+        }
+
+    
+    </script>                                                                                      
+ 
+</head>
+<body>
+
+<div id="tb">
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="">添加</a>    
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true">删除</a>
+    
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" style="float:right">帮助</a>
+    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm',iconCls:'icon-edit'" style="float:right">设置</a>   
+</div>
+<div id="mm" style="width:220px;">  
+    <div style="align-content:center">
+ 
+        <label style="font-size:12px;line-height:21.3px"><b>表格列设置</b></label>
+    </div> 
+    <div class="menu-sep"></div> 
+    <table  id="myTb">
+    </table>  
+    <div class="menu-sep"></div>
+    <div style="align-items:center"><input type="button" value="确定" id="btnOk" onclick="SetGridStyle('UserGrid');"/></div>
+</div>  
+
+<div style="width:100%;height:100%;display:block;margin:-2px 0 0 -4px;">
+ <div id="cc" class="easyui-layout" fit="true">   
+     <div data-options="region:'north',title:'用户查询',split:true,border:true,iconCls:'icon-search'" style="height:100px;padding:5px 0px 0px 0px;">
+         <table cellpadding="0" cellspacing="0" style="width:100%">
+             <tr>
+                 <td style="text-align:left">
+                    <input class="easyui-textbox" style="width:200px" data-options="label:'用户编码:' labelAlign:'right'  prompt:请输入用户编码."/> 
+                    <input class="easyui-textbox" style="width:200px" data-options="label:'用户名称:' labelAlign:'right'  prompt:请输入用户名称."/> 
+                 </td> 
+                 <td></td>
+                 <td></td>
+             </tr>
+             <tr>
+                 <td style="text-align:center">
+                     <a id="btnQuery" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+                     <a id="btnClear" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete'">清空</a>
+                 </td>
+                 <td></td>
+                 <td></td>
+             </tr>
+         </table>
+     </div>  
+     <div data-options="region:'center',title:'用户信息',border:false,iconCls:'icon-user'" style="padding-top:2px;background:#eee;">  
+         <div id="UserGrid" data-options="region:'center'"></div>
+
+     </div>
+ </div>
+</div>
+</body>
+</html>

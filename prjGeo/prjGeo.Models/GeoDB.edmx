@@ -1,0 +1,422 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GeoGisModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="GeoGisModelStoreContainer">
+          <EntitySet Name="mForm" EntityType="GeoGisModel.Store.mForm" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="mGISArea" EntityType="GeoGisModel.Store.mGISArea" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="mGrid" EntityType="GeoGisModel.Store.mGrid" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="mMenu" EntityType="GeoGisModel.Store.mMenu" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="mSharp" EntityType="GeoGisModel.Store.mSharp" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="mUser" EntityType="GeoGisModel.Store.mUser" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Orders" EntityType="GeoGisModel.Store.Orders" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="mForm">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FormID" Type="int" Nullable="false" />
+          <Property Name="FormName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="FormType" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="FormDesc" Type="nvarchar" Nullable="false" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="mGISArea">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ProvinceID" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ProvinceName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ParentID" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="AreaName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="AreaCode" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="flon" Type="float" />
+          <Property Name="flat" Type="float" />
+          <Property Name="IsLeef" Type="int" Nullable="false" />
+          <Property Name="IsVisible" Type="int" Nullable="false" />
+          <Property Name="SetMarkerCnt" Type="int" Nullable="false" />
+          <Property Name="SetPloyGonCnt" Type="int" Nullable="false" />
+          <Property Name="SetCircleCnt" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mGrid">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="FormID" Type="int" Nullable="false" />
+          <Property Name="SeqNo" Type="int" Nullable="false" />
+          <Property Name="ColName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ColWidth" Type="int" Nullable="false" />
+          <Property Name="ColAlign" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ColTitle" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="ColRowspan" Type="int" Nullable="false" />
+          <Property Name="Colhidden" Type="bit" Nullable="false" />
+          <Property Name="ColField" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="ColEditor" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="isSum" Type="bit" Nullable="false" />
+          <Property Name="isAvg" Type="bit" Nullable="false" />
+          <Property Name="isMax" Type="bit" Nullable="false" />
+          <Property Name="isMin" Type="bit" Nullable="false" />
+          <Property Name="isSort" Type="bit" Nullable="false" />
+          <Property Name="isUsed" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mMenu">
+          <Key>
+            <PropertyRef Name="MenuID" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="MenuID" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ParentID" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="MenuName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="mURL" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="IsLeef" Type="int" Nullable="false" />
+          <Property Name="IconClass" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="MenuDesc" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="MenuSeqNo" Type="int" Nullable="false" />
+          <Property Name="IsVisible" Type="int" Nullable="false" />
+          <Property Name="mState" Type="int" Nullable="false" />
+          <Property Name="mChecked" Type="int" Nullable="false" />
+          <Property Name="RightFlag" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mSharp">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="SharpID" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="SharpName" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="flat" Type="float" Nullable="false" />
+          <Property Name="flon" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mUser">
+          <Key>
+            <PropertyRef Name="UserCode" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserCode" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="DeptName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="UserSeq" Type="varchar" MaxLength="10" />
+          <Property Name="UserName" Type="varchar" MaxLength="200" />
+          <Property Name="Description" Type="varchar" MaxLength="2048" />
+          <Property Name="Password" Type="varchar" MaxLength="40" />
+          <Property Name="RoleName" Type="varchar" MaxLength="1000" />
+          <Property Name="OrganizeName" Type="varchar" MaxLength="1000" />
+          <Property Name="ConfigJSON" Type="nvarchar" />
+          <Property Name="IsEnable" Type="bit" />
+          <Property Name="LoginCount" Type="int" />
+          <Property Name="LastLoginDate" Type="datetime" />
+          <Property Name="CreatePerson" Type="varchar" MaxLength="20" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="UpdatePerson" Type="varchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerID" Type="nchar" MaxLength="5" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="OrderDate" Type="datetime" />
+          <Property Name="RequiredDate" Type="datetime" />
+          <Property Name="ShippedDate" Type="datetime" />
+          <Property Name="ShipVia" Type="int" />
+          <Property Name="Freight" Type="money" />
+          <Property Name="ShipName" Type="nvarchar" MaxLength="40" />
+          <Property Name="ShipAddress" Type="nvarchar" MaxLength="60" />
+          <Property Name="ShipCity" Type="nvarchar" MaxLength="15" />
+          <Property Name="ShipRegion" Type="nvarchar" MaxLength="15" />
+          <Property Name="ShipPostalCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="ShipCountry" Type="nvarchar" MaxLength="15" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GeoGisModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="GeoGisEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="mForm" EntityType="GeoGisModel.mForm" />
+          <EntitySet Name="mGISArea" EntityType="GeoGisModel.mGISArea" />
+          <EntitySet Name="mMenu" EntityType="GeoGisModel.mMenu" />
+          <EntitySet Name="mSharp" EntityType="GeoGisModel.mSharp" />
+          <EntitySet Name="mUser" EntityType="GeoGisModel.mUser" />
+          <EntitySet Name="Orders" EntityType="GeoGisModel.Orders" />
+          <EntitySet Name="mGrid" EntityType="GeoGisModel.mGrid" />
+        </EntityContainer>
+        <EntityType Name="mForm">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="FormID" Type="Int32" Nullable="false" />
+          <Property Name="FormName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="FormType" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="FormDesc" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="mGISArea">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ProvinceID" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="ProvinceName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="ParentID" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="AreaName" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="AreaCode" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="flon" Type="Double" />
+          <Property Name="flat" Type="Double" />
+          <Property Name="IsLeef" Type="Int32" Nullable="false" />
+          <Property Name="IsVisible" Type="Int32" Nullable="false" />
+          <Property Name="SetMarkerCnt" Type="Int32" Nullable="false" />
+          <Property Name="SetPloyGonCnt" Type="Int32" Nullable="false" />
+          <Property Name="SetCircleCnt" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mMenu">
+          <Key>
+            <PropertyRef Name="MenuID" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuID" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="ParentID" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="MenuName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="mURL" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="IsLeef" Type="Int32" Nullable="false" />
+          <Property Name="IconClass" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="MenuDesc" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="MenuSeqNo" Type="Int32" Nullable="false" />
+          <Property Name="IsVisible" Type="Int32" Nullable="false" />
+          <Property Name="mState" Type="Int32" Nullable="false" />
+          <Property Name="mChecked" Type="Int32" Nullable="false" />
+          <Property Name="RightFlag" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mSharp">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="SharpID" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="SharpName" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="flat" Type="Double" Nullable="false" />
+          <Property Name="flon" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mUser">
+          <Key>
+            <PropertyRef Name="UserCode" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="UserCode" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="DeptName" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="UserSeq" Type="String" MaxLength="10" Unicode="false" FixedLength="false" />
+          <Property Name="UserName" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="2048" Unicode="false" FixedLength="false" />
+          <Property Name="Password" Type="String" MaxLength="40" Unicode="false" FixedLength="false" />
+          <Property Name="RoleName" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <Property Name="OrganizeName" Type="String" MaxLength="1000" Unicode="false" FixedLength="false" />
+          <Property Name="ConfigJSON" Type="String" MaxLength="4000" Unicode="true" FixedLength="false" />
+          <Property Name="IsEnable" Type="Boolean" />
+          <Property Name="LoginCount" Type="Int32" />
+          <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatePerson" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatePerson" Type="String" MaxLength="20" Unicode="false" FixedLength="false" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerID" Type="String" MaxLength="5" Unicode="true" FixedLength="true" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="OrderDate" Type="DateTime" Precision="3" />
+          <Property Name="RequiredDate" Type="DateTime" Precision="3" />
+          <Property Name="ShippedDate" Type="DateTime" Precision="3" />
+          <Property Name="ShipVia" Type="Int32" />
+          <Property Name="Freight" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ShipName" Type="String" MaxLength="40" Unicode="true" FixedLength="false" />
+          <Property Name="ShipAddress" Type="String" MaxLength="60" Unicode="true" FixedLength="false" />
+          <Property Name="ShipCity" Type="String" MaxLength="15" Unicode="true" FixedLength="false" />
+          <Property Name="ShipRegion" Type="String" MaxLength="15" Unicode="true" FixedLength="false" />
+          <Property Name="ShipPostalCode" Type="String" MaxLength="10" Unicode="true" FixedLength="false" />
+          <Property Name="ShipCountry" Type="String" MaxLength="15" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="mGrid">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="FormID" Nullable="false" />
+          <Property Type="Int32" Name="SeqNo" Nullable="false" />
+          <Property Type="String" Name="ColName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ColWidth" Nullable="false" />
+          <Property Type="String" Name="ColAlign" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ColTitle" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ColRowspan" Nullable="false" />
+          <Property Type="Boolean" Name="Colhidden" Nullable="false" />
+          <Property Type="String" Name="ColField" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ColEditor" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="isSum" Nullable="false" />
+          <Property Type="Boolean" Name="isAvg" Nullable="false" />
+          <Property Type="Boolean" Name="isMax" Nullable="false" />
+          <Property Type="Boolean" Name="isMin" Nullable="false" />
+          <Property Type="Boolean" Name="isSort" Nullable="false" />
+          <Property Type="Boolean" Name="isUsed" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GeoGisModelStoreContainer" CdmEntityContainer="GeoGisEntities">
+          <EntitySetMapping Name="mForm">
+            <EntityTypeMapping TypeName="GeoGisModel.mForm">
+              <MappingFragment StoreEntitySet="mForm">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="FormID" ColumnName="FormID" />
+                <ScalarProperty Name="FormName" ColumnName="FormName" />
+                <ScalarProperty Name="FormType" ColumnName="FormType" />
+                <ScalarProperty Name="FormDesc" ColumnName="FormDesc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mGISArea">
+            <EntityTypeMapping TypeName="GeoGisModel.mGISArea">
+              <MappingFragment StoreEntitySet="mGISArea">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+                <ScalarProperty Name="ProvinceName" ColumnName="ProvinceName" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="AreaName" ColumnName="AreaName" />
+                <ScalarProperty Name="AreaCode" ColumnName="AreaCode" />
+                <ScalarProperty Name="flon" ColumnName="flon" />
+                <ScalarProperty Name="flat" ColumnName="flat" />
+                <ScalarProperty Name="IsLeef" ColumnName="IsLeef" />
+                <ScalarProperty Name="IsVisible" ColumnName="IsVisible" />
+                <ScalarProperty Name="SetMarkerCnt" ColumnName="SetMarkerCnt" />
+                <ScalarProperty Name="SetPloyGonCnt" ColumnName="SetPloyGonCnt" />
+                <ScalarProperty Name="SetCircleCnt" ColumnName="SetCircleCnt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mMenu">
+            <EntityTypeMapping TypeName="GeoGisModel.mMenu">
+              <MappingFragment StoreEntitySet="mMenu">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="MenuID" ColumnName="MenuID" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+                <ScalarProperty Name="mURL" ColumnName="mURL" />
+                <ScalarProperty Name="IsLeef" ColumnName="IsLeef" />
+                <ScalarProperty Name="IconClass" ColumnName="IconClass" />
+                <ScalarProperty Name="MenuDesc" ColumnName="MenuDesc" />
+                <ScalarProperty Name="MenuSeqNo" ColumnName="MenuSeqNo" />
+                <ScalarProperty Name="IsVisible" ColumnName="IsVisible" />
+                <ScalarProperty Name="mState" ColumnName="mState" />
+                <ScalarProperty Name="mChecked" ColumnName="mChecked" />
+                <ScalarProperty Name="RightFlag" ColumnName="RightFlag" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mSharp">
+            <EntityTypeMapping TypeName="GeoGisModel.mSharp">
+              <MappingFragment StoreEntitySet="mSharp">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="SharpID" ColumnName="SharpID" />
+                <ScalarProperty Name="SharpName" ColumnName="SharpName" />
+                <ScalarProperty Name="flat" ColumnName="flat" />
+                <ScalarProperty Name="flon" ColumnName="flon" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mUser">
+            <EntityTypeMapping TypeName="GeoGisModel.mUser">
+              <MappingFragment StoreEntitySet="mUser">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="UserCode" ColumnName="UserCode" />
+                <ScalarProperty Name="DeptName" ColumnName="DeptName" />
+                <ScalarProperty Name="UserSeq" ColumnName="UserSeq" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="OrganizeName" ColumnName="OrganizeName" />
+                <ScalarProperty Name="ConfigJSON" ColumnName="ConfigJSON" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="LoginCount" ColumnName="LoginCount" />
+                <ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
+                <ScalarProperty Name="CreatePerson" ColumnName="CreatePerson" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="UpdatePerson" ColumnName="UpdatePerson" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="GeoGisModel.Orders">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="RequiredDate" ColumnName="RequiredDate" />
+                <ScalarProperty Name="ShippedDate" ColumnName="ShippedDate" />
+                <ScalarProperty Name="ShipVia" ColumnName="ShipVia" />
+                <ScalarProperty Name="Freight" ColumnName="Freight" />
+                <ScalarProperty Name="ShipName" ColumnName="ShipName" />
+                <ScalarProperty Name="ShipAddress" ColumnName="ShipAddress" />
+                <ScalarProperty Name="ShipCity" ColumnName="ShipCity" />
+                <ScalarProperty Name="ShipRegion" ColumnName="ShipRegion" />
+                <ScalarProperty Name="ShipPostalCode" ColumnName="ShipPostalCode" />
+                <ScalarProperty Name="ShipCountry" ColumnName="ShipCountry" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mGrid">
+            <EntityTypeMapping TypeName="GeoGisModel.mGrid">
+              <MappingFragment StoreEntitySet="mGrid">
+                <ScalarProperty Name="isUsed" ColumnName="isUsed" />
+                <ScalarProperty Name="isSort" ColumnName="isSort" />
+                <ScalarProperty Name="isMin" ColumnName="isMin" />
+                <ScalarProperty Name="isMax" ColumnName="isMax" />
+                <ScalarProperty Name="isAvg" ColumnName="isAvg" />
+                <ScalarProperty Name="isSum" ColumnName="isSum" />
+                <ScalarProperty Name="ColEditor" ColumnName="ColEditor" />
+                <ScalarProperty Name="ColField" ColumnName="ColField" />
+                <ScalarProperty Name="Colhidden" ColumnName="Colhidden" />
+                <ScalarProperty Name="ColRowspan" ColumnName="ColRowspan" />
+                <ScalarProperty Name="ColTitle" ColumnName="ColTitle" />
+                <ScalarProperty Name="ColAlign" ColumnName="ColAlign" />
+                <ScalarProperty Name="ColWidth" ColumnName="ColWidth" />
+                <ScalarProperty Name="ColName" ColumnName="ColName" />
+                <ScalarProperty Name="SeqNo" ColumnName="SeqNo" />
+                <ScalarProperty Name="FormID" ColumnName="FormID" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
