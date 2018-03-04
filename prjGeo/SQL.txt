@@ -1,0 +1,6 @@
+2018.3.4
+
+set identity_insert mMenu on
+insert into mMenu (id,MenuID,ParentID,MenuName,mURL,IsLeef,IconClass,MenuDesc,MenuSeqNo,IsVisible,mState,mChecked,RightFlag)
+ values (10,'010108','0101','Cwzz_kmlManage','/KML/Index',1,'','KMLπ‹¿Ì',0,1,1,0,1)
+

@@ -58,6 +58,7 @@
     <Compile Include="Core\BaseBLL.cs" />
     <Compile Include="mAreaBLL.cs" />
     <Compile Include="mElementBLL.cs" />
+    <Compile Include="mKmlBLL.cs" />
     <Compile Include="mMenuBLL.cs" />
     <Compile Include="mUsersBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

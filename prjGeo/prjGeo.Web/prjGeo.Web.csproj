@@ -2695,6 +2695,7 @@
     <Content Include="Views\Shared\_Index_Layout.cshtml" />
     <Content Include="Views\mArea\Index.cshtml" />
     <Content Include="Views\mElement\Index.cshtml" />
+    <Content Include="Views\KML\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

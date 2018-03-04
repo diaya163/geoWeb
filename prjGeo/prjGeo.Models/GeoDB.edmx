@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="GeoGisModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="GeoGisModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="mArea">
           <Key>
             <PropertyRef Name="id" />
@@ -12,7 +12,7 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Ccode" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Memo" Type="nvarchar" MaxLength="100" Nullable="false" />
-          <Property Name="Remarks" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="mElement">
           <Key>
@@ -92,6 +92,22 @@
           <Property Name="isSort" Type="bit" Nullable="false" />
           <Property Name="isUsed" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="mKml">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="provinceName" Type="nvarchar" MaxLength="50" />
+          <Property Name="cityName" Type="nvarchar" MaxLength="50" />
+          <Property Name="countyName" Type="nvarchar" MaxLength="100" />
+          <Property Name="longitude" Type="numeric" Precision="12" Scale="8" />
+          <Property Name="latitude" Type="numeric" Precision="12" Scale="8" />
+          <Property Name="isVisible" Type="int" />
+          <Property Name="kmlPath" Type="nvarchar" MaxLength="500" />
+          <Property Name="layerName" Type="nvarchar" MaxLength="100" />
+          <Property Name="villageName" Type="nvarchar" MaxLength="100" />
+          <Property Name="layerOrder" Type="int" />
+        </EntityType>
         <EntityType Name="mMenu">
           <Key>
             <PropertyRef Name="MenuID" />
@@ -167,6 +183,7 @@
           <EntitySet Name="mForm" EntityType="Self.mForm" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mGISArea" EntityType="Self.mGISArea" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mGrid" EntityType="Self.mGrid" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mKml" EntityType="Self.mKml" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mMenu" EntityType="Self.mMenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mSharp" EntityType="Self.mSharp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mUser" EntityType="Self.mUser" Schema="dbo" store:Type="Tables" />
@@ -186,6 +203,7 @@
           <EntitySet Name="mGrid" EntityType="GeoGisModel.mGrid" />
           <EntitySet Name="mArea" EntityType="GeoGisModel.mArea" />
           <EntitySet Name="mElement" EntityType="GeoGisModel.mElement" />
+          <EntitySet Name="mKml" EntityType="GeoGisModel.mKml" />
         </EntityContainer>
         <EntityType Name="mForm">
           <Key>
@@ -313,7 +331,7 @@
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Ccode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Memo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Remarks" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="mElement">
           <Key>
@@ -342,6 +360,22 @@
           <Property Name="Property15" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Attachment" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="mKml">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="provinceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="cityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="countyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="longitude" Type="Decimal" Precision="12" Scale="8" />
+          <Property Name="latitude" Type="Decimal" Precision="12" Scale="8" />
+          <Property Name="isVisible" Type="Int32" />
+          <Property Name="kmlPath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="layerName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="villageName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="layerOrder" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -510,6 +544,23 @@
                 <ScalarProperty Name="UnitSymbol" ColumnName="UnitSymbol" />
                 <ScalarProperty Name="ElementName" ColumnName="ElementName" />
                 <ScalarProperty Name="ElementSymbol" ColumnName="ElementSymbol" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mKml">
+            <EntityTypeMapping TypeName="GeoGisModel.mKml">
+              <MappingFragment StoreEntitySet="mKml">
+                <ScalarProperty Name="layerOrder" ColumnName="layerOrder" />
+                <ScalarProperty Name="villageName" ColumnName="villageName" />
+                <ScalarProperty Name="layerName" ColumnName="layerName" />
+                <ScalarProperty Name="kmlPath" ColumnName="kmlPath" />
+                <ScalarProperty Name="isVisible" ColumnName="isVisible" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="countyName" ColumnName="countyName" />
+                <ScalarProperty Name="cityName" ColumnName="cityName" />
+                <ScalarProperty Name="provinceName" ColumnName="provinceName" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
