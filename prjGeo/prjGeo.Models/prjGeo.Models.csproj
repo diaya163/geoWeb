@@ -62,6 +62,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>GeoDB.edmx</DependentUpon>
     </Compile>
+    <Compile Include="mArea.cs">
+      <DependentUpon>GeoDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="mElement.cs">
+      <DependentUpon>GeoDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="mForm.cs">
       <DependentUpon>GeoDB.tt</DependentUpon>
     </Compile>

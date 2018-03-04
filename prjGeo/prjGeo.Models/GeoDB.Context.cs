@@ -32,5 +32,7 @@ namespace prjGeo.Models
         public DbSet<mUser> mUser { get; set; }
         public DbSet<Orders> Orders { get; set; }
         public DbSet<mGrid> mGrid { get; set; }
+        public DbSet<mArea> mArea { get; set; }
+        public DbSet<mElement> mElement { get; set; }
     }
 }

@@ -4,36 +4,64 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="GeoGisModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityContainer Name="GeoGisModelStoreContainer">
-          <EntitySet Name="mForm" EntityType="GeoGisModel.Store.mForm" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="mGISArea" EntityType="GeoGisModel.Store.mGISArea" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="mGrid" EntityType="GeoGisModel.Store.mGrid" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="mMenu" EntityType="GeoGisModel.Store.mMenu" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="mSharp" EntityType="GeoGisModel.Store.mSharp" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="mUser" EntityType="GeoGisModel.Store.mUser" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Orders" EntityType="GeoGisModel.Store.Orders" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="GeoGisModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="mArea">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ccode" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Memo" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mElement">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ElementSymbol" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ElementName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="UnitSymbol" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ElementUnit" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Decimals" Type="int" Nullable="false" />
+          <Property Name="Property1" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property2" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property3" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property4" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property5" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property6" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property7" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property8" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property9" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property10" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property11" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property12" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property13" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property14" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Property15" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Attachment" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="500" Nullable="false" />
+        </EntityType>
         <EntityType Name="mForm">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FormID" Type="int" Nullable="false" />
-          <Property Name="FormName" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="FormType" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="FormDesc" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="FormName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FormType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="FormDesc" Type="nvarchar" MaxLength="200" Nullable="false" />
         </EntityType>
         <EntityType Name="mGISArea">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="ProvinceID" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="ProvinceName" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="ParentID" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="AreaName" Type="nvarchar" Nullable="false" MaxLength="100" />
-          <Property Name="AreaCode" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProvinceID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProvinceName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ParentID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AreaName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="AreaCode" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="flon" Type="float" />
           <Property Name="flat" Type="float" />
           <Property Name="IsLeef" Type="int" Nullable="false" />
@@ -46,17 +74,17 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="FormID" Type="int" Nullable="false" />
           <Property Name="SeqNo" Type="int" Nullable="false" />
-          <Property Name="ColName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="ColName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ColWidth" Type="int" Nullable="false" />
-          <Property Name="ColAlign" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="ColTitle" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="ColAlign" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ColTitle" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="ColRowspan" Type="int" Nullable="false" />
           <Property Name="Colhidden" Type="bit" Nullable="false" />
-          <Property Name="ColField" Type="nvarchar" Nullable="false" MaxLength="100" />
-          <Property Name="ColEditor" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="ColField" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ColEditor" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="isSum" Type="bit" Nullable="false" />
           <Property Name="isAvg" Type="bit" Nullable="false" />
           <Property Name="isMax" Type="bit" Nullable="false" />
@@ -68,14 +96,14 @@
           <Key>
             <PropertyRef Name="MenuID" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="MenuID" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="ParentID" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="MenuName" Type="nvarchar" Nullable="false" MaxLength="50" />
-          <Property Name="mURL" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenuID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ParentID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MenuName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="mURL" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="IsLeef" Type="int" Nullable="false" />
-          <Property Name="IconClass" Type="nvarchar" Nullable="false" MaxLength="100" />
-          <Property Name="MenuDesc" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="IconClass" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="MenuDesc" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="MenuSeqNo" Type="int" Nullable="false" />
           <Property Name="IsVisible" Type="int" Nullable="false" />
           <Property Name="mState" Type="int" Nullable="false" />
@@ -86,9 +114,9 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="SharpID" Type="nvarchar" Nullable="false" MaxLength="100" />
-          <Property Name="SharpName" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SharpID" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="SharpName" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="flat" Type="float" Nullable="false" />
           <Property Name="flon" Type="float" Nullable="false" />
         </EntityType>
@@ -96,16 +124,16 @@
           <Key>
             <PropertyRef Name="UserCode" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="UserCode" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="DeptName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserCode" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DeptName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="UserSeq" Type="varchar" MaxLength="10" />
           <Property Name="UserName" Type="varchar" MaxLength="200" />
           <Property Name="Description" Type="varchar" MaxLength="2048" />
           <Property Name="Password" Type="varchar" MaxLength="40" />
           <Property Name="RoleName" Type="varchar" MaxLength="1000" />
           <Property Name="OrganizeName" Type="varchar" MaxLength="1000" />
-          <Property Name="ConfigJSON" Type="nvarchar" />
+          <Property Name="ConfigJSON" Type="nvarchar" MaxLength="4000" />
           <Property Name="IsEnable" Type="bit" />
           <Property Name="LoginCount" Type="int" />
           <Property Name="LastLoginDate" Type="datetime" />
@@ -118,7 +146,7 @@
           <Key>
             <PropertyRef Name="OrderID" />
           </Key>
-          <Property Name="OrderID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="OrderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CustomerID" Type="nchar" MaxLength="5" />
           <Property Name="EmployeeID" Type="int" />
           <Property Name="OrderDate" Type="datetime" />
@@ -133,6 +161,17 @@
           <Property Name="ShipPostalCode" Type="nvarchar" MaxLength="10" />
           <Property Name="ShipCountry" Type="nvarchar" MaxLength="15" />
         </EntityType>
+        <EntityContainer Name="GeoGisModelStoreContainer">
+          <EntitySet Name="mArea" EntityType="Self.mArea" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mElement" EntityType="Self.mElement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mForm" EntityType="Self.mForm" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mGISArea" EntityType="Self.mGISArea" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mGrid" EntityType="Self.mGrid" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mMenu" EntityType="Self.mMenu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mSharp" EntityType="Self.mSharp" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mUser" EntityType="Self.mUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -145,6 +184,8 @@
           <EntitySet Name="mUser" EntityType="GeoGisModel.mUser" />
           <EntitySet Name="Orders" EntityType="GeoGisModel.Orders" />
           <EntitySet Name="mGrid" EntityType="GeoGisModel.mGrid" />
+          <EntitySet Name="mArea" EntityType="GeoGisModel.mArea" />
+          <EntitySet Name="mElement" EntityType="GeoGisModel.mElement" />
         </EntityContainer>
         <EntityType Name="mForm">
           <Key>
@@ -264,6 +305,43 @@
           <Property Type="Boolean" Name="isMin" Nullable="false" />
           <Property Type="Boolean" Name="isSort" Nullable="false" />
           <Property Type="Boolean" Name="isUsed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mArea">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ccode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Memo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="mElement">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ElementSymbol" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ElementName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UnitSymbol" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ElementUnit" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Decimals" Type="Int32" Nullable="false" />
+          <Property Name="Property1" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property2" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property3" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property4" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property5" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property6" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property7" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property8" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property9" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property10" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property11" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property12" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property13" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property14" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Property15" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Attachment" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -397,6 +475,45 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="mArea">
+            <EntityTypeMapping TypeName="GeoGisModel.mArea">
+              <MappingFragment StoreEntitySet="mArea">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="Ccode" ColumnName="Ccode" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mElement">
+            <EntityTypeMapping TypeName="GeoGisModel.mElement">
+              <MappingFragment StoreEntitySet="mElement">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Attachment" ColumnName="Attachment" />
+                <ScalarProperty Name="Property15" ColumnName="Property15" />
+                <ScalarProperty Name="Property14" ColumnName="Property14" />
+                <ScalarProperty Name="Property13" ColumnName="Property13" />
+                <ScalarProperty Name="Property12" ColumnName="Property12" />
+                <ScalarProperty Name="Property11" ColumnName="Property11" />
+                <ScalarProperty Name="Property10" ColumnName="Property10" />
+                <ScalarProperty Name="Property9" ColumnName="Property9" />
+                <ScalarProperty Name="Property8" ColumnName="Property8" />
+                <ScalarProperty Name="Property7" ColumnName="Property7" />
+                <ScalarProperty Name="Property6" ColumnName="Property6" />
+                <ScalarProperty Name="Property5" ColumnName="Property5" />
+                <ScalarProperty Name="Property4" ColumnName="Property4" />
+                <ScalarProperty Name="Property3" ColumnName="Property3" />
+                <ScalarProperty Name="Property2" ColumnName="Property2" />
+                <ScalarProperty Name="Property1" ColumnName="Property1" />
+                <ScalarProperty Name="Decimals" ColumnName="Decimals" />
+                <ScalarProperty Name="ElementUnit" ColumnName="ElementUnit" />
+                <ScalarProperty Name="UnitSymbol" ColumnName="UnitSymbol" />
+                <ScalarProperty Name="ElementName" ColumnName="ElementName" />
+                <ScalarProperty Name="ElementSymbol" ColumnName="ElementSymbol" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -414,6 +531,7 @@
         <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

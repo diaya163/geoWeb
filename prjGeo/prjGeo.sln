@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prjGeo.Web", "prjGeo.Web\prjGeo.Web.csproj", "{A42F8269-B63A-4835-88B2-A73DE2FBA777}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "prjGeo.BLL", "prjGeo.BLL", "{D1BD46F3-B1D3-416C-8C15-5E249A84C124}"
@@ -14,8 +16,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prjGeo.Commons", "prjGeo.Commons\prjGeo.Commons.csproj", "{16BE27B1-F82B-43D2-91D3-570E7078D2EA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prjGeo.BLL", "prjGeo.BLL\prjGeo.BLL.csproj", "{7E578C0F-7AB8-488E-894B-640CB55B1A4A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{16BE27B1-F82B-43D2-91D3-570E7078D2EA} = {16BE27B1-F82B-43D2-91D3-570E7078D2EA}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prjGeo.DAL", "prjGeo.DAL\prjGeo.DAL.csproj", "{CAF9537E-138D-49F6-BA5A-C732978FB3DC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E9CEEEB5-C241-4049-83CE-3B3E47CD5689} = {E9CEEEB5-C241-4049-83CE-3B3E47CD5689}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prjGeo.Models", "prjGeo.Models\prjGeo.Models.csproj", "{E9CEEEB5-C241-4049-83CE-3B3E47CD5689}"
 EndProject

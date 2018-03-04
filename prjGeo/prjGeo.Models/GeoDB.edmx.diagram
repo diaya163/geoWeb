@@ -12,6 +12,8 @@
         <EntityTypeShape EntityType="GeoGisModel.mUser" Width="1.5" PointX="4.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="GeoGisModel.Orders" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="GeoGisModel.mGrid" Width="1.5" PointX="4.625" PointY="0.5" />
+        <EntityTypeShape EntityType="GeoGisModel.mArea" Width="1.5" PointX="6.375" PointY="4.625" />
+        <EntityTypeShape EntityType="GeoGisModel.mElement" Width="1.5" PointX="6.375" PointY="6.375" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

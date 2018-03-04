@@ -40,13 +40,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="prjGeo.BLL">
-      <HintPath>..\prjGeo.BLL\bin\Debug\prjGeo.BLL.dll</HintPath>
-    </Reference>
-    <Reference Include="prjGeo.Commons, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\prjGeo.Commons\bin\Debug\prjGeo.Commons.dll</HintPath>
-    </Reference>
     <Reference Include="prjGeo.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\prjGeo.Models\bin\Debug\prjGeo.Models.dll</HintPath>
@@ -143,6 +136,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KMLController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\mAreaController.cs" />
+    <Compile Include="Controllers\mElementController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -2670,6 +2665,7 @@
     <Content Include="Scripts\jquery-easyui-portal\portal.html" />
     <Content Include="Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
+    <Content Include="Scripts\jquery.json-2.4.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -2697,6 +2693,8 @@
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\Shared\_Index_Layout.cshtml" />
+    <Content Include="Views\mArea\Index.cshtml" />
+    <Content Include="Views\mElement\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2707,6 +2705,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\prjGeo.BLL\prjGeo.BLL.csproj">
+      <Project>{7e578c0f-7ab8-488e-894b-640cb55b1a4a}</Project>
+      <Name>prjGeo.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\prjGeo.Commons\prjGeo.Commons.csproj">
+      <Project>{16be27b1-f82b-43d2-91d3-570e7078d2ea}</Project>
+      <Name>prjGeo.Commons</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

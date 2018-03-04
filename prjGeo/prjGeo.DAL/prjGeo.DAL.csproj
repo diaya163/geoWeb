@@ -30,9 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper">
+      <HintPath>..\DLL\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Esquel.Utility">
+      <HintPath>..\DLL\Esquel.Utility.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -53,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\EntityObject.cs" />
+    <Compile Include="mAreaDAL.cs" />
+    <Compile Include="mElementDAL.cs" />
     <Compile Include="menuDAL.cs" />
     <Compile Include="mUsersDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

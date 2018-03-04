@@ -24,7 +24,7 @@ namespace prjGeo.DAL
         public IEnumerable<mMenu> GetListforSQL(GeoGisEntities db)
         {
             DbContext con = (DbContext)(db as IObjectContextAdapter);
-            IEnumerable<mMenu> list = con.Database.SqlQuery<mMenu>("select * from mMenu order by id").ToList();
+            IEnumerable<mMenu> list = con.Database.SqlQuery<mMenu>("select * from mMenu where IsVisible=1 order by id").ToList();
 
             return list;
         }
@@ -33,11 +33,11 @@ namespace prjGeo.DAL
             string strSQL = string.Empty;
             if (id == "0")
             {
-                strSQL = "select * from mMenu  where  ParentID='" + id.Trim() + "'  order by MenuID ";
+                strSQL = "select * from mMenu  where  ParentID='" + id.Trim() + "'  and IsVisible=1 order by MenuID ";
             }
             else
             {
-                 strSQL = string.Format("select * from mMenu  where MenuID<>'{0}' and ParentID = '{0}' order by MenuID ", id.Trim());
+                strSQL = string.Format("select * from mMenu  where MenuID<>'{0}' and ParentID = '{0}' and IsVisible=1 order by MenuID ", id.Trim());
             }
             DbContext con = (DbContext)(db as IObjectContextAdapter);
             IEnumerable<mMenu> list = con.Database.SqlQuery<mMenu>(strSQL).ToList();
@@ -49,11 +49,11 @@ namespace prjGeo.DAL
             string strSQL = string.Empty;
             if (id == "0")
             {
-                strSQL = "select * from mMenu  where  ParentID='" + id.Trim() + "'  order by MenuID ";
+                strSQL = "select * from mMenu  where  ParentID='" + id.Trim() + "' and IsVisible=1 order by MenuID ";
             }
             else
-            {               
-                strSQL = string.Format("select * from mMenu  where MenuID<>'{0}' and ParentID = '{0}' order by MenuID ", id.Trim());
+            {
+                strSQL = string.Format("select * from mMenu  where MenuID<>'{0}' and ParentID = '{0}' and IsVisible=1 order by MenuID ", id.Trim());
             }
             DbContext con = (DbContext)(db as IObjectContextAdapter);
             List<mMenu> list = con.Database.SqlQuery<mMenu>(strSQL).ToList();
