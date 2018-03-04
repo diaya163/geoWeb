@@ -1,0 +1,521 @@
+﻿@using prjGeo.Commons;
+@using prjGeo.Models.Sys;
+@using prjGeo.Models;
+@using prjGeo.Web;
+@{
+    Layout = "~/Views/Shared/_Index_Layout.cshtml";
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
+    <title>@ViewBag.Title</title>
+    <style type="text/css">
+        table.gridtable {
+            font-family: verdana,arial,sans-serif;
+            font-size: 11px;
+            color: #333333;
+            border-width: 1px;
+            border-color: #666666;
+            border-collapse: collapse;
+        }
+
+            table.gridtable th {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #dedede;
+            }
+
+            table.gridtable td {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #ffffff;
+            }
+    </style>
+
+
+    <script type="text/javascript">
+        var modelData=@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        $(function () {
+            $('#mElementGrid').datagrid({
+                url: '/mElement/GetList',
+                //width: $(window).width()-100,
+                methord: 'post',
+                height: $(window).height() -3,
+                fitColumns: false,
+                sortName: 'id',
+                sortOrder: 'desc',
+                idField: modelData.GridInfo.idField,
+                pageSize: 10,
+                pageList: [ 10, 20, 30, 40],
+                pagination: true,
+                striped: true, //奇偶行是否区分
+                singleSelect: true,//单选模式
+                rownumbers: true,//行号
+                toolbar:'#tb',
+                columns: eval(modelData.GridInfo.ColInfo)
+                //onLoadSuccess: function (data) {   //隐藏表头的checkbox
+                //    $("#UserGrid").parent().find("div .datagrid-header-check").children("input[type=\"checkbox\"]").eq(0).attr("style", "display:none;");
+
+                //    if (data){
+                //        var rowData = data.rows;
+                //        $.each(rowData, function (idx, val) {
+                //            if (val.IsEnable) {
+                //                $("#UserGrid").datagrid("selectRow", idx);
+                //            }
+                //        });
+                //    }
+                //}
+            });
+            InitGridSet(modelData.GridColInfo);
+        });
+
+        function InitGridSet(json)
+        {
+            if (json==undefined) return;
+
+            var th='';
+            $.each(json.columns, function (colIndex, col) {
+                if (col.Title!=undefined)
+                {
+                    th+='<th style="font-size:12px; line-height:21.3px">' + col.Title + '</th>';
+                }
+            });
+
+            $("#myTb").append("<tr>" + th + "</tr>");
+            //行遍历
+            $('#myTb').append('<tbody id="lstCols">')
+            $.each(json.rows, function (rowIndex, row) {
+                var tr='';
+
+                //列遍历
+                if (row.fldType='CHK')
+                {
+                    tr+='<td><input type="checkbox" id="chksel" /></td>';
+                }
+                if (row.Title!=undefined)
+                {
+                    tr+='<td align="left" style="font-size:10px; line-height:21.3px">'+row.Title+'</td>';
+                }
+                else
+                {
+                    tr+='<td align="center" style="font-size:10px; line-height:21.3px"></td>';
+                }
+                if (row.fldName!=undefined)
+                {
+                    tr+='<td align="left" style="font-size:10px; line-height:21.3px">'+row.fldName+'</td>';
+                }
+                else
+                {
+                    tr+='<td align="center" style="font-size:10px; line-height:21.3px"></td>';
+                }
+
+                $("#myTb").append('<tr>'+tr+'</tr>');
+            });
+            $('#myTb').append('</tbody>');
+
+            //$("#myTb").append('</tbody>');
+            //$("#myTb").append('<tr>');
+            //$("#myTb").append('<td></td>');
+            //$("#myTb").append('<td><input type="button" value="确定" id="btnOk" /></td>');
+            //$("#myTb").append('<td></td>');
+            //$("#myTb").append('</tr>');
+        }
+        //隐藏某列的方法：     $('#tt').datagrid('hideColumn', 'XXX');  -----其中 XXX 是隐藏列的  field 属性值
+        //展示某列的方法：     $('#tt').datagrid('showColumn', 'XXX');  -----其中 XXX 是隐藏列的  field 属性值
+        function SetGridStyle(grid)
+        {
+            var mytable = document.getElementById('myTb');
+            var data = [];
+            var cols=[];
+            var strCol="";
+            debugger
+            for(var i=1,rows=mytable.rows.length; i<rows; i++){
+                for(var j=0,cells=mytable.rows[i].cells.length; j<cells; j++){
+                    if(!data[i]){
+                        data[i] = new Array();
+                    }
+                    if (j==0)
+                    {
+                        if (document.getElementById('chksel').checked)
+                        {
+                            strCol=mytable.rows[i].cells[2].innerHTML;
+                            $("'#mElementGrid").datagrid('hideColumn',''+strCol);
+                        }
+                        else
+                        {
+                            data[i][j] =0;
+                        }
+                    }
+                    else
+                    {
+                        data[i][j] = mytable.rows[i].cells[j].innerHTML;
+                    }
+                }
+            }
+            return data;
+
+
+            //var strVar='';
+            //debugger
+            //var vTable=$("#myTb");
+
+            //var chkSel=$('lstCols').find('input:checked') ;
+            //$("#myTb").each(function (){
+            //   // var thisObj = this.parentNode.parentNode;
+            //    var a = $("#myTb").children();
+            //    for(var i=0;i<a.length;i++){
+            //        if (chkSel.is('input:checked'))
+            //        {
+            //            strVar=a.eq(i).text();
+            //        }
+            //    }
+
+            //});
+
+
+            //vgrid.datagrid('hideColumn','OrganizeName');
+        }
+        var action = '',id = -1;
+        function save(){
+            var elementSymbol =  $("#txtElementSymbol").textbox('getValue');
+            if(elementSymbol == ''){
+                $.messager.alert('系统提示','元素符号不能为空!');
+                return;
+            }
+            var elementName = $("#txtElementName").textbox('getValue');
+            if(elementName == ''){
+                $.messager.alert('系统提示','元素名称不能为空!');
+                return;
+            }
+            var unitSymbol = $("#txtUnitSymbol").textbox('getValue');
+            if(unitSymbol == ''){
+                $.messager.alert('系统提示','单位符号不能为空!');
+                return;
+            }
+            var elementUnit = $("#txtElementUnit").textbox('getValue');
+            if(elementUnit == ''){
+                $.messager.alert('系统提示','元素单位不能为空!');
+                return;
+            }
+
+            var decimals = $("#txtDecimals").numberbox('getValue');
+            if(decimals == ''){
+                $.messager.alert('系统提示','元素小数位不能为空!');
+                return;
+            }
+            var property1 = $("#txtProperty1").textbox('getValue');
+            var property2 = $("#txtProperty2").textbox('getValue');
+            var property3 = $("#txtProperty3").textbox('getValue');
+            var property4 = $("#txtProperty4").textbox('getValue');
+            var property5 = $("#txtProperty5").textbox('getValue');
+            var property6 = $("#txtProperty6").textbox('getValue');
+            var property7 = $("#txtProperty7").textbox('getValue');
+            var property8 = $("#txtProperty8").textbox('getValue');
+            var property9 = $("#txtProperty9").textbox('getValue');
+            var property10 = $("#txtProperty10").textbox('getValue');
+            var property11 = $("#txtProperty11").textbox('getValue');
+            var property12 = $("#txtProperty12").textbox('getValue');
+            var property13 = $("#txtProperty13").textbox('getValue');
+            var property14 = $("#txtProperty14").textbox('getValue');
+            var property15 = $("#txtProperty15").textbox('getValue');
+            var Remarks= $("#txtRemarks").textbox('getValue') ;
+            var o = {ElementSymbol:elementSymbol,ElementName:elementName,UnitSymbol:unitSymbol,ElementUnit:elementUnit,Decimals:decimals,
+                Property1:property1, Property2:property2, Property3:property3, Property4:property4, Property5:property5,
+                Property6:property6,Property7:property7,Property8:property8,Property9:property9,Property10:property10,
+                Property11:property11,Property12:property12,Property13:property13,Property14:property14,Property15:property15,
+                Remarks:Remarks,id:id};
+            $.ajax({
+                url: "/mElement/SaveData",
+                type: 'post',
+                data: $.toJSON({ action: action, model: o }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.errMsg != '') {
+                        $.messager.alert('保存出错',data.errMsg);
+                        return;
+                    }
+                    $('#w').window('close');
+                    $("#mElementGrid").datagrid('reload');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }, complete: function () {
+
+                }
+            });
+        }
+        function rowOpt(a){
+            $("#txtElementSymbol").textbox('setValue');
+            $("#txtElementName").textbox('setValue');
+            $("#txtUnitSymbol").textbox('setValue');
+            $("#txtElementUnit").textbox('setValue');
+            $("#txtDecimals").numberbox('setValue');
+            $("#txtProperty1").textbox('setValue');
+            $("#txtProperty2").textbox('setValue');
+            $("#txtProperty3").textbox('setValue');
+            $("#txtProperty4").textbox('setValue');
+            $("#txtProperty5").textbox('setValue');
+            $("#txtProperty6").textbox('setValue');
+            $("#txtProperty7").textbox('setValue');
+            $("#txtProperty8").textbox('setValue');
+            $("#txtProperty9").textbox('setValue');
+            $("#txtProperty10").textbox('setValue');
+            $("#txtProperty11").textbox('setValue');
+            $("#txtProperty12").textbox('setValue');
+            $("#txtProperty13").textbox('setValue');
+            $("#txtProperty14").textbox('setValue');
+            $("#txtProperty15").textbox('setValue');
+            $("#txtRemarks").textbox('setValue');
+
+            if(a == 'modify'){
+                var  row = $('#mElementGrid').datagrid('getSelected');
+                if(row == undefined){
+                    $.messager.alert('系统提示','请选择要修改的行!');//2w+
+                    return;
+                }
+                id = row.id;
+                $("#txtElementSymbol").textbox('setValue',row.ElementSymbol);
+                $("#txtElementName").textbox('setValue',row.ElementName);
+                $("#txtUnitSymbol").textbox('setValue',row.UnitSymbol);
+                $("#txtElementUnit").textbox('setValue',row.ElementUnit);
+                $("#txtDecimals").numberbox('setValue',row.Decimals);
+                $("#txtProperty1").textbox('setValue',row.Property1);
+                $("#txtProperty2").textbox('setValue',row.Property2);
+                $("#txtProperty3").textbox('setValue',row.Property3);
+                $("#txtProperty4").textbox('setValue',row.Property4);
+                $("#txtProperty5").textbox('setValue',row.Property5);
+                $("#txtProperty6").textbox('setValue',row.Property6);
+                $("#txtProperty7").textbox('setValue',row.Property7);
+                $("#txtProperty8").textbox('setValue',row.Property8);
+                $("#txtProperty9").textbox('setValue',row.Property9);
+                $("#txtProperty10").textbox('setValue',row.Property10);
+                $("#txtProperty11").textbox('setValue',row.Property11);
+                $("#txtProperty12").textbox('setValue',row.Property12);
+                $("#txtProperty13").textbox('setValue',row.Property13);
+                $("#txtProperty14").textbox('setValue',row.Property14);
+                $("#txtProperty15").textbox('setValue',row.Property15);
+                $("#txtRemarks").textbox('setValue',row.Remarks);
+            }
+            action = a;
+            $('#w').window('open');
+        }
+        function rowDel(){
+            var row = $('#mElementGrid').datagrid('getSelected');
+            if(row == undefined){
+                $.messager.alert('系统提示','请选择要删除的行!');
+                return;
+            }
+            $.messager.confirm('系统提示', '你确定要删除所选择的行吗?', function(r){
+                if (r){
+                    id = row.id;
+                    var o ={id:id};
+                    $.ajax({
+                        url: "/mElement/Delete",
+                        type: 'post',
+                        data: $.toJSON({ model: o }),
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            if (data.errMsg != '') {
+                                $.messager.alert('删除出错',data.errMsg);
+                                return;
+                            }
+                            $("#mElementGrid").datagrid('reload');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+
+                        }, complete: function () {
+
+                        }
+                    });
+                }
+            });
+        }
+
+        function importClick()
+        {
+            var row = $('#mElementGrid').datagrid('getSelected');
+            if(row == undefined){
+                $.messager.alert('系统提示','请选择要上传文件的行!');
+                return;
+            }
+
+            $('#fileImport').filebox({
+                required : true,
+                width : '260px',
+                multiple : false,
+                validType : ['fileSize[1024,"kb"]' ],
+                buttonText : '请选择',
+                buttonAlign : 'right',
+                //prompt : '请选择一个图片类型的文件',
+                //accept : [ 'image/jpg', 'image/bmp', 'image/jpeg', 'image/gif', 'image/png' ]
+            });
+            $('#import-excel-template').window('open');
+        }
+
+        //关闭导入弹出窗口
+        function closeImportClick() {
+            $('#fileImport').filebox('setValue');
+            $('#import-excel-template').window('close')
+        }
+        //导入文件
+        function importFileClick() {
+
+            var row = $('#mElementGrid').datagrid('getSelected');
+            if(row == undefined){
+                $.messager.alert('系统提示','请选择要上传文件的行!');
+                return;
+            }
+            //获取form数据
+            var formData = new FormData($("#importFileForm")[0]);
+            $.ajax({
+                url: "/mElement/PostExcelData?id="+row.id,
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (returnInfo) {
+                    $.messager.alert('系统提示',returnInfo);
+                    closeImportClick();
+                },
+                error: function (returnInfo) {
+                    $.messager.alert('系统提示',returnInfo);
+                }
+            });
+
+
+        }
+
+    </script>
+
+</head>
+<body>
+
+    <div id="mm" style="width:220px;">
+        <div style="align-content:center">
+
+            <label style="font-size:12px;line-height:21.3px"><b>表格列设置</b></label>
+        </div>
+        <div class="menu-sep"></div>
+        <table id="myTb"></table>
+        <div class="menu-sep"></div>
+        <div style="align-items:center"><input type="button" value="确定" id="btnOk" onclick="SetGridStyle('mElementGrid');" /></div>
+    </div>
+    <div style="width:100%;height:100%;display:block;margin:-2px 0 0 -4px;">
+        <div id="cc" class="easyui-layout" fit="true">
+            <div id="mElementGrid" data-options="region:'center'"></div>
+            <div id="tb">
+                <div style="margin-bottom:5px">
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="rowOpt('new')">添加</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="rowOpt('modify')">修改</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true" onclick="rowDel()">删除</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-file',plain:true" onclick="importClick()">上传附件</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" style="float:right">帮助</a>
+                    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm',iconCls:'icon-edit'" style="float:right">设置</a>
+                </div>
+                <div>
+                    查询: <input class="easyui-textbox" data-options="prompt:'请输入元素符号\名称\单位'" style="width:150px">
+
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px">查询</a>
+                </div>
+            </div>
+        </div>
+        <div id="w" class="easyui-window" title="基本元素-新增/修改" data-options="modal:true,closed:true,iconcls:'icon-save'" style="width:670px;height:420px;padding:5px;">
+            <table cellpadding="5">
+                <tr>
+                    <td>元素符号:</td>
+                    <td><input class="easyui-textbox" id="txtElementSymbol" data-options="required:true" style="width:120px;" /></td>
+                    <td>元素名称:</td>
+                    <td><input class="easyui-textbox" id="txtElementName" data-options="required:true" style="width:120px;" /></td>
+                    <td>单位符号:</td>
+                    <td><input class="easyui-textbox" id="txtUnitSymbol" data-options="required:true" style="width:120px;" /></td>
+                </tr>
+                <tr>
+                    <td>元素单位:</td>
+                    <td><input class="easyui-textbox" id="txtElementUnit" data-options="required:true" style="width:120px;" /></td>
+                    <td>小数位:</td>
+                    <td><input class="easyui-numberbox" id="txtDecimals" precision="0" data-options="required:true" style="width:120px;" /></td>
+                    <td>属性1:</td>
+                    <td><input class="easyui-textbox" id="txtProperty1" style="width:120px;" /></td>
+
+                </tr>
+                <tr>
+                    <td>属性2:</td>
+                    <td><input class="easyui-textbox" id="txtProperty2" style="width:120px;" /></td>
+                    <td>属性3:</td>
+                    <td><input class="easyui-textbox" id="txtProperty3" style="width:120px;" /></td>
+                    <td>属性4:</td>
+                    <td><input class="easyui-textbox" id="txtProperty4" style="width:120px;" /></td>
+
+                </tr>
+                <tr>
+                    <td>属性5:</td>
+                    <td><input class="easyui-textbox" id="txtProperty5" style="width:120px;" /></td>
+                    <td>属性6:</td>
+                    <td><input class="easyui-textbox" id="txtProperty6" style="width:120px;" /></td>
+                    <td>属性7:</td>
+                    <td><input class="easyui-textbox" id="txtProperty7" style="width:120px;" /></td>
+
+                </tr>
+                <tr>
+                    <td>属性8:</td>
+                    <td><input class="easyui-textbox" id="txtProperty8" style="width:120px;" /></td>
+                    <td>属性9:</td>
+                    <td><input class="easyui-textbox" id="txtProperty9" style="width:120px;" /></td>
+                    <td>属性10:</td>
+                    <td><input class="easyui-textbox" id="txtProperty10" style="width:120px;" /></td>
+
+                </tr>
+                <tr>
+                    <td>属性11:</td>
+                    <td><input class="easyui-textbox" id="txtProperty12" style="width:120px;" /></td>
+                    <td>属性12:</td>
+                    <td><input class="easyui-textbox" id="txtProperty11" style="width:120px;" /></td>
+                    <td>属性13:</td>
+                    <td><input class="easyui-textbox" id="txtProperty13" style="width:120px;" /></td>
+
+                </tr>
+                <tr>
+                    <td>属性14:</td>
+                    <td><input class="easyui-textbox" id="txtProperty14" style="width:120px;" /></td>
+                    <td>属性15:</td>
+                    <td><input class="easyui-textbox" id="txtProperty15" style="width:120px;" /></td>
+                </tr>
+
+                <tr>
+                    <td>备注:</td>
+                    <td colspan="5"><input class="easyui-textbox" id="txtRemarks" style="width:100%" /></td>
+                </tr>
+            </table>
+            <div style="text-align:right;padding:5px">
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="save()" style="width:80px">保存</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="$('#w').window('close')" style="width:80px">取消</a>
+            </div>
+        </div>
+        <div class="easyui-window" id="import-excel-template" title="基本元素-上传附件" style="width:400px;height:160px;padding:2px;" closed="true">
+            <form id="importFileForm" method="post" enctype="multipart/form-data">
+                <table style="margin:5px;height:50px;">
+                    <tr>
+                        <td>请选择文件</td>
+                        <td width="5px;"></td>
+                        <td><input class="easyui-filebox" id="fileImport" name="fileImport" validtype="fileSize:[10,'MB'] style=" width:260px;"></td>
+                    </tr>
+
+                </table><div style="text-align:center;clear:both;margin:5px;">
+                    <a id="uploadFile" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" style="width:60px" onclick="importFileClick()" href="#">上传</a>
+                    <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" style="width:60px" onclick="closeImportClick()" href="#">关闭</a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>
