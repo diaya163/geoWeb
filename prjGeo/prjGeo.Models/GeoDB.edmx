@@ -107,6 +107,8 @@
           <Property Name="layerName" Type="nvarchar" MaxLength="100" />
           <Property Name="villageName" Type="nvarchar" MaxLength="100" />
           <Property Name="layerOrder" Type="int" />
+          <Property Name="projId" Type="varchar" MaxLength="50" />
+          <Property Name="prjName" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="mMenu">
           <Key>
@@ -376,6 +378,8 @@
           <Property Name="layerName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="villageName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="layerOrder" Type="Int32" />
+          <Property Name="projId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="prjName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -551,6 +555,8 @@
           <EntitySetMapping Name="mKml">
             <EntityTypeMapping TypeName="GeoGisModel.mKml">
               <MappingFragment StoreEntitySet="mKml">
+                <ScalarProperty Name="prjName" ColumnName="prjName" />
+                <ScalarProperty Name="projId" ColumnName="projId" />
                 <ScalarProperty Name="layerOrder" ColumnName="layerOrder" />
                 <ScalarProperty Name="villageName" ColumnName="villageName" />
                 <ScalarProperty Name="layerName" ColumnName="layerName" />
