@@ -14,7 +14,7 @@ namespace prjGeo.Models
     
     public partial class mKml
     {
-        public string id { get; set; }
+        public int id { get; set; }
         public string provinceName { get; set; }
         public string cityName { get; set; }
         public string countyName { get; set; }

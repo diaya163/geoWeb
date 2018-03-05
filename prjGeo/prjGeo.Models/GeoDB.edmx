@@ -96,7 +96,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" />
           <Property Name="provinceName" Type="nvarchar" MaxLength="50" />
           <Property Name="cityName" Type="nvarchar" MaxLength="50" />
           <Property Name="countyName" Type="nvarchar" MaxLength="100" />
@@ -367,7 +367,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="provinceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="cityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="countyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />

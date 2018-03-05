@@ -14,9 +14,73 @@ namespace prjGeo.Web.Controllers
 {
     public class KMLController : BaseController
     {
+        private string errMsg = string.Empty;
+
+        private mKmlBLL objBLL = new mKmlBLL();
+
         public ActionResult Index()
         {
-            return View();
+            ViewBag.Title = "分部维护";
+            //List<mUsersModel> list =objUser.GetAllList(),
+            var model = new
+            {
+                form = new
+                {
+
+                },
+                GridInfo = new
+                {
+                    idField = "id",
+                    ColInfo = new TableInfo().GetGridColInfo(112, 0),
+                    sortName = "id"
+                },
+                GridColInfo = new
+                {
+                    columns = new TableInfo().GetInitGridCols(112),
+                    rows = new TableInfo().GetInitGridRows(112)
+                }
+
+
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public JsonResult GetList(GridPager pager)
+        {
+            string filters = string.Empty;
+            var list = objBLL.GetIndexList(filters, ref errMsg, ref pager);
+            var json = new
+            {
+                total = pager.totalRows,
+                rows = list.ToArray()
+            };
+
+            return Json(json, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SaveData(string action, mKml model)
+        {
+            if (action.Equals("new"))
+            {
+                objBLL.Add(model, ref errMsg);
+            }
+            else if (action.Equals("modify"))
+            {
+                objBLL.Update(model, ref errMsg);
+            }
+            return Json(new { errMsg }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Delete(mKml model)
+        {
+            objBLL.Delete(model, ref errMsg);
+            return Json(new { errMsg }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetListData()
+        {
+            var list = objBLL.GetList(string.Empty, ref errMsg);
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
 
     }
