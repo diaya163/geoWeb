@@ -60,6 +60,7 @@
     <Compile Include="mElementBLL.cs" />
     <Compile Include="mKmlBLL.cs" />
     <Compile Include="mMenuBLL.cs" />
+    <Compile Include="mProjectBLL.cs" />
     <Compile Include="mUsersBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

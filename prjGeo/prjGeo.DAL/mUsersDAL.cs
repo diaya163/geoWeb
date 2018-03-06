@@ -20,7 +20,7 @@ namespace prjGeo.DAL
         {
             IQueryable<mUser> list = db.mUser.AsQueryable();
             return list;
-        }
+        } 
 
 
         public List<mUsersModel> GetAllList(string strUser, GeoGisEntities db)

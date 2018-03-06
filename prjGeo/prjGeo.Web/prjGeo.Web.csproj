@@ -138,6 +138,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\mAreaController.cs" />
     <Compile Include="Controllers\mElementController.cs" />
+    <Compile Include="Controllers\mProjectController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -2696,6 +2697,7 @@
     <Content Include="Views\mArea\Index.cshtml" />
     <Content Include="Views\mElement\Index.cshtml" />
     <Content Include="Views\KML\Index.cshtml" />
+    <Content Include="Views\mProject\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

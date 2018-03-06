@@ -83,6 +83,10 @@
     <Compile Include="mMenu.cs">
       <DependentUpon>GeoDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="mProject.cs">
+      <DependentUpon>GeoDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="mProject.ljx.cs" />
     <Compile Include="mSharp.cs">
       <DependentUpon>GeoDB.tt</DependentUpon>
     </Compile>

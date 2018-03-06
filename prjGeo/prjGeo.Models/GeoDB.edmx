@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="GeoGisModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="GeoGisModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="mArea">
           <Key>
             <PropertyRef Name="id" />
@@ -128,6 +128,22 @@
           <Property Name="mChecked" Type="int" Nullable="false" />
           <Property Name="RightFlag" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="mProject">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Recid" Type="int" />
+          <Property Name="Ccode" Type="varchar" MaxLength="50" />
+          <Property Name="CName" Type="varchar" MaxLength="150" />
+          <Property Name="Clocation" Type="varchar" MaxLength="150" />
+          <Property Name="Province" Type="nvarchar" MaxLength="100" />
+          <Property Name="City" Type="nvarchar" MaxLength="100" />
+          <Property Name="County" Type="nvarchar" MaxLength="150" />
+          <Property Name="Town" Type="nvarchar" MaxLength="150" />
+          <Property Name="Village" Type="nvarchar" MaxLength="150" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="250" />
+        </EntityType>
         <EntityType Name="mSharp">
           <Key>
             <PropertyRef Name="id" />
@@ -187,6 +203,7 @@
           <EntitySet Name="mGrid" EntityType="Self.mGrid" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mKml" EntityType="Self.mKml" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mMenu" EntityType="Self.mMenu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mProject" EntityType="Self.mProject" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mSharp" EntityType="Self.mSharp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mUser" EntityType="Self.mUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
@@ -206,6 +223,7 @@
           <EntitySet Name="mArea" EntityType="GeoGisModel.mArea" />
           <EntitySet Name="mElement" EntityType="GeoGisModel.mElement" />
           <EntitySet Name="mKml" EntityType="GeoGisModel.mKml" />
+          <EntitySet Name="mProject" EntityType="GeoGisModel.mProject" />
         </EntityContainer>
         <EntityType Name="mForm">
           <Key>
@@ -380,6 +398,22 @@
           <Property Name="layerOrder" Type="Int32" />
           <Property Name="projId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="prjName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="mProject">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Recid" Type="Int32" />
+          <Property Name="Ccode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Clocation" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Province" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="County" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Town" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Village" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -567,6 +601,23 @@
                 <ScalarProperty Name="countyName" ColumnName="countyName" />
                 <ScalarProperty Name="cityName" ColumnName="cityName" />
                 <ScalarProperty Name="provinceName" ColumnName="provinceName" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mProject">
+            <EntityTypeMapping TypeName="GeoGisModel.mProject">
+              <MappingFragment StoreEntitySet="mProject">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Village" ColumnName="Village" />
+                <ScalarProperty Name="Town" ColumnName="Town" />
+                <ScalarProperty Name="County" ColumnName="County" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="Clocation" ColumnName="Clocation" />
+                <ScalarProperty Name="CName" ColumnName="CName" />
+                <ScalarProperty Name="Ccode" ColumnName="Ccode" />
+                <ScalarProperty Name="Recid" ColumnName="Recid" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -20,7 +20,7 @@ namespace prjGeo.DAL
             IQueryable<mMenu> list = db.mMenu.AsQueryable();
             return list;
         }
-
+         
         public IEnumerable<mMenu> GetListforSQL(GeoGisEntities db)
         {
             DbContext con = (DbContext)(db as IObjectContextAdapter);

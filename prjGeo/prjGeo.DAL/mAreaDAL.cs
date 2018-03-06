@@ -20,7 +20,7 @@ namespace prjGeo.DAL
     public partial class mAreaDAL : IDisposable
     {
         public void Dispose()
-        {
+        { 
         }
         public mAreaDAL()
         {

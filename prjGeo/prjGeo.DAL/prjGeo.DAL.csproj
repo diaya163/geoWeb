@@ -63,6 +63,7 @@
     <Compile Include="mElementDAL.cs" />
     <Compile Include="menuDAL.cs" />
     <Compile Include="mkmlDAL.cs" />
+    <Compile Include="mProjectDAL.cs" />
     <Compile Include="mUsersDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
