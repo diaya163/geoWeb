@@ -134,10 +134,10 @@
     <Compile Include="Areas\Sys\SysAreaRegistration.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\KMLController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\mAreaController.cs" />
     <Compile Include="Controllers\mElementController.cs" />
+    <Compile Include="Controllers\mKmlController.cs" />
     <Compile Include="Controllers\mProjectController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -2657,6 +2657,7 @@
     <Content Include="jquery-easyui-1.5\themes\metro\validatebox.css" />
     <Content Include="jquery-easyui-1.5\themes\metro\window.css" />
     <Content Include="jquery-easyui-1.5\themes\mobile.css" />
+    <Content Include="KML\kmlView.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <Content Include="Scripts\jquery-easyui-portal\datagrid_data.json" />
@@ -2696,8 +2697,8 @@
     <Content Include="Views\Shared\_Index_Layout.cshtml" />
     <Content Include="Views\mArea\Index.cshtml" />
     <Content Include="Views\mElement\Index.cshtml" />
-    <Content Include="Views\KML\Index.cshtml" />
     <Content Include="Views\mProject\Index.cshtml" />
+    <Content Include="Views\mKml\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

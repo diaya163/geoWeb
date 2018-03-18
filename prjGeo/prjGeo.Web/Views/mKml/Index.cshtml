@@ -1,0 +1,151 @@
+﻿@using prjGeo.Commons;
+@using prjGeo.Models.Sys;
+@using prjGeo.Models;
+@using prjGeo.Web;
+@{
+    Layout = "~/Views/Shared/_Index_Layout.cshtml";
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
+    <script src="~/KML/kmlView.js"></script>
+    <title>@ViewBag.Title</title>
+    <style type="text/css">
+        table.gridtable {
+            font-family: verdana,arial,sans-serif;
+            font-size: 11px;
+            color: #333333;
+            border-width: 1px;
+            border-color: #666666;
+            border-collapse: collapse;
+        }
+
+            table.gridtable th {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #dedede;
+            }
+
+            table.gridtable td {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #ffffff;
+            }
+    </style>
+    <script type="text/javascript">
+    var modelData=@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+    $(function () {
+        $('#mKmlGrid').datagrid({
+            url: '/mKml/GetList',
+            //width: $(window).width()-100,
+            methord: 'post',
+            height: $(window).height() - 4,
+            fitColumns: false,
+            sortName: 'id',
+            sortOrder: 'desc',
+            idField: modelData.GridInfo.idField,
+            pageSize: 10,
+            pageList: [ 10, 20, 30, 40],
+            pagination: true,
+            striped: true, //奇偶行是否区分
+            singleSelect: true,//单选模式
+            rownumbers: true,//行号
+            toolbar:'#tb',
+            columns: eval(modelData.GridInfo.ColInfo)
+            //onLoadSuccess: function (data) {   //隐藏表头的checkbox
+            //    $("#UserGrid").parent().find("div .datagrid-header-check").children("input[type=\"checkbox\"]").eq(0).attr("style", "display:none;");
+
+            //    if (data){
+            //        var rowData = data.rows;
+            //        $.each(rowData, function (idx, val) {
+            //            if (val.IsEnable) {
+            //                $("#UserGrid").datagrid("selectRow", idx);
+            //            }
+            //        });
+            //    }
+            //}
+    });
+    InitGridSet(modelData.GridColInfo);
+    });
+
+    </script>
+</head>
+<body>
+    <div id="mm" style="width:220px;">
+        <div style="align-content:center">
+            <label style="font-size:12px;line-height:21.3px"><b>表格列设置</b></label>
+        </div>
+        <div class="menu-sep"></div>
+        <table id="myTb"></table>
+        <div class="menu-sep"></div>
+        <div style="align-items:center"><input type="button" value="确定" id="btnOk" onclick="SetGridStyle('mKmlGrid');" /></div>
+    </div>
+
+    <div style="width:100%;height:100%;display:block;margin:-2px 0 0 -4px;">
+        <div id="cc" class="easyui-layout" fit="true">
+            <div id="mKmlGrid" data-options="region:'center'"></div>
+            <div id="tb">
+                <div style="margin-bottom:5px">
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="rowOpt('new')">添加</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="rowOpt('modify')">修改</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true" onclick="rowDel()">删除</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" style="float:right">帮助</a>
+                    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm',iconCls:'icon-edit'" style="float:right">设置</a>
+                </div>
+                <div>
+                    查询: <input class="easyui-textbox" data-options="prompt:'请输入图层名'" style="width:150px">
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px">查询</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="w" class="easyui-window" title="KML管理-新增/修改" data-options="modal:true,closed:true,iconcls:'icon-save'" style="width:600px;height:300px;padding:5px;">
+            <table cellpadding="5">
+                <tr>
+                    <td>*项目编号:</td>
+                    <td><input class="easyui-combobox" id="txtProjId" data-options="required:true" style="width:120px;" /></td>
+                    <td>*项目名称:</td>
+                    <td><input class="easyui-combobox" id="txtPrjName" data-options="required:true" style="width:120px;" /></td>
+                </tr>
+                <tr>
+                    <td>所在省:</td>
+                    <td><input class="easyui-textbox" id="txtProvinceName" data-options="required:true" /></td>
+                    <td>所在市:</td>
+                    <td><input class="easyui-textbox" id="txtCityName" data-options="required:true" /></td>
+                </tr>
+                <tr>
+                    <td>所在县:</td>
+                    <td><input class="easyui-textbox" id="txtCountyName" data-options="required:true" /></td>
+                    <td>所在镇/乡:</td>
+                    <td><input class="easyui-textbox" id="txtTownName" data-options="required:true" /></td>
+
+                </tr>
+                <tr>
+                    <td>所在村:</td>
+                    <td><input class="easyui-textbox" id="txtVillageName" /></td>
+                    <td>KML文件:</td>
+                    <td><input class="easyui-textbox" id="txtKmlPath" data-options="required:true" /></td>
+                </tr>
+                <tr>
+                    <td>图层名:</td>
+                    <td><input class="easyui-textbox" id="txtLayerName" data-options="required:true" /></td>
+                    <td>图层序号:</td>
+                    <td><input class="easyui-textbox" id="txtLayerOrder" data-options="required:true" /></td>
+                </tr>
+
+            </table>
+            <div style="text-align:right;padding:5px">
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="save()" style="width:80px">保存</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="$('#w').window('close')" style="width:80px">取消</a>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

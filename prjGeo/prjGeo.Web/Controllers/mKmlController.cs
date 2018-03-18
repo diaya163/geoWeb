@@ -12,7 +12,7 @@ using prjGeo.Models.Sys;
 
 namespace prjGeo.Web.Controllers
 {
-    public class KMLController : BaseController
+    public class mKmlController : BaseController
     {
         private string errMsg = string.Empty;
 
@@ -31,13 +31,13 @@ namespace prjGeo.Web.Controllers
                 GridInfo = new
                 {
                     idField = "id",
-                    ColInfo = new TableInfo().GetGridColInfo(112, 0),
+                    ColInfo = new TableInfo().GetGridColInfo(120, 0),
                     sortName = "id"
                 },
                 GridColInfo = new
                 {
-                    columns = new TableInfo().GetInitGridCols(112),
-                    rows = new TableInfo().GetInitGridRows(112)
+                    columns = new TableInfo().GetInitGridCols(120),
+                    rows = new TableInfo().GetInitGridRows(120)
                 }
 
 
