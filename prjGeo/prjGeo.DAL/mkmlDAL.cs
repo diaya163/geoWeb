@@ -67,8 +67,8 @@ namespace prjGeo.DAL
         {
             StringBuilder insCmd = new StringBuilder();
             insCmd.Append("insert into mKml");
-            insCmd.Append("(id,provinceName,cityName,countyName,longitude,latitude,isVisible,kmlPath,layerName,villageName,layerOrder,projId,prjName)");
-            insCmd.Append("VALUES(@id,@provinceName,@cityName,@countyName,@longitude,@latitude,@isVisible,@kmlPath,@layerName,@villageName,@layerOrder,@projId,@prjName)");
+            insCmd.Append("(provinceName,cityName,countyName,longitude,latitude,isVisible,kmlPath,layerName,villageName,layerOrder,projId,prjName)");
+            insCmd.Append("VALUES(@provinceName,@cityName,@countyName,@longitude,@latitude,@isVisible,@kmlPath,@layerName,@villageName,@layerOrder,@projId,@prjName)");
             insCmd.Append(";select @@IDENTITY");
             try
             {

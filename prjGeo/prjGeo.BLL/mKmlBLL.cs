@@ -91,18 +91,20 @@ namespace prjGeo.BLL
                                    select new mKml
                                    {
                                        id = k.id,
-                                       provinceName = k.provinceName,
-                                       cityName = k.cityName,
-                                       countyName = k.countyName,
-                                       longitude = k.longitude,
-                                       latitude = k.latitude,
-                                       isVisible = k.isVisible,
-                                       kmlPath = k.kmlPath,
-                                       layerName = k.layerName,
-                                       villageName = k.villageName,
-                                       layerOrder = k.layerOrder,
-                                       projId = k.projId,
-                                       prjName = k.prjName
+                                       ProvinceName = k.ProvinceName,
+                                       CityName = k.CityName,
+                                       CountyName = k.CountyName,
+                                       TownName = k.TownName,
+                                       VillageName = k.VillageName,
+                                       Longitude = k.Longitude,
+                                       Latitude = k.Latitude,
+                                       IsVisible = k.IsVisible,
+                                       KmlPath = k.KmlPath,
+                                       LayerName = k.LayerName,
+                                       
+                                       LayerOrder = k.LayerOrder,
+                                       ProjId = k.ProjId,
+                                       PrjName = k.PrjName
                                    }).ToList();
             return lstData;
 

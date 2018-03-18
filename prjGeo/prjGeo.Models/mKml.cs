@@ -15,17 +15,18 @@ namespace prjGeo.Models
     public partial class mKml
     {
         public int id { get; set; }
-        public string provinceName { get; set; }
-        public string cityName { get; set; }
-        public string countyName { get; set; }
-        public Nullable<decimal> longitude { get; set; }
-        public Nullable<decimal> latitude { get; set; }
-        public Nullable<int> isVisible { get; set; }
-        public string kmlPath { get; set; }
-        public string layerName { get; set; }
-        public string villageName { get; set; }
-        public Nullable<int> layerOrder { get; set; }
-        public string projId { get; set; }
-        public string prjName { get; set; }
+        public string ProvinceName { get; set; }
+        public string CityName { get; set; }
+        public string CountyName { get; set; }
+        public string TownName { get; set; }
+        public Nullable<decimal> Longitude { get; set; }
+        public Nullable<decimal> Latitude { get; set; }
+        public Nullable<int> IsVisible { get; set; }
+        public string KmlPath { get; set; }
+        public string LayerName { get; set; }
+        public string VillageName { get; set; }
+        public Nullable<int> LayerOrder { get; set; }
+        public string ProjId { get; set; }
+        public string PrjName { get; set; }
     }
 }

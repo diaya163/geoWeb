@@ -1,6 +1,18 @@
-2018.3.4
-
 set identity_insert mMenu on
 insert into mMenu (id,MenuID,ParentID,MenuName,mURL,IsLeef,IconClass,MenuDesc,MenuSeqNo,IsVisible,mState,mChecked,RightFlag)
- values (10,'010108','0101','Cwzz_kmlManage','/KML/Index',1,'','KML管理',0,1,1,0,1)
+ values (10,'0303010','0303','Cwzz_kmlManage','/mKml/Index',1,'','KML管理',0,1,1,0,1)
 
+
+update mGrid set ColName='CName',ColField='CName' where FormID=114 and id=61
+
+mGrid表：
+
+101	120	5	ProvinceName	100	center	所在省	0	False	ProvinceName	text	False	False	False	False	False	True
+102	120	6	CityName	100	center	所在市	0	False	CityName	text	False	False	False	False	False	True
+103	120	7	CountyName	100	center	所在县	0	False	CountyName	text	False	False	False	False	False	True
+104	120	9	VillageName	100	center	所在村	0	False	VillageName	text	False	False	False	False	False	True
+105	120	2	LayerName	100	center	图层名	0	False	LayerName	text	False	False	False	False	False	True
+107	120	1	LayerOrder	100	center	图层序号	0	False	LayerOrder	text	False	False	False	False	False	True
+108	120	3	ProjId	100	center	项目编号	0	False	ProjId	text	False	False	False	False	False	True
+109	120	4	PrjName	100	center	项目名称	0	False	PrjName	text	False	False	False	False	False	True
+111	120	8	TownName	100	center	所在镇/乡	0	False	TownName	text	False	False	False	False	False	True

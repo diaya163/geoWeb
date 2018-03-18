@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="GeoGisModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="GeoGisModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="mArea">
           <Key>
             <PropertyRef Name="id" />
@@ -96,19 +96,20 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" Nullable="false" />
-          <Property Name="provinceName" Type="nvarchar" MaxLength="50" />
-          <Property Name="cityName" Type="nvarchar" MaxLength="50" />
-          <Property Name="countyName" Type="nvarchar" MaxLength="100" />
-          <Property Name="longitude" Type="numeric" Precision="12" Scale="8" />
-          <Property Name="latitude" Type="numeric" Precision="12" Scale="8" />
-          <Property Name="isVisible" Type="int" />
-          <Property Name="kmlPath" Type="nvarchar" MaxLength="500" />
-          <Property Name="layerName" Type="nvarchar" MaxLength="100" />
-          <Property Name="villageName" Type="nvarchar" MaxLength="100" />
-          <Property Name="layerOrder" Type="int" />
-          <Property Name="projId" Type="varchar" MaxLength="50" />
-          <Property Name="prjName" Type="nvarchar" MaxLength="100" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProvinceName" Type="nvarchar" MaxLength="100" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="100" />
+          <Property Name="CountyName" Type="nvarchar" MaxLength="150" />
+          <Property Name="TownName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Longitude" Type="numeric" Precision="12" Scale="8" />
+          <Property Name="Latitude" Type="numeric" Precision="12" Scale="8" />
+          <Property Name="IsVisible" Type="int" />
+          <Property Name="KmlPath" Type="nvarchar" MaxLength="500" />
+          <Property Name="LayerName" Type="nvarchar" MaxLength="100" />
+          <Property Name="VillageName" Type="nvarchar" MaxLength="100" />
+          <Property Name="LayerOrder" Type="int" />
+          <Property Name="ProjId" Type="varchar" MaxLength="50" />
+          <Property Name="PrjName" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="mMenu">
           <Key>
@@ -222,8 +223,8 @@
           <EntitySet Name="mGrid" EntityType="GeoGisModel.mGrid" />
           <EntitySet Name="mArea" EntityType="GeoGisModel.mArea" />
           <EntitySet Name="mElement" EntityType="GeoGisModel.mElement" />
-          <EntitySet Name="mKml" EntityType="GeoGisModel.mKml" />
           <EntitySet Name="mProject" EntityType="GeoGisModel.mProject" />
+          <EntitySet Name="mKml" EntityType="GeoGisModel.mKml" />
         </EntityContainer>
         <EntityType Name="mForm">
           <Key>
@@ -381,24 +382,6 @@
           <Property Name="Attachment" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="mKml">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="provinceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="cityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="countyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="longitude" Type="Decimal" Precision="12" Scale="8" />
-          <Property Name="latitude" Type="Decimal" Precision="12" Scale="8" />
-          <Property Name="isVisible" Type="Int32" />
-          <Property Name="kmlPath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="layerName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="villageName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="layerOrder" Type="Int32" />
-          <Property Name="projId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="prjName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="mProject">
           <Key>
             <PropertyRef Name="id" />
@@ -414,6 +397,25 @@
           <Property Name="Town" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Village" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="mKml">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProvinceName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CityName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CountyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="TownName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Longitude" Type="Decimal" Precision="12" Scale="8" />
+          <Property Name="Latitude" Type="Decimal" Precision="12" Scale="8" />
+          <Property Name="IsVisible" Type="Int32" />
+          <Property Name="KmlPath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="LayerName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="VillageName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LayerOrder" Type="Int32" />
+          <Property Name="ProjId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PrjName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -586,25 +588,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="mKml">
-            <EntityTypeMapping TypeName="GeoGisModel.mKml">
-              <MappingFragment StoreEntitySet="mKml">
-                <ScalarProperty Name="prjName" ColumnName="prjName" />
-                <ScalarProperty Name="projId" ColumnName="projId" />
-                <ScalarProperty Name="layerOrder" ColumnName="layerOrder" />
-                <ScalarProperty Name="villageName" ColumnName="villageName" />
-                <ScalarProperty Name="layerName" ColumnName="layerName" />
-                <ScalarProperty Name="kmlPath" ColumnName="kmlPath" />
-                <ScalarProperty Name="isVisible" ColumnName="isVisible" />
-                <ScalarProperty Name="latitude" ColumnName="latitude" />
-                <ScalarProperty Name="longitude" ColumnName="longitude" />
-                <ScalarProperty Name="countyName" ColumnName="countyName" />
-                <ScalarProperty Name="cityName" ColumnName="cityName" />
-                <ScalarProperty Name="provinceName" ColumnName="provinceName" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="mProject">
             <EntityTypeMapping TypeName="GeoGisModel.mProject">
               <MappingFragment StoreEntitySet="mProject">
@@ -618,6 +601,26 @@
                 <ScalarProperty Name="CName" ColumnName="CName" />
                 <ScalarProperty Name="Ccode" ColumnName="Ccode" />
                 <ScalarProperty Name="Recid" ColumnName="Recid" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mKml">
+            <EntityTypeMapping TypeName="GeoGisModel.mKml">
+              <MappingFragment StoreEntitySet="mKml">
+                <ScalarProperty Name="PrjName" ColumnName="PrjName" />
+                <ScalarProperty Name="ProjId" ColumnName="ProjId" />
+                <ScalarProperty Name="LayerOrder" ColumnName="LayerOrder" />
+                <ScalarProperty Name="VillageName" ColumnName="VillageName" />
+                <ScalarProperty Name="LayerName" ColumnName="LayerName" />
+                <ScalarProperty Name="KmlPath" ColumnName="KmlPath" />
+                <ScalarProperty Name="IsVisible" ColumnName="IsVisible" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="TownName" ColumnName="TownName" />
+                <ScalarProperty Name="CountyName" ColumnName="CountyName" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="ProvinceName" ColumnName="ProvinceName" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
