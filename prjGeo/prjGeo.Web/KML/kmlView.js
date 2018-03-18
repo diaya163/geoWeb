@@ -106,17 +106,15 @@ function save() {
         , id: id
     };
 
-    var PrjName = $("#txtPrjName").combobox('getValue');
+
+    var PrjName = $("#txtPrjName").combobox('getText');
     if (PrjName)
         o.PrjName = PrjName;
 
-    var ProjId = $("#txtProjId").combobox('getValue');
+    var ProjId = $("#txtProjId").combobox('getText');
     if (ProjId)
         o.ProjId = ProjId;
 
-    var CountyName = $("#txtCountyName").textbox('getValue');
-    if (CountyName)
-        o.CountyName = CountyName;
 
     var TownName = $("#txtTownName").textbox('getValue');
     if (TownName)
@@ -151,9 +149,26 @@ function save() {
         }
     });
 }
+
+function initProjCnt(record) {
+     $("#txtProvinceName").textbox('setValue',record.Province);
+     $("#txtCityName").textbox('setValue',record.City);
+     $("#txtCountyName").textbox('setValue',record.County);
+     $("#txtTownName").textbox('setValue',record.Town);
+     $("#txtVillageName").textbox('setValue', record.Village);
+ }
 function rowOpt(a) {
-    $("#txtProjId").combobox('setValue');
-    $("#txtPrjName").combobox('setValue');
+    if (a == 'modify') {
+        var row = $('#mKmlGrid').datagrid('getSelected');
+        if (row == undefined) {
+            $.messager.alert('系统提示', '请选择要修改的行!');//2w+
+            return;
+        }
+    }
+
+
+ //   $("#txtProjId").combobox('setValue');
+ //   $("#txtPrjName").combobox('setValue');
     $("#txtProvinceName").textbox('setValue');
     $("#txtCityName").textbox('setValue');
     $("#txtCountyName").textbox('setValue');
@@ -163,35 +178,62 @@ function rowOpt(a) {
     $("#txtLayerOrder").textbox('setValue');
 
 
-    $('#txtProjId').combobox({
+    
+    $.ajax({
         url: "/mProject/GetListData",
-        required: true,
-        valueField: 'id',
-        textField: 'Ccode',
-    });
-    $('#txtPrjName').combobox({
-        url: "/mProject/GetListData",
-        required: true,
-        valueField: 'id',
-        textField: 'CName'
-    });
-    if (a == 'modify') {
-        var row = $('#mKmlGrid').datagrid('getSelected');
-        if (row == undefined) {
-            $.messager.alert('系统提示', '请选择要修改的行!');//2w+
-            return;
+        type: 'post',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        success: function (data) {
+            if (!data) {
+                $.messager.alert('获取项目数据出错', data.errMsg);
+                return;
+            }
+            $('#txtProjId').combobox({
+                data: data,
+                valueField: 'id',
+                textField: 'Ccode',
+                onSelect: function (record) {
+                    $("#txtPrjName").combobox('setValue', record.CName);
+                    initProjCnt(record);
+                }
+
+
+            });
+            $('#txtPrjName').combobox({
+                data: data,
+                valueField: 'id',
+                textField: 'CName',
+                onSelect: function (record) {
+                    $("#txtProjId").combobox('setValue', record.Ccode);
+                    initProjCnt(record);
+                }
+
+            });
+
+            if (action == 'modify') {
+                var row = $('#mKmlGrid').datagrid('getSelected');
+                id = row.id;
+                $("#txtProjId").combobox('setValue', row.ProjId);
+                $("#txtPrjName").combobox('setValue', row.PrjName);
+                $("#txtProvinceName").textbox('setValue', row.ProvinceName);
+                $("#txtCityName").textbox('setValue', row.CityName);
+                $("#txtCountyName").textbox('setValue', row.CountyName);
+                $("#txtTownName").textbox('setValue', row.TownName);
+                $("#txtLayerName").textbox('setValue', row.LayerName);
+                $("#txtVillageName").textbox('setValue', row.VillageName);
+                $("#txtLayerOrder").textbox('setValue', row.LayerOrder);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+
+        }, complete: function () {
+
         }
-        id = row.id;
-        $("#txtProjId").combobox('setValue', row.ProjId);
-        $("#txtPrjName").combobox('setValue', row.PrjName);
-        $("#txtProvinceName").textbox('setValue', row.ProvinceName);
-        $("#txtCityName").textbox('setValue', row.CityName);
-        $("#txtCountyName").textbox('setValue', row.CountyName);
-        $("#txtTownName").textbox('setValue', row.TownName);
-        $("#txtLayerName").textbox('setValue', row.LayerName);
-        $("#txtVillageName").textbox('setValue', row.VillageName);
-        $("#txtLayerOrder").textbox('setValue', row.LayerOrder);
-    }
+    });
+
+  
+
     action = a;
     $('#w').window('open');
 }

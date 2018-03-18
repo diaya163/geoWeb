@@ -69,8 +69,9 @@
             //        });
             //    }
             //}
-    });
-    InitGridSet(modelData.GridColInfo);
+         });
+        InitGridSet(modelData.GridColInfo);
+
     });
 
     </script>
@@ -108,10 +109,10 @@
         <div id="w" class="easyui-window" title="KML管理-新增/修改" data-options="modal:true,closed:true,iconcls:'icon-save'" style="width:600px;height:300px;padding:5px;">
             <table cellpadding="5">
                 <tr>
-                    <td>*项目编号:</td>
-                    <td><input class="easyui-combobox" id="txtProjId" data-options="required:true" style="width:120px;" /></td>
-                    <td>*项目名称:</td>
-                    <td><input class="easyui-combobox" id="txtPrjName" data-options="required:true" style="width:120px;" /></td>
+                    <td>项目编号:</td>
+                    <td><input class="easyui-combobox" id="txtProjId" data-options="required:true" /></td>
+                    <td>项目名称:</td>
+                    <td><input class="easyui-combobox" id="txtPrjName" data-options="required:true" /></td>
                 </tr>
                 <tr>
                     <td>所在省:</td>
@@ -123,14 +124,12 @@
                     <td>所在县:</td>
                     <td><input class="easyui-textbox" id="txtCountyName" data-options="required:true" /></td>
                     <td>所在镇/乡:</td>
-                    <td><input class="easyui-textbox" id="txtTownName" data-options="required:true" /></td>
+                    <td><input class="easyui-textbox" id="txtTownName" /></td>
 
                 </tr>
                 <tr>
                     <td>所在村:</td>
-                    <td><input class="easyui-textbox" id="txtVillageName" /></td>
-                    <td>KML文件:</td>
-                    <td><input class="easyui-textbox" id="txtKmlPath" data-options="required:true" /></td>
+                    <td colspan="3"><input class="easyui-textbox" id="txtVillageName" /></td>
                 </tr>
                 <tr>
                     <td>图层名:</td>
@@ -138,10 +137,17 @@
                     <td>图层序号:</td>
                     <td><input class="easyui-textbox" id="txtLayerOrder" data-options="required:true" /></td>
                 </tr>
+                <tr >
+                    <td>上传KML文件:</td>
+                    <td colspan="3"><input class="easyui-textbox" id="txtKmlPath" data-options="required:true" style="width:350px;" />
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-folder_go'" onclick="" style="width:80px">浏览</a>
+                    </td>
+
+                </tr>
 
             </table>
             <div style="text-align:right;padding:5px">
-                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="save()" style="width:80px">保存</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="save()" style="width:80px">上传保存</a>
                 <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="$('#w').window('close')" style="width:80px">取消</a>
             </div>
         </div>
