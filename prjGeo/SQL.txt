@@ -26,3 +26,9 @@ FileType	nvarchar(50)	Checked
 
 在web工程中的web.config里 <appSettings>中加下面设置：
  <add key="KMLFolder" value="D:\work\geoWeb\geoWeb\prjGeo\prjGeo.Web\KMLFiles\" />
+
+
+mMenu中修改
+地图区域查询   对应的mURL: /mMap/Index
+
+
