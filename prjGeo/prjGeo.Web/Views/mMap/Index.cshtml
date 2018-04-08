@@ -1,0 +1,37 @@
+﻿@{
+    Layout = "~/Views/Shared/_Index_Layout.cshtml";
+}
+<!doctype html>
+<html>
+<head>
+    <title>leaflet 调用天地图</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8" />
+    <script type='text/javascript' src='~/GisMaps/Lib/leaflet/leaflet-src.js'></script>
+    <link type='text/css' rel='stylesheet' href='~/GisMaps/Lib/leaflet/leaflet.css' />
+    <script type='text/javascript' src='~/GisMaps/Lib/leaflet/leaflet-tilelayer-wmts-src.js'></script>
+    <script type='text/javascript' src='~/GisMaps/Lib/KML.js'></script>
+
+</head>
+
+<body>
+    <div class="easyui-layout" data-options="fit:true" style="width:100%;height:500px;padding:0px;">
+        <div data-options=" region:'west',split:true" style="width:200px;padding:0px">
+            <div class="container_12" style="width:90%;margin:5%;">
+                <div class="grid_3 lbl">项目名称：</div>
+                <div class="grid_9 val"><input class="easyui-combobox" id="txtPrjName" data-options="required:true" /></div>
+            </div>
+            <div style="text-align:right;padding:5px">
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-finder'" id="btnFind"style="width:80px">查询</a>
+            </div>
+           <!-- <table id="dg" style="width: 99%; height: 200px;display: none;"></table>-->
+            <table id="dg" class="easyui-datagrid" title="KML图层" style="width:100%;height:80%;"></table>
+        </div>
+        <div data-options="region:'center'" style="padding:0px">
+            <div id='map' style="width:100%;height:100%;position:absolute;overflow:hidden;"></div>
+        </div>
+    </div>
+
+    <script type='text/javascript' src='~/GisMaps/map.js'></script>
+    <script type='text/javascript' src='~/GisMaps/mapView.js'></script>
+</body>
+</html>

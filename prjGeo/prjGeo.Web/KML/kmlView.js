@@ -74,6 +74,8 @@ function SetGridStyle(grid) {
     return data;
 }
 var action = '', id = -1;
+var o = null;
+
 function save() {
     var ProvinceName = $("#txtProvinceName").textbox('getValue');
     if (ProvinceName == '') {
@@ -96,17 +98,89 @@ function save() {
         $.messager.alert('系统提示', '图层名不能为空!');
         return;
     }
+    var FileName = $("#txtFileName").textbox('getValue');
+    if (FileName == '') {
+        $.messager.alert('系统提示', '请选择上传的KML文件!');
+        return;
+    }
 
 
-    var o = {
+
+    o = {
         ProvinceName: ProvinceName
-        , CityName: CityName
-        , CountyName: CountyName
-        , LayerName: LayerName
-        , id: id
+       , CityName: CityName
+       , CountyName: CountyName
+       , LayerName: LayerName
+       , FileName: FileName
+       , id: id
     };
 
+    var PrjName = $("#txtPrjName").combobox('getText');
+    if (PrjName)
+        o.PrjName = PrjName;
 
+    var ProjId = $("#txtProjId").combobox('getText');
+    if (ProjId)
+        o.ProjId = ProjId;
+    
+    var TownName = $("#txtTownName").textbox('getValue');
+    if (TownName)
+        o.TownName = TownName;
+
+    var VillageName = $("#txtVillageName").textbox('getValue');
+    if (VillageName)
+        o.VillageName = VillageName;
+
+    var LayerOrder = $("#txtLayerOrder").textbox('getValue');
+    if (LayerOrder)
+        o.LayerOrder = LayerOrder;
+
+    var FileSize = $("#txtFileSize").textbox('getValue');
+    if (FileSize)
+        o.FileSize = FileSize;
+
+    var FileType = $("#txtFileType").textbox('getValue');
+    if (FileType)
+        o.FileType = FileType;
+    
+   
+    //var file = document.getElementById('browse').files[0];
+    var fm = new FormData();
+    fm.append('action', action);
+    fm.append('kmlData', JSON.stringify(o));
+    if (file) {
+        fm.append('kmlfile', file);
+    }
+    $.ajax(
+        {
+            url: '/mKml/uploadKml',   
+            type: 'POST',
+            data: fm,
+            cache: false,
+            contentType: false, //禁止设置请求类型
+            processData: false, //禁止jquery对DAta数据的处理,默认会处理
+            //禁止的原因是,FormData已经帮我们做了处理
+            async: false,
+            success: function (data) {
+                //测试是否成功
+                //但需要你后端有返回值
+                if (data.errMsg != '') {
+                    $.messager.alert('保存出错', data.errMsg);
+                    return;
+                }
+                $('#w').window('close');
+                $("#mKmlGrid").datagrid('reload');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+
+            },
+            complete: function () {
+            }
+        }
+    );
+}
+/*
+function saveData() {
     var PrjName = $("#txtPrjName").combobox('getText');
     if (PrjName)
         o.PrjName = PrjName;
@@ -148,8 +222,7 @@ function save() {
 
         }
     });
-}
-
+}*/
 function initProjCnt(record) {
      $("#txtProvinceName").textbox('setValue',record.Province);
      $("#txtCityName").textbox('setValue',record.City);
@@ -176,9 +249,10 @@ function rowOpt(a) {
     $("#txtLayerName").textbox('setValue');
     $("#txtVillageName").textbox('setValue');
     $("#txtLayerOrder").textbox('setValue');
-
-
-    
+    $("#txtFileName").textbox('setValue');
+    $("#txtFileSize").textbox('setValue');
+    $("#txtFileType").textbox('setValue');
+        
     $.ajax({
         url: "/mProject/GetListData",
         type: 'post',
@@ -223,6 +297,9 @@ function rowOpt(a) {
                 $("#txtLayerName").textbox('setValue', row.LayerName);
                 $("#txtVillageName").textbox('setValue', row.VillageName);
                 $("#txtLayerOrder").textbox('setValue', row.LayerOrder);
+                $("#txtFileName").textbox('setValue', row.FileName);
+                $("#txtFileSize").textbox('setValue', row.FileSize);
+                $("#txtFileType").textbox('setValue', row.FileType);
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -268,4 +345,186 @@ function rowDel() {
             });
         }
     });
+}
+
+var uploadifyOnSelectError = function (file, errorCode, errorMsg) {
+    var msgText = "上传失败\n";
+    switch (errorCode) {
+        case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:
+            //this.queueData.errorMsg = "每次最多上传 " + this.settings.queueSizeLimit + "个文件";
+            msgText += "每次最多上传 " + this.settings.queueSizeLimit + "个文件";
+            break;
+        case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:
+            msgText += "文件大小超过限制( " + this.settings.fileSizeLimit + " )";
+            break;
+        case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
+            msgText += "文件大小为0";
+            break;
+        case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
+            msgText += "文件格式不正确，仅限 " + this.settings.fileTypeExts;
+            break;
+        default:
+            msgText += "错误代码：" + errorCode + "\n" + errorMsg;
+    }
+    layer.msg(msgText);
+};
+var uploadifyOnUploadError = function (file, errorCode, errorMsg, errorString) {
+    // 手工取消不弹出提示
+    if (errorCode == SWFUpload.UPLOAD_ERROR.FILE_CANCELLED
+      || errorCode == SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED) {
+        return;
+    }
+    var msgText = "上传失败\n";
+    switch (errorCode) {
+        case SWFUpload.UPLOAD_ERROR.HTTP_ERROR:
+            msgText += "HTTP 错误\n" + errorMsg;
+            break;
+        case SWFUpload.UPLOAD_ERROR.MISSING_UPLOAD_URL:
+            msgText += "上传文件丢失，请重新上传";
+            break;
+        case SWFUpload.UPLOAD_ERROR.IO_ERROR:
+            msgText += "IO错误";
+            break;
+        case SWFUpload.UPLOAD_ERROR.SECURITY_ERROR:
+            msgText += "安全性错误\n" + errorMsg;
+            break;
+        case SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED:
+            msgText += "每次最多上传 " + this.settings.uploadLimit + "个";
+            break;
+        case SWFUpload.UPLOAD_ERROR.UPLOAD_FAILED:
+            msgText += errorMsg;
+            break;
+        case SWFUpload.UPLOAD_ERROR.SPECIFIED_FILE_ID_NOT_FOUND:
+            msgText += "找不到指定文件，请重新操作";
+            break;
+        case SWFUpload.UPLOAD_ERROR.FILE_VALIDATION_FAILED:
+            msgText += "参数错误";
+            break;
+        default:
+            msgText += "文件:" + file.name + "\n错误码:" + errorCode + "\n"
+              + errorMsg + "\n" + errorString;
+    }
+    layer.msg(msgText);
+};
+
+var uploadifyOnSelect = function () {
+};
+var uploadifyOnUploadSuccess = function (file, data, response) {
+    layer.msg(file.name + "\n\n" + response + "\n\n" + data);
+    saveData();
+};
+var btnBrowse = function () {
+    $("#browse").click();
+}
+
+
+var file = null;
+$(function () {
+    $("#browse").change(function () {
+        file = this.files[0];
+        if (file) {
+            $("#txtFileName").textbox('setValue', file.name);
+            var name = file.name.substring(0,file.name.indexOf('.'));
+            $("#txtLayerName").textbox('setValue', name);
+           
+            var fileSize = 0;
+            if (file.size > 1024 * 1024)
+                fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
+            else
+                fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
+            $("#txtFileSize").textbox('setValue', fileSize);
+            $("#txtFileType").textbox('setValue', file.type);
+           // document.getElementById('fileSize').innerHTML = 'Size: ' + fileSize;
+          //  document.getElementById('fileType').innerHTML = 'Type: ' + file.type;
+        }
+    })
+
+    /*
+    $("#uploadify").uploadify({
+        uploader: '/mKml/UploadifyFile', //处理上传的方法
+        swf: '/Scripts/lib/uploadify/uploadify.swf',
+        queueID: '', //文件队列的ID，该ID与存放文件队列的div的ID一致
+        width: 80, // 按钮宽度
+        height: 60, //按钮高度
+        buttonText: "",
+        buttonCursor: 'hand',
+        fileSizeLimit: 204800,
+        fileobjName: 'Filedata',
+        fileTypeExts: '*.kml;*.xml', //扩展名
+        fileTypeDesc: "请选择kml文件", //文件说明
+        auto: false, //是否自动上传
+        multi: true, //是否一次可以选中多个文件
+        queueSizeLimit: 5, //允许同时上传文件的个数
+        overrideEvents: ['onSelectError', 'onDialogClose'], // 是否要默认提示 要就不配置
+        onSelect: uploadifyOnSelect,
+        onSelectError: uploadifyOnSelectError,
+        onUploadError: uploadifyOnUploadError,
+        onUploadSuccess: uploadifyOnUploadSuccess
+    });*/
+});
+
+
+
+
+function uploadFile(dt) {
+
+    //var file = document.getElementById('browse').files[0];
+    var fm = new FormData();
+ //   fm.append('userName', userName);
+    fm.append('kmlfile', file);
+    $.ajax(
+        {
+            url: '/mKml/Doit',    //UploadifyFile',
+            type: 'POST',
+            data: fm,
+            cache: false,
+            contentType: false, //禁止设置请求类型
+            processData: false, //禁止jquery对DAta数据的处理,默认会处理
+            //禁止的原因是,FormData已经帮我们做了处理
+            async:false,
+            success: function (result) {
+                //测试是否成功
+                //但需要你后端有返回值
+                alert(result);
+            }
+        }
+    );
+
+/*
+    if (window.FileReader) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        //监听文件读取结束后事件    
+        reader.onloadend = function (e) {
+           // $(".img").attr("src", e.target.result);    //e.target.result就是最后的路径地址
+            fd.append("file", e.target.result);
+            var xhr = new XMLHttpRequest();
+            xhr.upload.addEventListener("progress", uploadProgress, false);
+            xhr.addEventListener("load", uploadComplete, false);
+            xhr.addEventListener("error", uploadFailed, false);
+            xhr.addEventListener("abort", uploadCanceled, false);
+            xhr.open("POST", '/mKml/UploadifyFile');//修改成自己的接口
+            xhr.send(fd);
+        };
+    }
+    */
+}
+function uploadProgress(evt) {
+    if (evt.lengthComputable) {
+        var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+        document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
+    }
+    else {
+        document.getElementById('progressNumber').innerHTML = 'unable to compute';
+    }
+}
+function uploadComplete(evt) {
+    /* 服务器端返回响应时候触发event事件*/
+    alert(evt.target.responseText);
+}
+function uploadFailed(evt) {
+    alert("There was an error attempting to upload the file.");
+}
+function uploadCanceled(evt) {
+    alert("The upload has been canceled by the user or the browser dropped the connection.");
 }

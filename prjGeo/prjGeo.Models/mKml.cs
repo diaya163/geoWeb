@@ -28,5 +28,8 @@ namespace prjGeo.Models
         public Nullable<int> LayerOrder { get; set; }
         public string ProjId { get; set; }
         public string PrjName { get; set; }
+        public string FileName { get; set; }
+        public string FileSize { get; set; }
+        public string FileType { get; set; }
     }
 }

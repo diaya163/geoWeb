@@ -133,11 +133,13 @@
     <Compile Include="App_Start\webstack\JObjectModelBinder.cs" />
     <Compile Include="Areas\Sys\SysAreaRegistration.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BaseDataPackage.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\mAreaController.cs" />
     <Compile Include="Controllers\mElementController.cs" />
     <Compile Include="Controllers\mKmlController.cs" />
+    <Compile Include="Controllers\mMapController.cs" />
     <Compile Include="Controllers\mProjectController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -1868,6 +1870,20 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="GisMaps\base.js" />
+    <Content Include="GisMaps\Lib\KML.js" />
+    <Content Include="GisMaps\GisInfos.js" />
+    <Content Include="GisMaps\Lib\leaflet\images\layers-2x.png" />
+    <Content Include="GisMaps\Lib\leaflet\images\layers.png" />
+    <Content Include="GisMaps\Lib\leaflet\images\marker-icon-2x.png" />
+    <Content Include="GisMaps\Lib\leaflet\images\marker-icon.png" />
+    <Content Include="GisMaps\Lib\leaflet\images\marker-shadow.png" />
+    <Content Include="GisMaps\Lib\leaflet\leaflet-src.js" />
+    <Content Include="GisMaps\Lib\leaflet\leaflet-tilelayer-wmts-src.js" />
+    <Content Include="GisMaps\Lib\leaflet\leaflet.css" />
+    <Content Include="GisMaps\Lib\leaflet\leaflet.js" />
+    <Content Include="GisMaps\map.js" />
+    <Content Include="GisMaps\mapView.js" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="jquery-easyui-1.5\demo\accordion\datagrid_data1.json" />
@@ -2680,7 +2696,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Sys\SysUser.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -2699,6 +2717,7 @@
     <Content Include="Views\mElement\Index.cshtml" />
     <Content Include="Views\mProject\Index.cshtml" />
     <Content Include="Views\mKml\Index.cshtml" />
+    <Content Include="Views\mMap\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

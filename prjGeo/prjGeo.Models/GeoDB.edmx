@@ -110,6 +110,9 @@
           <Property Name="LayerOrder" Type="int" />
           <Property Name="ProjId" Type="varchar" MaxLength="50" />
           <Property Name="PrjName" Type="nvarchar" MaxLength="100" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="FileSize" Type="nvarchar" MaxLength="50" />
+          <Property Name="FileType" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="mMenu">
           <Key>
@@ -416,6 +419,9 @@
           <Property Name="LayerOrder" Type="Int32" />
           <Property Name="ProjId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="PrjName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FileSize" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FileType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -608,6 +614,9 @@
           <EntitySetMapping Name="mKml">
             <EntityTypeMapping TypeName="GeoGisModel.mKml">
               <MappingFragment StoreEntitySet="mKml">
+                <ScalarProperty Name="FileType" ColumnName="FileType" />
+                <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
                 <ScalarProperty Name="PrjName" ColumnName="PrjName" />
                 <ScalarProperty Name="ProjId" ColumnName="ProjId" />
                 <ScalarProperty Name="LayerOrder" ColumnName="LayerOrder" />

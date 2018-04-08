@@ -9,12 +9,20 @@ using prjGeo.Commons;
 using prjGeo.BLL;
 using prjGeo.Models;
 using prjGeo.Models.Sys;
+using System.Configuration;
+using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+
 
 namespace prjGeo.Web.Controllers
 {
+
     public class mKmlController : BaseController
     {
         private string errMsg = string.Empty;
+        private string _kmlFolder = string.Empty;
 
         private mKmlBLL objBLL = new mKmlBLL();
 
@@ -73,8 +81,42 @@ namespace prjGeo.Web.Controllers
         }
         public ActionResult Delete(mKml model)
         {
-            objBLL.Delete(model, ref errMsg);
-            return Json(new { errMsg }, JsonRequestBehavior.AllowGet);
+            try
+            {
+                string strFilter = "id="+model.id;
+                IList<mKml> list = objBLL.GetList(strFilter, ref errMsg);
+                if (list.Count == 1)
+                {
+                    //delete kml file
+                    if (string.IsNullOrEmpty(_kmlFolder))
+                    {
+                        _kmlFolder = ConfigurationManager.AppSettings["KMLFolder"];
+                    }
+                    foreach (mKml it in list)
+                    {
+                        string path = _kmlFolder + "\\" + it.PrjName + "\\" + it.FileName;
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+
+                        }
+                        //delete kml data
+                        objBLL.Delete(model, ref errMsg);
+                    }
+
+                }
+                return Json(new { errMsg }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+           
+           
+            
+
         }
 
         public ActionResult GetListData()
@@ -82,6 +124,114 @@ namespace prjGeo.Web.Controllers
             var list = objBLL.GetList(string.Empty, ref errMsg);
             return Json(list, JsonRequestBehavior.AllowGet);
         }
+        /// <summary>
+        /// 文件上传页面
+        /// </summary>
+        /// <param name="filedata"></param>
+        /// <returns></returns>
+        public ActionResult UploadifyFile(HttpPostedFileBase filedata)
+        {
+            if (filedata == null ||
+              String.IsNullOrEmpty(filedata.FileName) ||
+              filedata.ContentLength == 0)
+            {
+                return HttpNotFound();
+            }
+
+            string filename = System.IO.Path.GetFileName(filedata.FileName);
+            if (string.IsNullOrEmpty(_kmlFolder))
+            {
+                _kmlFolder = ConfigurationManager.AppSettings["KMLFolder"];
+            }
+
+            //string virtualPath = String.Format("~/File/{0}", filename);
+
+            // string path = Server.MapPath(virtualPath);
+
+            string path = _kmlFolder + DateTime.Now.ToString() + "\\";
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+
+            }
+            path = path + filename;
+
+
+            // 以下注释的代码 都可以获得文件属性
+            // System.Diagnostics.FileVersionInfo info = System.Diagnostics.FileVersionInfo.GetVersionInfo(path);
+            // FileInfo file = new FileInfo(filedata.FileName);
+
+            filedata.SaveAs(path);
+            return null;
+        }
+
+
+        public ActionResult uploadKml()
+        {
+
+            try
+            {
+                string action = Request.Form["action"];  //普通参数获取
+                string p1 = Request.Form["kmlData"];  //普通参数获取
+                mKml kmlData = JsonConvert.DeserializeObject<mKml>(p1);
+
+                if (string.IsNullOrEmpty(_kmlFolder))
+                {
+                    _kmlFolder = ConfigurationManager.AppSettings["KMLFolder"];
+                }
+
+                if (action.Equals("new"))
+                {
+                    foreach (string upload in Request.Files.AllKeys)
+                    {
+                        HttpPostedFileBase file = Request.Files[upload];   //file可能为null
+                        string filename = System.IO.Path.GetFileName(file.FileName);
+
+                        string path = _kmlFolder + "\\" + kmlData.PrjName + "\\";
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+
+                        }
+                        path = path + filename;
+                        file.SaveAs(path);
+                        kmlData.KmlPath = "/KMLFiles/" + kmlData.PrjName + "/" + filename;
+                    }
+                    objBLL.Add(kmlData, ref errMsg);
+                }
+                else if (action.Equals("modify"))
+                {
+                    foreach (string upload in Request.Files.AllKeys)
+                    {
+                        HttpPostedFileBase file = Request.Files[upload];   //file可能为null
+                        string filename = System.IO.Path.GetFileName(file.FileName);
+
+                        string path = _kmlFolder + "\\" + kmlData.PrjName + "\\";
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+
+                        }
+                        path = path + filename;
+                        file.SaveAs(path);
+                        kmlData.KmlPath = "/KMLFiles/" + kmlData.PrjName + "/" + filename;
+                    }
+                    objBLL.Update(kmlData, ref errMsg);
+                }
+                return Json(new { errMsg }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+           
+        }
+
+
+
+ 
 
     }
+
+
 }

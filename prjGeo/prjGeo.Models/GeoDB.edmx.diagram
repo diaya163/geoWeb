@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="867bcbd74f9843ab8c1d1e8fb5b779be" Name="关系图1" ZoomLevel="89">
+      <Diagram DiagramId="867bcbd74f9843ab8c1d1e8fb5b779be" Name="关系图1" ZoomLevel="68">
         <EntityTypeShape EntityType="GeoGisModel.mForm" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="GeoGisModel.mGISArea" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="GeoGisModel.mMenu" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />

@@ -67,8 +67,8 @@ namespace prjGeo.DAL
         {
             StringBuilder insCmd = new StringBuilder();
             insCmd.Append("insert into mKml");
-            insCmd.Append("(provinceName,cityName,countyName,longitude,latitude,isVisible,kmlPath,layerName,villageName,layerOrder,projId,prjName)");
-            insCmd.Append("VALUES(@provinceName,@cityName,@countyName,@longitude,@latitude,@isVisible,@kmlPath,@layerName,@villageName,@layerOrder,@projId,@prjName)");
+            insCmd.Append("(provinceName,cityName,countyName,longitude,latitude,isVisible,kmlPath,layerName,villageName,layerOrder,projId,prjName,fileName,fileSize,fileType)");
+            insCmd.Append("VALUES(@provinceName,@cityName,@countyName,@longitude,@latitude,@isVisible,@kmlPath,@layerName,@villageName,@layerOrder,@projId,@prjName,@fileName,@fileSize,@fileType)");
             insCmd.Append(";select @@IDENTITY");
             try
             {
@@ -106,6 +106,9 @@ namespace prjGeo.DAL
             updCmd.Append(",layerOrder=@layerOrder");
             updCmd.Append(",projId=@projId");
             updCmd.Append(",prjName=@prjName");
+            updCmd.Append(",fileName=@fileName");
+            updCmd.Append(",fileSize=@fileSize");
+            updCmd.Append(",fileType=@fileType");
             updCmd.Append(" where id=@id");
 
             try
@@ -148,5 +151,6 @@ namespace prjGeo.DAL
             return -1;
         }
 
+      
     }
 }

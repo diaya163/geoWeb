@@ -101,10 +101,12 @@ namespace prjGeo.BLL
                                        IsVisible = k.IsVisible,
                                        KmlPath = k.KmlPath,
                                        LayerName = k.LayerName,
-                                       
                                        LayerOrder = k.LayerOrder,
                                        ProjId = k.ProjId,
-                                       PrjName = k.PrjName
+                                       PrjName = k.PrjName,
+                                       FileName = k.FileName,
+                                       FileSize = k.FileSize,
+                                       FileType = k.FileType
                                    }).ToList();
             return lstData;
 
