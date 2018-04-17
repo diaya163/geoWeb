@@ -83,28 +83,22 @@ namespace prjGeo.Web.Controllers
         {
             try
             {
-                string strFilter = "id="+model.id;
-                IList<mKml> list = objBLL.GetList(strFilter, ref errMsg);
-                if (list.Count == 1)
-                {
-                    //delete kml file
-                    if (string.IsNullOrEmpty(_kmlFolder))
-                    {
-                        _kmlFolder = ConfigurationManager.AppSettings["KMLFolder"];
-                    }
-                    foreach (mKml it in list)
-                    {
-                        string path = _kmlFolder + "\\" + it.PrjName + "\\" + it.FileName;
-                        if (System.IO.File.Exists(path))
-                        {
-                            System.IO.File.Delete(path);
+                //delete kml data
+                objBLL.Delete(model, ref errMsg);
 
-                        }
-                        //delete kml data
-                        objBLL.Delete(model, ref errMsg);
-                    }
+                //delete kml file
+                if (string.IsNullOrEmpty(_kmlFolder))
+                {
+                    _kmlFolder = ConfigurationManager.AppSettings["KMLFolder"];
+                }
+
+                string path = _kmlFolder + "\\" + model.PrjName + "\\" + model.FileName;
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.File.Delete(path);
 
                 }
+
                 return Json(new { errMsg }, JsonRequestBehavior.AllowGet);
 
             }
@@ -117,6 +111,12 @@ namespace prjGeo.Web.Controllers
            
             
 
+        }
+        public ActionResult GetListDataById(string id)
+        {
+            string strFilter = "id='" + id + "'";
+            IList<mKml> list = objBLL.GetList(strFilter, ref errMsg);
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetListData()
@@ -193,6 +193,7 @@ namespace prjGeo.Web.Controllers
                             Directory.CreateDirectory(path);
 
                         }
+                        filename = filename.Replace(".kml", ".xml");
                         path = path + filename;
                         file.SaveAs(path);
                         kmlData.KmlPath = "/KMLFiles/" + kmlData.PrjName + "/" + filename;
@@ -212,6 +213,7 @@ namespace prjGeo.Web.Controllers
                             Directory.CreateDirectory(path);
 
                         }
+                        filename = filename.Replace(".kml", ".xml");
                         path = path + filename;
                         file.SaveAs(path);
                         kmlData.KmlPath = "/KMLFiles/" + kmlData.PrjName + "/" + filename;

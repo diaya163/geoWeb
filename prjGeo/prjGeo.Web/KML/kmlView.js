@@ -325,6 +325,51 @@ function rowDel() {
             id = row.id;
             var o = { id: id };
             $.ajax({
+                url: "/mKml/GetListDataById",
+                type: 'post',
+                data: $.toJSON(o),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.errMsg && data.errMsg != '') {
+                        $.messager.alert('id不存在！', data.errMsg);
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "/mKml/Delete",
+                        type: 'post',
+                        data: $.toJSON({ model: data[0]}),
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            if (data.errMsg != '') {
+                                $.messager.alert('删除出错', data.errMsg);
+                                return;
+                            }
+                            $("#mKmlGrid").datagrid('reload');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+
+                        }, complete: function () {
+
+                        }
+                    });
+                   
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }, complete: function () {
+
+                }
+            });
+
+           
+
+
+
+
+            $.ajax({
                 url: "/mKml/Delete",
                 type: 'post',
                 data: $.toJSON({ model: o }),

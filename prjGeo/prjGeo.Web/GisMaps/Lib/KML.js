@@ -14,9 +14,11 @@ L.KML = L.FeatureGroup.extend({
 	},
 
 	loadXML: function (url, cb, options, async) {
+		//added by cxy on 2018.4.15
 		if (async === undefined) async = this.options.async;
 		if (options === undefined) options = this.options;
-
+       //added end
+	   
 		var req = new window.XMLHttpRequest();
 		
 		// Check for IE8 and IE9 Fix Cors for those browsers
@@ -36,7 +38,11 @@ L.KML = L.FeatureGroup.extend({
 			setTimeout(function () { xdr.send(); }, 0);
 		} else {
 			req.open('GET', url, async);
-			req.setRequestHeader('Accept', 'application/vnd.google-earth.kml+xml');
+			//changed by cxy on 2018.4.15  for 406 Not Acceptable
+			//req.setRequestHeader('Accept', 'application/vnd.google-earth.kml+xml');
+			req.setRequestHeader('Accept', '*/*');
+			//changed end 
+			
 			try {
 				req.overrideMimeType('text/xml'); // unsupported by IE
 			} catch (e) { }
@@ -181,12 +187,25 @@ L.Util.extend(L.KML, {
 	
 	parseStyleMap: function (xml, existingStyles) {
 		var sl = xml.getElementsByTagName('StyleMap');
-		
-		for (var i = 0; i < sl.length; i++) {
-			var e = sl[i], el;
+		var len = sl.length;
+		for (var j = 0; j < len; j++) {
+			var e = sl[j];
+			var el,elUrl;
 			var smKey, smStyleUrl;
 			
 			el = e.getElementsByTagName('key');
+			//changed by cxy on 2017.7.26 for normal, highlight style
+			/*
+			elUrl = e.getElementsByTagName('styleUrl');
+			if(el && elUrl && (el.length = elUrl.length)){
+				var arr = {};
+				for(var i=0;i<el.length;i++){
+					var nor = el[i].textContent;
+					arr[nor] = elUrl[i].textContent;
+				}
+				existingStyles['#' + e.id] = arr;
+			}*/
+
 			if (el && el[0]) { smKey = el[0].textContent; }
 			el = e.getElementsByTagName('styleUrl');
 			if (el && el[0]) { smStyleUrl = el[0].textContent; }
@@ -195,6 +214,8 @@ L.Util.extend(L.KML, {
 			{
 				existingStyles['#' + e.getAttribute('id')] = existingStyles[smStyleUrl];
 			}
+
+			//changed end
 		}
 		
 		return;
@@ -289,6 +310,11 @@ L.Util.extend(L.KML, {
 		if (name) {
 			layer.on('add', function () {
 				layer.bindPopup('<h2>' + name + '</h2>' + descr);
+			});
+		}
+		else if(descr && descr!=""){  //added by cxy on 2017.7.26 for tip
+			layer.on('add', function () {
+				layer.bindPopup(descr,{maxHeight:300});
 			});
 		}
 
@@ -442,7 +468,7 @@ L.KMLIcon = L.Icon.extend({
 		if (options.anchorType.x === 'pixels')
 			img.style.marginLeft = (-options.anchorRef.x) + 'px';
 		if (options.anchorType.y === 'pixels')
-			img.style.marginTop  = (options.anchorRef.y - img.height + 1) + 'px';
+			img.style.marginTop  = (options.anchxccxorRef.y - img.height + 1) + 'px';
 	}
 });
 

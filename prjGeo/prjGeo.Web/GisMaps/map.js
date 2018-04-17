@@ -216,7 +216,7 @@ mapCls = {
         for (var i = 0; i < lstKmlUrl.length;i++) {
             var layer = new L.KML(lstKmlUrl[i], { async: true });
             layer.on("loaded", function (e) {
-                this.map.fitBounds(e.target.getBounds());
+                map.fitBounds(e.target.getBounds());
             });
             map.addLayer(layer);
        //     map.addControl(new L.Control.Layers({}, { 'kml': layer }));
