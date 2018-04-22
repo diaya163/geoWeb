@@ -143,7 +143,7 @@ function save() {
     if (FileType)
         o.FileType = FileType;
     
-   
+
     //var file = document.getElementById('browse').files[0];
     var fm = new FormData();
     fm.append('action', action);
