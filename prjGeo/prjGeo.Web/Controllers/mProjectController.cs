@@ -58,6 +58,35 @@ namespace prjGeo.Web.Controllers
 
             return Json(json, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult GetListByFilter(string PrjName, string PrjId, GridPager pager)
+        {
+            string filters = "";
+            if(!string.IsNullOrEmpty(PrjName))
+            {
+                filters = "a.CName like '%" + PrjName + "%' ";
+            }
+            if (!string.IsNullOrEmpty(PrjId))
+            {
+                if (!string.IsNullOrEmpty(filters))
+                {
+                    filters += " and a.Ccode like '%" + PrjId + "%' ";
+                }
+                else
+                {
+                    filters = " a.Ccode like '%" + PrjId + "%' ";
+                }
+               
+            }
+            var list = objBLL.GetIndexList(filters, ref errMsg, ref pager);
+            var json = new
+            {
+                total = pager.totalRows,
+                rows = list.ToArray()
+            };
+
+            return Json(json, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult SaveData(string action, mProject model)
         {
             if (action.Equals("new"))

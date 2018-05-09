@@ -201,15 +201,20 @@ mapCls = {
         ts.map.addLayer(img_layer);
         ts.map.addLayer(imganno_layer);
     },
+    clearMap: function () {
+        this.map.remove();
+        this.kmlLayers = [];
+    },
+    removeAllKmls: function () {
+        var ts = this;
+        if(!ts.map) return;
+        for (var i = 0; i < kmlLayers.length; i++) {
+            ts.map.removeLayer(kmlLayers[i]);
+        }
+    },
 
     addKmls: function (lstKmlUrl) {
         var map = this.map;
-        if (this.kmlLayers.length > 0) {
-            for (var i = 0; i < kmlLayers.length;i++) {
-                this.kmlLayer[i].remove();
-            }
-           
-        }
         this.kmlLayer = [];
                
         //add kmls
@@ -218,9 +223,8 @@ mapCls = {
             layer.on("loaded", function (e) {
                 map.fitBounds(e.target.getBounds());
             });
-            map.addLayer(layer);
        //     map.addControl(new L.Control.Layers({}, { 'kml': layer }));
-            this.kmlLayer.push(layer);
+            this.kmlLayer[i] = layer;
         }
 
         /*
@@ -233,6 +237,20 @@ mapCls = {
         ts.map.addLayer(kmlLayer);
         ts.map.addControl(new L.Control.Layers({}, { 'kml': kmlLayer }));
         //add end */
+    },
+    showKmls: function (lstIndx) {
+        //remove all kml layer
+        for (var i = 0; i < kmlLayers.length; i++) {
+            if (map.hasLayer(kmlLayers[i])){
+                map.removeLayer(kmlLayers[i]);
+            }
+        }
+
+        //add show layer
+        for (var i = 0; i < lstIndx.length; i++) {
+            map.addLayer(kmlLayers[i]);
+        }
+        map.addLayer(layer);
     },
     setView: function (lat,lon,zoom) {
         if (this.map) {

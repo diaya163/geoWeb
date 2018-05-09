@@ -5,13 +5,15 @@ $(function () {
     var height = $(window).height();
     var width = $(window).width();
     var gridData = [];
+    var PrjName = null;
+    var PrjId = null;
 
-    $('#txtPrjName').combobox({
-        url: "/mProject/GetListData",
-        required: true,
-        valueField: 'id',
-        textField: 'CName'
-    });
+    //$('#txtPrjName').combobox({
+    //    url: "/mProject/GetListData",
+    //    required: true,
+    //    valueField: 'id',
+    //    textField: 'CName'
+    //});
     $("#btnFind").click(find);
     //  InitProjectCombo();
     InitialDatagrid();
@@ -69,12 +71,12 @@ $(function () {
     function InitialDatagrid() {
           $('#dg').datagrid({
                loader: loadData,
-               pagination: false,
-            //   pageList: [5, 10, 50, 100, 500],
-           //    pageSize: 5,
+               pagination: true,
+               pageList: [5, 10, 50, 100, 500],
+               pageSize: 5,
                rownumbers: false,
                fitColumns: true,
-           //    singleSelect: false,
+               singleSelect: true,
            //    selectOnCheck: true,
            //    checkOnSelect:true,
                cache: true,
@@ -82,14 +84,18 @@ $(function () {
                autoRowHeight: true,
                nowrap: false,
                loadMsg: "正在加载数据，请稍等…",
-               onCheck: function (rowIndex, rowData) {
-                   gridCheck(rowIndex, rowData,1);
-               },
-               onUncheck:function(rowIndex, rowData){
-                   gridCheck(rowIndex, rowData, 0);
-               },
-               rowStyler: function (rowIndex, rowData) {
-                   return 'background-color:#fff;';
+               //onCheck: function (rowIndex, rowData) {
+               //    gridCheck(rowIndex, rowData,1);
+               //},
+               //onUncheck:function(rowIndex, rowData){
+               //    gridCheck(rowIndex, rowData, 0);
+               //},
+               //rowStyler: function (rowIndex, rowData) {
+               //    return 'background-color:#fff;';
+              //},
+               onSelect: function (index, row) {
+                 //  $('#dg1').datagrid('options').selectRow = index;
+                   getLayer(row.CName);
                },
                onClickCell: function (rowIndex, field, value) {
                   // MouseCellClick(rowIndex, field, value);
@@ -119,23 +125,71 @@ $(function () {
               
                },
                columns: [[
-                   { field: 'IsVisible', checkbox: true, align: "center" },
-                   { field: 'LayerName', title: '图层名', width: 150, align: "center" },
+                   //{ field: 'IsVisible', checkbox: true, align: "center" },
+                   { field: 'CName', title: '项目名', width: 150, align: "center" },
+                   { field: 'Ccode', title: '项目编号', width: 100, align: "center" },
                ]]
            });
 
     }
 
     function loadData(param, success, error) {
-          success(gridData);
+        if ((!PrjName || PrjName == "") && (!PrjId || PrjId == "")) {
+            success({ total: 0, rows: [] });
+            return;
+        }
+        var grid = $("#dg" ).datagrid("getPager" ).data("pagination" ).options;
+            
+        var obj = {
+            PrjName: PrjName,
+            PrjId: PrjId,
+            pager: {
+                order:"desc",
+                sort:"id",
+                rows: param.rows,
+                page: param.page
+            }
+        }
+        $.ajax({
+            url: "/mProject/GetListByFilter",
+            type: 'post',
+            data: JSON.stringify(obj),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.errMsg) {
+                    $.messager.alert('查询出错', data.errMsg);
+                    success({ total: 0, rows: [] });
+                    return;
+                }
+
+                success(data);
+               // gridData = data;
+
+              //  $("#dg").datagrid('reload');
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+
+            }, complete: function () {
+
+            }
+        });
     }
 
     function find() {
-        var PrjName = $("#txtPrjName").combobox('getText');
-        if (!PrjName) {
-            $.messager.alert('系统提示', '请选择项目名称!');
+        //  var PrjName = $("#txtPrjName").combobox('getText');
+        PrjName = $("#txtPrjName").textbox('getText');
+        PrjId = $("#txtPrjId").textbox('getText');
+        if ((!PrjName || PrjName=="")&&(!PrjId || PrjId=="")) {
+            $.messager.alert('系统提示', '请输入查询条件!');
             return;
         }
+        $("#dg").datagrid('reload');
+          
+    }
+
+    function getLayer(PrjName) {
         var param = {
             PrjName: PrjName
         }
@@ -147,17 +201,32 @@ $(function () {
             contentType: 'application/json; charset=utf-8',
             success: function (data) {
                 if (data.errMsg) {
-                    $.messager.alert('查询出错', data.errMsg);
+                    $.messager.alert("取kml文件出错", data.errMsg);
                     return;
                 }
+                if (data.length < 1) {
+                    $.messager.alert("提示：", "此项目没有kml文件图层！");
+                    return;
+                }
+
+                mapCls.clearMap();
+                mapCls.initMap();
                 var urls = [];
-                for (var i = 0; i < data.length;i++) {
+                for (var i = 0; i < data.length; i++) {
                     urls.push(data[i].KmlPath);
                 }
                 mapCls.addKmls(urls);
-                gridData = data;
 
-                $("#dg").datagrid('reload');
+                //var urls = [];
+                //var lstShow = [];
+                //for (var i = 0; i < data.length; i++) {
+                //    urls.push([data[i].KmlPath]);
+                //    if (data[i].IsVisible === 1) {
+                //        lstShow.push(i);
+                //    }
+                //}
+                //mapCls.addKmls(urls);
+                //mapCls.showKmls(lstShow);
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -166,7 +235,6 @@ $(function () {
 
             }
         });
-           
     }
 
     function gridCheck(rowIndex, rowData, bCheck) {

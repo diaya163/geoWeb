@@ -177,7 +177,7 @@ namespace prjGeo.Web.Controllers
 
                 if (string.IsNullOrEmpty(_kmlFolder))
                 {
-                    _kmlFolder = ConfigurationManager.AppSettings["KMLFolder"];
+                    _kmlFolder = Server.MapPath("/")+"KMLFiles\\";// ConfigurationManager.AppSettings["KMLFolder"];
                 }
 
                 if (action.Equals("new"))
@@ -187,7 +187,7 @@ namespace prjGeo.Web.Controllers
                         HttpPostedFileBase file = Request.Files[upload];   //file可能为null
                         string filename = System.IO.Path.GetFileName(file.FileName);
 
-                        string path = _kmlFolder + "\\" + kmlData.PrjName + "\\";
+                        string path = _kmlFolder + kmlData.PrjName + "\\";
                         if (!Directory.Exists(path))
                         {
                             Directory.CreateDirectory(path);
@@ -207,7 +207,7 @@ namespace prjGeo.Web.Controllers
                         HttpPostedFileBase file = Request.Files[upload];   //file可能为null
                         string filename = System.IO.Path.GetFileName(file.FileName);
 
-                        string path = _kmlFolder + "\\" + kmlData.PrjName + "\\";
+                        string path = _kmlFolder + kmlData.PrjName + "\\";
                         if (!Directory.Exists(path))
                         {
                             Directory.CreateDirectory(path);

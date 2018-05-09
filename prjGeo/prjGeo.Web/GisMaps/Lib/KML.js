@@ -435,7 +435,7 @@ L.Util.extend(L.KML, {
 				var value = e.childNodes[0].nodeValue;
 				if (key === 'Icon') {
 					ioptions = _parse(e);
-					if (ioptions.href) { options.href = ioptions.href; }
+					if (ioptions.href) { options.href = "/GisMaps/LeafLet/leaflet-script/icon/defaultIcon.png"; }//ioptions.href; }  //changed by cxy on 2018.5.8 for incon picture
 				} else if (key === 'href') {
 					options.href = value;
 				} else if (key === 'color') {
@@ -468,7 +468,7 @@ L.KMLIcon = L.Icon.extend({
 		if (options.anchorType.x === 'pixels')
 			img.style.marginLeft = (-options.anchorRef.x) + 'px';
 		if (options.anchorType.y === 'pixels')
-			img.style.marginTop  = (options.anchxccxorRef.y - img.height + 1) + 'px';
+			img.style.marginTop  = (options.anchorRef.y - img.height + 1) + 'px';
 	}
 });
 
