@@ -140,7 +140,7 @@ objMaps.addMap = function (flon, flat, objData, mapname) {
 
 mapCls = {
     map: null,
-    kmlLayers:[],
+  //  kmlLayers:[],
     initMap: function (mapId) {
         var emap_url = 'http://t4.tianditu.com/vec_c/wmts';
         var emapanno_url = 'http://t4.tianditu.com/cva_c/wmts';
@@ -206,52 +206,45 @@ mapCls = {
         this.kmlLayers = [];
     },
     removeAllKmls: function () {
-        var ts = this;
-        if(!ts.map) return;
-        for (var i = 0; i < kmlLayers.length; i++) {
-            ts.map.removeLayer(kmlLayers[i]);
+        var me = this;
+        if(!me.map) return;
+        for (var i = 0; i < me.kmlLayers.length; i++) {
+            ts.map.removeLayer(me.kmlLayers[i]);
         }
     },
 
     addKmls: function (lstKmlUrl) {
-        var map = this.map;
-        this.kmlLayer = [];
-               
+        var me = this;
+       // me.kmlLayer = [];
+        var obj = {};
         //add kmls
-        for (var i = 0; i < lstKmlUrl.length;i++) {
-            var layer = new L.KML(lstKmlUrl[i], { async: true });
+        for (var i = 0; i < lstKmlUrl.length; i++) {
+            var dt = lstKmlUrl[i];
+            var layer = new L.KML(dt.url, { async: true });
             layer.on("loaded", function (e) {
-                map.fitBounds(e.target.getBounds());
+                me.map.fitBounds(e.target.getBounds());
             });
-       //     map.addControl(new L.Control.Layers({}, { 'kml': layer }));
-            this.kmlLayer[i] = layer;
+            obj[dt.name] = layer;
+            me.map.addLayer(layer);
         }
+      
+        me.map.addControl(new L.Control.Layers({}, obj));
 
-        /*
-
-        //      var kmlLayer = new L.KML("../kml/test.xml", { async: true });
-        var kmlLayer = new L.KML("/KML/kml/xml/Cd.xml", { async: true });
-        kmlLayer.on("loaded", function (e) {
-            ts.map.fitBounds(e.target.getBounds());
-        });
-        ts.map.addLayer(kmlLayer);
-        ts.map.addControl(new L.Control.Layers({}, { 'kml': kmlLayer }));
-        //add end */
     },
-    showKmls: function (lstIndx) {
-        //remove all kml layer
-        for (var i = 0; i < kmlLayers.length; i++) {
-            if (map.hasLayer(kmlLayers[i])){
-                map.removeLayer(kmlLayers[i]);
-            }
-        }
+    //showKmls: function (lstIndx) {
+    //    //remove all kml layer
+    //    for (var i = 0; i < kmlLayers.length; i++) {
+    //        if (map.hasLayer(kmlLayers[i])){
+    //            map.removeLayer(kmlLayers[i]);
+    //        }
+    //    }
 
-        //add show layer
-        for (var i = 0; i < lstIndx.length; i++) {
-            map.addLayer(kmlLayers[i]);
-        }
-        map.addLayer(layer);
-    },
+    //    //add show layer
+    //    for (var i = 0; i < lstIndx.length; i++) {
+    //        map.addLayer(kmlLayers[i]);
+    //    }
+    //    map.addLayer(layer);
+    //},
     setView: function (lat,lon,zoom) {
         if (this.map) {
             this.map.setView(L.latLng(lat, lon), zoom);

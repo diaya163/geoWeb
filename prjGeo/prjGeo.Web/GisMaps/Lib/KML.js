@@ -151,9 +151,9 @@ L.Util.extend(L.KML, {
 						options.weight = value;
 					} else if (key === 'Icon') {
 						ioptions = _parse(e);
-						if (ioptions.href) { options.href = ioptions.href; }
+						if (ioptions.href) { options.href = "/GisMaps/icon/defaultIcon.png"; }//ioptions.href; }  //changed by cxy on 2018.5.8 for incon picture
 					} else if (key === 'href') {
-						options.href = value;
+					    options.href = value;
 					}
 				}
 			}
@@ -309,7 +309,9 @@ L.Util.extend(L.KML, {
 
 		if (name) {
 			layer.on('add', function () {
-				layer.bindPopup('<h2>' + name + '</h2>' + descr);
+			    layer.bindPopup('<h2>' + name + '</h2>' + descr);
+			   // layer.bindTooltip('<h2>' + name + '</h2>'); //add by cxy  on 2018.5.16
+			    layer.bindPopup(descr, { maxHeight: 300 });
 			});
 		}
 		else if(descr && descr!=""){  //added by cxy on 2017.7.26 for tip
@@ -435,9 +437,9 @@ L.Util.extend(L.KML, {
 				var value = e.childNodes[0].nodeValue;
 				if (key === 'Icon') {
 					ioptions = _parse(e);
-					if (ioptions.href) { options.href = "/GisMaps/LeafLet/leaflet-script/icon/defaultIcon.png"; }//ioptions.href; }  //changed by cxy on 2018.5.8 for incon picture
+					if (ioptions.href) { options.href = "/GisMaps/icon/defaultIcon.png"; }//ioptions.href; }  //changed by cxy on 2018.5.8 for incon picture
 				} else if (key === 'href') {
-					options.href = value;
+				    options.href = value;
 				} else if (key === 'color') {
 					options.opacity = parseInt(value.substring(0, 2), 16) / 255.0;
 					options.color = '#' + value.substring(6, 8) + value.substring(4, 6) + value.substring(2, 4);

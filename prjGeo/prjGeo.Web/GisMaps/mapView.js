@@ -213,7 +213,7 @@ $(function () {
                 mapCls.initMap();
                 var urls = [];
                 for (var i = 0; i < data.length; i++) {
-                    urls.push(data[i].KmlPath);
+                    urls.push({ name: data[i].LayerName, url: data[i].KmlPath });
                 }
                 mapCls.addKmls(urls);
 
