@@ -231,7 +231,46 @@ namespace prjGeo.Web.Controllers
 
 
 
- 
+        public JsonResult GetListByFilter(string PrjName, string PrjId, string LayerName, GridPager pager)
+        {
+            string filters = "";
+            if (!string.IsNullOrEmpty(PrjName))
+            {
+                filters = "PrjName like '%" + PrjName + "%' ";
+            }
+            if (!string.IsNullOrEmpty(PrjId))
+            {
+                if (!string.IsNullOrEmpty(filters))
+                {
+                    filters += " and  ProjId like '%" + PrjId + "%' ";
+                }
+                else
+                {
+                    filters = " ProjId like '%" + PrjId + "%' ";
+                }
+
+            }
+            if (!string.IsNullOrEmpty(LayerName))
+            {
+                if (!string.IsNullOrEmpty(filters))
+                {
+                    filters += " and  LayerName like '%" + LayerName + "%' ";
+                }
+                else
+                {
+                    filters = " LayerName like '%" + LayerName + "%' ";
+                }
+
+            }
+            var list = objBLL.GetIndexList(filters, ref errMsg, ref pager);
+            var json = new
+            {
+                total = pager.totalRows,
+                rows = list.ToArray()
+            };
+
+            return Json(json, JsonRequestBehavior.AllowGet);
+        }
 
     }
 

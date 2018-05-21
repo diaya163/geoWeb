@@ -278,11 +278,13 @@ L.Util.extend(L.KML, {
 		var layers = [];
 
 		var parse = ['LineString', 'Polygon', 'Point', 'Track', 'gx:Track'];
+		console.log(parse);
+
 		for (j in parse) {
 			var tag = parse[j];
 			el = place.getElementsByTagName(tag);
 			for (i = 0; i < el.length; i++) {
-				var l = this['parse' + tag.replace(/gx:/, '')](el[i], xml, opts);
+			    var l = this['parse' + tag.replace(/gx:/, '')](el[i], xml, opts);
 				if (l) { layers.push(l); }
 			}
 		}

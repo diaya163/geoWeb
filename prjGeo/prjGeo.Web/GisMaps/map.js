@@ -227,8 +227,8 @@ mapCls = {
             obj[dt.name] = layer;
             me.map.addLayer(layer);
         }
-      
-        me.map.addControl(new L.Control.Layers({}, obj));
+        var opt = { collapsed: false, hideSingleBase: true };
+        me.map.addControl(new L.Control.Layers({}, obj, opt));
 
     },
     //showKmls: function (lstIndx) {

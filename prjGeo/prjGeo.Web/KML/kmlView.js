@@ -392,72 +392,59 @@ function rowDel() {
     });
 }
 
-var uploadifyOnSelectError = function (file, errorCode, errorMsg) {
-    var msgText = "上传失败\n";
-    switch (errorCode) {
-        case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:
-            //this.queueData.errorMsg = "每次最多上传 " + this.settings.queueSizeLimit + "个文件";
-            msgText += "每次最多上传 " + this.settings.queueSizeLimit + "个文件";
-            break;
-        case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:
-            msgText += "文件大小超过限制( " + this.settings.fileSizeLimit + " )";
-            break;
-        case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
-            msgText += "文件大小为0";
-            break;
-        case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
-            msgText += "文件格式不正确，仅限 " + this.settings.fileTypeExts;
-            break;
-        default:
-            msgText += "错误代码：" + errorCode + "\n" + errorMsg;
-    }
-    layer.msg(msgText);
-};
-var uploadifyOnUploadError = function (file, errorCode, errorMsg, errorString) {
-    // 手工取消不弹出提示
-    if (errorCode == SWFUpload.UPLOAD_ERROR.FILE_CANCELLED
-      || errorCode == SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED) {
-        return;
-    }
-    var msgText = "上传失败\n";
-    switch (errorCode) {
-        case SWFUpload.UPLOAD_ERROR.HTTP_ERROR:
-            msgText += "HTTP 错误\n" + errorMsg;
-            break;
-        case SWFUpload.UPLOAD_ERROR.MISSING_UPLOAD_URL:
-            msgText += "上传文件丢失，请重新上传";
-            break;
-        case SWFUpload.UPLOAD_ERROR.IO_ERROR:
-            msgText += "IO错误";
-            break;
-        case SWFUpload.UPLOAD_ERROR.SECURITY_ERROR:
-            msgText += "安全性错误\n" + errorMsg;
-            break;
-        case SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED:
-            msgText += "每次最多上传 " + this.settings.uploadLimit + "个";
-            break;
-        case SWFUpload.UPLOAD_ERROR.UPLOAD_FAILED:
-            msgText += errorMsg;
-            break;
-        case SWFUpload.UPLOAD_ERROR.SPECIFIED_FILE_ID_NOT_FOUND:
-            msgText += "找不到指定文件，请重新操作";
-            break;
-        case SWFUpload.UPLOAD_ERROR.FILE_VALIDATION_FAILED:
-            msgText += "参数错误";
-            break;
-        default:
-            msgText += "文件:" + file.name + "\n错误码:" + errorCode + "\n"
-              + errorMsg + "\n" + errorString;
-    }
-    layer.msg(msgText);
-};
+var findProjName = null
+    , findProjId = null
+    , findLayerName = null;
+function loadData(param, success, error) {
+   // var grid = $("#mKmlGrid").datagrid("getPager").data("pagination").options;
 
-var uploadifyOnSelect = function () {
-};
-var uploadifyOnUploadSuccess = function (file, data, response) {
-    layer.msg(file.name + "\n\n" + response + "\n\n" + data);
-    saveData();
-};
+    var obj = {
+        PrjName: findProjName,
+        PrjId: findProjId,
+        LayerName: findLayerName,
+        pager: {
+            order: "desc",
+            sort: "LayerOrder",
+            rows: param.rows,
+            page: param.page
+        }
+    }
+    $.ajax({
+        url: "/mKml/GetListByFilter",
+        type: 'post',
+        data: JSON.stringify(obj),
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        success: function (data) {
+            if (data.errMsg) {
+                $.messager.alert('查询出错', data.errMsg);
+                success({ total: 0, rows: [] });
+                return;
+            }
+
+            success(data);
+            // gridData = data;
+
+            //  $("#dg").datagrid('reload');
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+
+            success({ total: 0, rows: [] });
+
+        }, complete: function () {
+
+        }
+    });
+}
+function onBtnFind() {
+    findProjName = $("#findProjName").textbox('getValue');
+    findProjId = $("#findProjId").textbox('getValue');
+    findLayerName = $("#findLayerName").textbox('getValue');
+    $("#mKmlGrid").datagrid('reload');
+}
+
+
 var btnBrowse = function () {
     $("#browse").click();
 }
@@ -483,29 +470,6 @@ $(function () {
           //  document.getElementById('fileType').innerHTML = 'Type: ' + file.type;
         }
     })
-
-    /*
-    $("#uploadify").uploadify({
-        uploader: '/mKml/UploadifyFile', //处理上传的方法
-        swf: '/Scripts/lib/uploadify/uploadify.swf',
-        queueID: '', //文件队列的ID，该ID与存放文件队列的div的ID一致
-        width: 80, // 按钮宽度
-        height: 60, //按钮高度
-        buttonText: "",
-        buttonCursor: 'hand',
-        fileSizeLimit: 204800,
-        fileobjName: 'Filedata',
-        fileTypeExts: '*.kml;*.xml', //扩展名
-        fileTypeDesc: "请选择kml文件", //文件说明
-        auto: false, //是否自动上传
-        multi: true, //是否一次可以选中多个文件
-        queueSizeLimit: 5, //允许同时上传文件的个数
-        overrideEvents: ['onSelectError', 'onDialogClose'], // 是否要默认提示 要就不配置
-        onSelect: uploadifyOnSelect,
-        onSelectError: uploadifyOnSelectError,
-        onUploadError: uploadifyOnUploadError,
-        onUploadSuccess: uploadifyOnUploadSuccess
-    });*/
 });
 
 
@@ -535,41 +499,4 @@ function uploadFile(dt) {
         }
     );
 
-/*
-    if (window.FileReader) {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        //监听文件读取结束后事件    
-        reader.onloadend = function (e) {
-           // $(".img").attr("src", e.target.result);    //e.target.result就是最后的路径地址
-            fd.append("file", e.target.result);
-            var xhr = new XMLHttpRequest();
-            xhr.upload.addEventListener("progress", uploadProgress, false);
-            xhr.addEventListener("load", uploadComplete, false);
-            xhr.addEventListener("error", uploadFailed, false);
-            xhr.addEventListener("abort", uploadCanceled, false);
-            xhr.open("POST", '/mKml/UploadifyFile');//修改成自己的接口
-            xhr.send(fd);
-        };
-    }
-    */
-}
-function uploadProgress(evt) {
-    if (evt.lengthComputable) {
-        var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-        document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
-    }
-    else {
-        document.getElementById('progressNumber').innerHTML = 'unable to compute';
-    }
-}
-function uploadComplete(evt) {
-    /* 服务器端返回响应时候触发event事件*/
-    alert(evt.target.responseText);
-}
-function uploadFailed(evt) {
-    alert("There was an error attempting to upload the file.");
-}
-function uploadCanceled(evt) {
-    alert("The upload has been canceled by the user or the browser dropped the connection.");
 }

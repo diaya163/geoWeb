@@ -8,9 +8,9 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <script src="~/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
-    <script src="~/Scripts/lib/layer/layer.js"></script>
-    <script src="~/KML/kmlView.js"></script>
+    <script src="/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
+    <script src="/Scripts/lib/layer/layer.js"></script>
+    <script src="/KML/kmlView.js"></script>
     <title>@ViewBag.Title</title>
     <style type="text/css">
         table.gridtable {
@@ -42,7 +42,8 @@
     var modelData=@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
     $(function () {
         $('#mKmlGrid').datagrid({
-            url: '/mKml/GetList',
+            // url: '/mKml/GetList',
+            loader: loadData,
             //width: $(window).width()-100,
             methord: 'post',
             height: $(window).height() - 4,
@@ -70,7 +71,7 @@
             //        });
             //    }
             //}
-         });
+        });
         InitGridSet(modelData.GridColInfo);
     });
 
@@ -99,8 +100,11 @@
                     <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm',iconCls:'icon-edit'" style="float:right">设置</a>
                 </div>
                 <div>
-                    查询: <input class="easyui-textbox" data-options="prompt:'请输入图层名'" style="width:150px">
-                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px">查询</a>
+                    查询: 
+                    <input class="easyui-textbox" id="findProjName" data-options="prompt:'请输入项目名'" style="width:150px">
+                    <input class="easyui-textbox" id="findProjId" data-options="prompt:'请输入项目编号'" style="width:150px">
+                    <input class="easyui-textbox" id="findLayerName" data-options="prompt:'请输入图层名'" style="width:150px">
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px" onclick="onBtnFind()">查询</a>
                 </div>
             </div>
 
