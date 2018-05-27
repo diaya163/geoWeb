@@ -247,82 +247,84 @@ L.Util.extend(L.KML, {
 	},
 
 	parsePlacemark: function (place, xml, style, options) {
-		var h, i, j, k, el, il, opts = options || {};
+	    var h, i, j, k, el, il, opts = options || {};
 
-		el = place.getElementsByTagName('styleUrl');
-		for (i = 0; i < el.length; i++) {
-			var url = el[i].childNodes[0].nodeValue;
-			for (var a in style[url]) {
-				opts[a] = style[url][a];
-			}
-		}
+	    el = place.getElementsByTagName('styleUrl');
+	    for (i = 0; i < el.length; i++) {
+	        var url = el[i].childNodes[0].nodeValue;
+	        for (var a in style[url]) {
+	            opts[a] = style[url][a];
+	        }
+	    }
 		
-		il = place.getElementsByTagName('Style')[0];
-		if (il) {
-			var inlineStyle = this.parseStyle(place);
-			if (inlineStyle) {
-				for (k in inlineStyle) {
-					opts[k] = inlineStyle[k];
-				}
-			}
-		}
+	    il = place.getElementsByTagName('Style')[0];
+	    if (il) {
+	        var inlineStyle = this.parseStyle(place);
+	        if (inlineStyle) {
+	            for (k in inlineStyle) {
+	                opts[k] = inlineStyle[k];
+	            }
+	        }
+	    }
 
-		var multi = ['MultiGeometry', 'MultiTrack', 'gx:MultiTrack'];
-		for (h in multi) {
-			el = place.getElementsByTagName(multi[h]);
-			for (i = 0; i < el.length; i++) {
-				return this.parsePlacemark(el[i], xml, style, opts);
-			}
-		}
+	    var multi = ['MultiGeometry', 'MultiTrack', 'gx:MultiTrack'];
+	    for (h in multi) {
+	        el = place.getElementsByTagName(multi[h]);
+	        for (i = 0; i < el.length; i++) {
+	            return this.parsePlacemark(el[i], xml, style, opts);
+	        }
+	    }
 		
-		var layers = [];
+	    var layers = [];
 
-		var parse = ['LineString', 'Polygon', 'Point', 'Track', 'gx:Track'];
-		console.log(parse);
+	    var parse = ['LineString', 'Polygon', 'Point', 'Track', 'gx:Track'];
+	    console.log(parse);
 
-		for (j in parse) {
-			var tag = parse[j];
-			el = place.getElementsByTagName(tag);
-			for (i = 0; i < el.length; i++) {
-			    var l = this['parse' + tag.replace(/gx:/, '')](el[i], xml, opts);
-				if (l) { layers.push(l); }
-			}
-		}
+	    for (j in parse) {
+	        var tag = parse[j];
+	        el = place.getElementsByTagName(tag);
+	        for (i = 0; i < el.length; i++) {
+	            var l = this['parse' + tag.replace(/gx:/, '')](el[i], xml, opts);
+	            if (l) {
+	                layers.push(l);
+	            }
+	        }
+	    }
 
-		if (!layers.length) {
-			return;
-		}
-		var layer = layers[0];
-		if (layers.length > 1) {
-			layer = new L.FeatureGroup(layers);
-		}
+	    if (!layers.length) {
+	        return;
+	    }
+	    var layer = layers[0];
+	    if (layers.length > 1) {
+	        layer = new L.FeatureGroup(layers);
+	    }
+	    var name, descr = '';
+	    el = place.getElementsByTagName('name');
+	    if (el.length && el[0].childNodes.length) {
+	        name = el[0].childNodes[0].nodeValue;
+	    }
+	    el = place.getElementsByTagName('description');
+	    for (i = 0; i < el.length; i++) {
+	        for (j = 0; j < el[i].childNodes.length; j++) {
+	            descr = descr + el[i].childNodes[j].nodeValue;
+	        }
+	    }
 
-		var name, descr = '';
-		el = place.getElementsByTagName('name');
-		if (el.length && el[0].childNodes.length) {
-			name = el[0].childNodes[0].nodeValue;
-		}
-		el = place.getElementsByTagName('description');
-		for (i = 0; i < el.length; i++) {
-			for (j = 0; j < el[i].childNodes.length; j++) {
-				descr = descr + el[i].childNodes[j].nodeValue;
-			}
-		}
+	    if (name) {
+	        layer.on('add', function () {
+	            layer.bindTooltip(name); //add by cxy  on 2018.5.16
+	            layer.openTooltip();
+	            layer.bindPopup('<h2>' + name + '</h2>' + descr);
+	        });
+	    }
+	    else if(descr && descr!=""){  //added by cxy on 2017.7.26 for tip
+	        layer.on('add', function () {
+	            layer.bindPopup(descr, { maxHeight: 300 });
 
-		if (name) {
-			layer.on('add', function () {
-			    layer.bindPopup('<h2>' + name + '</h2>' + descr);
-			   // layer.bindTooltip('<h2>' + name + '</h2>'); //add by cxy  on 2018.5.16
-			    layer.bindPopup(descr, { maxHeight: 300 });
-			});
-		}
-		else if(descr && descr!=""){  //added by cxy on 2017.7.26 for tip
-			layer.on('add', function () {
-				layer.bindPopup(descr,{maxHeight:300});
-			});
-		}
+	        });
+	    }
 
-		return layer;
+	    return layer;
 	},
 
 	parseCoords: function (xml) {
@@ -353,7 +355,8 @@ L.Util.extend(L.KML, {
 			return;
 		}
 		var ll = el[0].childNodes[0].nodeValue.split(',');
-		return new L.KMLMarker(new L.LatLng(ll[1], ll[0]), options);
+		var marker = new L.KMLMarker(new L.LatLng(ll[1], ll[0]), options);
+		return marker;
 	},
 
 	parsePolygon: function (line, xml, options) {

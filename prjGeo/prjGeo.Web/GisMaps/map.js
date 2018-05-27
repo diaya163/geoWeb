@@ -137,36 +137,55 @@ objMaps.addMap = function (flon, flat, objData, mapname) {
 }
 
 
-
+/**  
+            * 天地图地图类型说明  
+            ______________________________  
+                图层名称  |  说明  
+               vec_c  | 矢量  
+               img_c  | 影像  
+               ter_c  | 地形  
+               cva_c  | 注记  
+               eva_c  | 英文注记  
+               cia_c  | 路网  
+               eia_c  | 英文路网  
+            ————————————————————————  
+            */
 mapCls = {
     map: null,
   //  kmlLayers:[],
     initMap: function (mapId) {
+        var matrixIds = [];
+        for (var i = 0; i < 22; ++i) {
+            matrixIds[i] = {
+                identifier: 1 + i,
+                topLeftCorner: new L.LatLng(90, -180)
+            };
+        }
+
         var emap_url = 'http://t4.tianditu.com/vec_c/wmts';
         var emapanno_url = 'http://t4.tianditu.com/cva_c/wmts';
         var img_url = 'http://t4.tianditu.com/img_c/wmts';
         var imganno_url = 'http://t4.tianditu.com/cia_c/wmts';
-
-        //电子地图
-        var emap_layer = new L.TileLayer.WMTS(emap_url,
-                                   {
-                                       tileSize: 256,
-                                       layer: 'vec',
-                                       style: "default",
-                                       tilematrixSet: "c",
-                                       format: "tile"
-                                   }
-                                  );
-        //电子地图注记
-        var emapanno_layer = new L.TileLayer.WMTS(emapanno_url,
-                                   {
-                                       tileSize: 256,
-                                       layer: 'cva',
-                                       style: "default",
-                                       tilematrixSet: "c",
-                                       format: "tile"
-                                   }
-                                  );
+        ////电子地图
+        //var emap_layer = new L.TileLayer.WMTS(emap_url,
+        //                           {
+        //                               tileSize: 256,
+        //                               layer: 'vec',
+        //                               style: "default",
+        //                               tilematrixSet: "c",
+        //                               format: "tile"
+        //                           }
+        //                          );
+        ////电子地图注记
+        //var emapanno_layer = new L.TileLayer.WMTS(emapanno_url,
+        //                           {
+        //                               tileSize: 256,
+        //                               layer: 'cva',
+        //                               style: "default",
+        //                               tilematrixSet: "c",
+        //                               format: "tile"
+        //                           }
+        //                          );
         //影像地图						  
         var img_layer = new L.TileLayer.WMTS(img_url,
                                    {
@@ -174,7 +193,8 @@ mapCls = {
                                        layer: 'img',
                                        style: "default",
                                        tilematrixSet: "c",
-                                       format: "tile"
+                                       format: "tile",
+                                       matrixIds: matrixIds
 
                                    }
                                   );
@@ -185,7 +205,9 @@ mapCls = {
                                        layer: 'cia',
                                        style: "default",
                                        tilematrixSet: "c",
-                                       format: "tile"
+                                       format: "tile",
+                                       matrixIds: matrixIds
+                                       
                                    }
                                   );
         var ts = this;
@@ -196,7 +218,7 @@ mapCls = {
                 lon: 114.31, //经度
                 lat: 30.59 // 纬度
             },
-            zoom: 15
+            zoom: 13
         });
         ts.map.addLayer(img_layer);
         ts.map.addLayer(imganno_layer);
