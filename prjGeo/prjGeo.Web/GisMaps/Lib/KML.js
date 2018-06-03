@@ -125,8 +125,24 @@ L.Util.extend(L.KML, {
 		}
 		return styles;
 	},
+	isHasImg: function (pathImg, funcCall) { //added by cxy for judeg icon file exist on 2018.5.27 
+	    var xmlHttp;
+	    if (window.ActiveXObject) {
+	        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+	    }
+	    else if (window.XMLHttpRequest) {
+	        xmlHttp = new XMLHttpRequest();
+	    }
+	    xmlHttp.open("Get", pathImg, false);
+	    xmlHttp.send();
+	    if (xmlHttp.status == 404)
+	        return false;
+	    else
+	        return true;
 
+	},
 	parseStyle: function (xml) {
+	    var me = this;
 		var style = {}, poptions = {}, ioptions = {}, el, id;
 
 		var attributes = {color: true, width: true, Icon: true, href: true, hotSpot: true};
@@ -150,8 +166,22 @@ L.Util.extend(L.KML, {
 					} else if (key === 'width') {
 						options.weight = value;
 					} else if (key === 'Icon') {
-						ioptions = _parse(e);
-						if (ioptions.href) { options.href = "/GisMaps/icon/defaultIcon.png"; }//ioptions.href; }  //changed by cxy on 2018.5.8 for incon picture
+					    ioptions = _parse(e);
+						if (ioptions.href) {
+						    var href = ioptions.href;
+						    var name = href.substring(href.lastIndexOf('/') + 1, href.length);
+						    var newHref = "/GisMaps/icon/" + name;
+						    //me.isHasImg(newHref, function (isHas) {
+						    //    if (!isHas) {
+						    //        newHref = "/GisMaps/icon/defaultIcon.png";
+						    //    }
+						    //    options.href = newHref;
+						    //});
+						    if (!me.isHasImg(newHref)) {
+						        newHref = "/GisMaps/icon/defaultIcon.png";
+						    }
+	     				    options.href = newHref;//ioptions.href; //changed by cxy on 2018.5.8 for incon picture
+						}
 					} else if (key === 'href') {
 					    options.href = value;
 					}
@@ -278,7 +308,6 @@ L.Util.extend(L.KML, {
 	    var layers = [];
 
 	    var parse = ['LineString', 'Polygon', 'Point', 'Track', 'gx:Track'];
-	    console.log(parse);
 
 	    for (j in parse) {
 	        var tag = parse[j];
@@ -421,6 +450,7 @@ L.Util.extend(L.KML, {
 	},
 
 	parseGroundOverlay: function (xml) {
+	    var me = this;
 		var latlonbox = xml.getElementsByTagName('LatLonBox')[0];
 		var bounds = new L.LatLngBounds(
 			[
@@ -442,7 +472,15 @@ L.Util.extend(L.KML, {
 				var value = e.childNodes[0].nodeValue;
 				if (key === 'Icon') {
 					ioptions = _parse(e);
-					if (ioptions.href) { options.href = "/GisMaps/icon/defaultIcon.png"; }//ioptions.href; }  //changed by cxy on 2018.5.8 for incon picture
+					if (ioptions.href) {
+					    var href = ioptions.href;
+					    var name = href.substring(href.lastIndexOf('/') + 1, href.length);
+					    var newHref = "/GisMaps/icon/" + name;
+					    if (!me.isHasImg(newHref)) {
+					        newHref = "/GisMaps/icon/defaultIcon.png";
+					    }
+					    options.href = newHref;//ioptions.href; //changed by cxy on 2018.5.8 for incon picture
+					}
 				} else if (key === 'href') {
 				    options.href = value;
 				} else if (key === 'color') {
