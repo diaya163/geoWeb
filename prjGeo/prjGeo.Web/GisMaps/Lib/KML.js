@@ -171,12 +171,6 @@ L.Util.extend(L.KML, {
 						    var href = ioptions.href;
 						    var name = href.substring(href.lastIndexOf('/') + 1, href.length);
 						    var newHref = "/GisMaps/icon/" + name;
-						    //me.isHasImg(newHref, function (isHas) {
-						    //    if (!isHas) {
-						    //        newHref = "/GisMaps/icon/defaultIcon.png";
-						    //    }
-						    //    options.href = newHref;
-						    //});
 						    if (!me.isHasImg(newHref)) {
 						        newHref = "/GisMaps/icon/defaultIcon.png";
 						    }
@@ -202,7 +196,7 @@ L.Util.extend(L.KML, {
 			style.icon = new L.KMLIcon({
 				iconUrl: ioptions.href,
 				shadowUrl: null,
-				anchorRef: {x: ioptions.x, y: ioptions.y},
+			    anchorRef: {x: ioptions.x, y: ioptions.y},
 				anchorType:	{x: ioptions.xunits, y: ioptions.yunits}
 			});
 		}
@@ -341,9 +335,12 @@ L.Util.extend(L.KML, {
 
 	    if (name) {
 	        layer.on('add', function () {
-	            layer.bindTooltip(name); //add by cxy  on 2018.5.16
+	            layer.bindTooltip(name,{direction:'left',permanent:true}); //add by cxy  on 2018.5.16
 	            layer.openTooltip();
 	            layer.bindPopup('<h2>' + name + '</h2>' + descr);
+	            //setTimeout(function () {
+	            //    layer.closeTooltip();
+	            //}, 300000);
 	        });
 	    }
 	    else if(descr && descr!=""){  //added by cxy on 2017.7.26 for tip
@@ -502,7 +499,7 @@ L.Util.extend(L.KML, {
 });
 
 L.KMLIcon = L.Icon.extend({
-	_setIconStyles: function (img, name) {
+    _setIconStyles: function (img, name) {
 		L.Icon.prototype._setIconStyles.apply(this, [img, name]);
 		var options = this.options;
 		this.options.popupAnchor = [0,(-0.83*img.height)];
@@ -511,7 +508,7 @@ L.KMLIcon = L.Icon.extend({
 		if (options.anchorType.y === 'fraction')
 			img.style.marginTop  = ((-(1 - options.anchorRef.y) * img.height) + 1) + 'px';
 		if (options.anchorType.x === 'pixels')
-			img.style.marginLeft = (-options.anchorRef.x) + 'px';
+			img.style.marginLeft = (-options.anchorRef.x/2) + 'px';
 		if (options.anchorType.y === 'pixels')
 			img.style.marginTop  = (options.anchorRef.y - img.height + 1) + 'px';
 	}
