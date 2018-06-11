@@ -193,9 +193,16 @@ L.Util.extend(L.KML, {
 		el = xml.getElementsByTagName('IconStyle');
 		if (el && el[0]) { ioptions = _parse(el[0]); }
 		if (ioptions.href) {
+		    var img = new Image();
+		    img.src = ioptions.href;
+		    var w = img.width > 0?img.width:15;
+		    var h = img.height > 0?img.height : 24;
 			style.icon = new L.KMLIcon({
-				iconUrl: ioptions.href,
-				shadowUrl: null,
+			    iconUrl: ioptions.href,
+			    iconSize: [w,h],
+			    iconAnchor: [img.width/2, img.height],
+			    popupAnchor: [0,-img.height],
+			    shadowUrl: null,
 			    anchorRef: {x: ioptions.x, y: ioptions.y},
 				anchorType:	{x: ioptions.xunits, y: ioptions.yunits}
 			});
@@ -335,7 +342,7 @@ L.Util.extend(L.KML, {
 
 	    if (name) {
 	        layer.on('add', function () {
-	            layer.bindTooltip(name,{direction:'left',permanent:true}); //add by cxy  on 2018.5.16
+	            layer.bindTooltip(name,{offset:L.point(0,0),direction:'bottom',permanent:true}); //add by cxy  on 2018.5.16
 	            layer.openTooltip();
 	            layer.bindPopup('<h2>' + name + '</h2>' + descr);
 	            //setTimeout(function () {

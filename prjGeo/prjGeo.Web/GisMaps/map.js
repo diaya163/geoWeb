@@ -65,6 +65,7 @@ objMaps.addMap = function (flon, flat, objData, mapname) {
 
     var map = L.map('map', {
         crs: L.CRS.EPSG4326,
+        attributionControl:false,
         center: {
             lon: flon,
             lat: flat
