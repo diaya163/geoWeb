@@ -198,8 +198,8 @@ L.Util.extend(L.KML, {
 		if (ioptions.href) {
 		    var img = new Image();
 		    img.src = ioptions.href;
-		    var w = img.width > 0?img.width:15;
-		    var h = img.height > 0?img.height : 24;
+		    var w = 24; //img.width > 0?img.width:15;
+		    var h = 24;//img.height > 0?img.height : 24;
 			style.icon = new L.KMLIcon({
 			    iconUrl: ioptions.href,
 			    iconSize: [w,h],
