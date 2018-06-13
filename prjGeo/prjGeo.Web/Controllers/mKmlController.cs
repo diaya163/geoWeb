@@ -94,7 +94,7 @@ namespace prjGeo.Web.Controllers
                 }
 
               //  string path = _kmlFolder +  model.PrjName + "\\" + model.FileName;
-                string path = Server.MapPath("/") + _kmlFolder + model.PrjName + "\\" + model.FileName;
+                string path = Server.MapPath("/") + _kmlFolder + "\\" + model.PrjName + "\\" + model.FileName;
                 path = path.Replace(".kml", ".xml");
                 Debug.WriteLine("path " +path);
                 if (System.IO.File.Exists(path))
@@ -137,53 +137,56 @@ namespace prjGeo.Web.Controllers
             try
             {
                 string action = Request.Form["action"];  //普通参数获取
+                string oldFile = Request.Form["oldFile"];//普通参数获取
                 string p1 = Request.Form["kmlData"];  //普通参数获取
+    
                 mKml kmlData = JsonConvert.DeserializeObject<mKml>(p1);
 
                 if (string.IsNullOrEmpty(_kmlFolder))
                 {
-                    _kmlFolder = Server.MapPath("/")+"KMLFiles\\";// ConfigurationManager.AppSettings["KMLFolder"];
+                    _kmlFolder = ConfigurationManager.AppSettings["KMLFolder"];
                 }
+
+                string path = Server.MapPath("/") + _kmlFolder + "\\" + kmlData.PrjName + "\\";
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+
+                }
+
+                foreach (string upload in Request.Files.AllKeys)
+                {
+                    HttpPostedFileBase file = Request.Files[upload];   //file可能为null
+                    string filename = System.IO.Path.GetFileName(file.FileName);
+
+                    filename = filename.Replace(".kml", ".xml");
+                    string desPath = path + filename;
+                    Debug.WriteLine("desPath " + desPath);
+                
+                    file.SaveAs(desPath);
+                    kmlData.KmlPath = "/" + _kmlFolder + "/" + kmlData.PrjName + "/" + filename;
+                }
+
 
                 if (action.Equals("new"))
                 {
-                    foreach (string upload in Request.Files.AllKeys)
-                    {
-                        HttpPostedFileBase file = Request.Files[upload];   //file可能为null
-                        string filename = System.IO.Path.GetFileName(file.FileName);
-
-                        string path = _kmlFolder + kmlData.PrjName + "\\";
-                        if (!Directory.Exists(path))
-                        {
-                            Directory.CreateDirectory(path);
-
-                        }
-                        filename = filename.Replace(".kml", ".xml");
-                        path = path + filename;
-                        file.SaveAs(path);
-                        kmlData.KmlPath = "/KMLFiles/" + kmlData.PrjName + "/" + filename;
-                    }
+                    
                     objBLL.Add(kmlData, ref errMsg);
                 }
                 else if (action.Equals("modify"))
                 {
-                    foreach (string upload in Request.Files.AllKeys)
-                    {
-                        HttpPostedFileBase file = Request.Files[upload];   //file可能为null
-                        string filename = System.IO.Path.GetFileName(file.FileName);
-
-                        string path = _kmlFolder + kmlData.PrjName + "\\";
-                        if (!Directory.Exists(path))
-                        {
-                            Directory.CreateDirectory(path);
-
-                        }
-                        filename = filename.Replace(".kml", ".xml");
-                        path = path + filename;
-                        file.SaveAs(path);
-                        kmlData.KmlPath = "/KMLFiles/" + kmlData.PrjName + "/" + filename;
-                    }
                     objBLL.Update(kmlData, ref errMsg);
+
+                    if (!string.IsNullOrEmpty(oldFile))
+                    {
+                        oldFile = oldFile.Replace(".kml", ".xml");
+                        string oldKml = Server.MapPath("/") + _kmlFolder + "\\" + kmlData.PrjName + "\\" + oldFile;
+                        Debug.WriteLine("oldKml " + oldKml);
+                        if (System.IO.File.Exists(oldKml))
+                        {
+                            System.IO.File.Delete(oldKml);
+                        }
+                    }
                 }
                 return Json(new { errMsg }, JsonRequestBehavior.AllowGet);
             }

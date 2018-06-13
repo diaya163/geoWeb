@@ -75,6 +75,7 @@ function SetGridStyle(grid) {
 }
 var action = '', id = -1;
 var o = null;
+var oldFile = '';
 
 function save() {
     var ProvinceName = $("#txtProvinceName").textbox('getValue');
@@ -147,6 +148,7 @@ function save() {
     //var file = document.getElementById('browse').files[0];
     var fm = new FormData();
     fm.append('action', action);
+    fm.append("oldFile", oldFile);
     fm.append('kmlData', JSON.stringify(o));
     if (file) {
         fm.append('kmlfile', file);
@@ -300,6 +302,7 @@ function rowOpt(a) {
                 $("#txtFileName").textbox('setValue', row.FileName);
                 $("#txtFileSize").textbox('setValue', row.FileSize);
                 $("#txtFileType").textbox('setValue', row.FileType);
+                oldFile = row.FileName;
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
