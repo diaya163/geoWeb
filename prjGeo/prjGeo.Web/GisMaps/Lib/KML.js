@@ -174,7 +174,10 @@ L.Util.extend(L.KML, {
 						    if (!me.isHasImg(newHref)) {
 						        newHref = "/GisMaps/icon/defaultIcon.png";
 						    }
-	     				    options.href = newHref;//ioptions.href; //changed by cxy on 2018.5.8 for incon picture
+						    options.href = newHref;//ioptions.href; //changed by cxy on 2018.5.8 for incon picture
+						    var img = new Image();
+						    img.src = options.href;
+						 
 						}
 					} else if (key === 'href') {
 					    options.href = value;
