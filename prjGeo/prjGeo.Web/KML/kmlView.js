@@ -308,9 +308,7 @@ function rowOpt(a) {
 
         }
     });
-
-  
-
+    
     action = a;
     $('#w').window('open');
 }
@@ -324,6 +322,7 @@ function rowDel() {
         if (r) {
             id = row.id;
             var o = { id: id };
+            console.log("id"+id);
             $.ajax({
                 url: "/mKml/GetListDataById",
                 type: 'post',
@@ -335,7 +334,8 @@ function rowDel() {
                         $.messager.alert('id不存在！', data.errMsg);
                         return;
                     }
-
+                    console.log("GetListDataById");
+                    console.log(data);
                     $.ajax({
                         url: "/mKml/Delete",
                         type: 'post',
@@ -365,10 +365,6 @@ function rowDel() {
             });
 
            
-
-
-
-
             $.ajax({
                 url: "/mKml/Delete",
                 type: 'post',
@@ -472,31 +468,3 @@ $(function () {
     })
 });
 
-
-
-
-function uploadFile(dt) {
-
-    //var file = document.getElementById('browse').files[0];
-    var fm = new FormData();
- //   fm.append('userName', userName);
-    fm.append('kmlfile', file);
-    $.ajax(
-        {
-            url: '/mKml/Doit',    //UploadifyFile',
-            type: 'POST',
-            data: fm,
-            cache: false,
-            contentType: false, //禁止设置请求类型
-            processData: false, //禁止jquery对DAta数据的处理,默认会处理
-            //禁止的原因是,FormData已经帮我们做了处理
-            async:false,
-            success: function (result) {
-                //测试是否成功
-                //但需要你后端有返回值
-                alert(result);
-            }
-        }
-    );
-
-}

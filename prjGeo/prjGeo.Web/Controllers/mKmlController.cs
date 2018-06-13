@@ -13,6 +13,7 @@ using System.Configuration;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 
 
@@ -89,10 +90,13 @@ namespace prjGeo.Web.Controllers
                 //delete kml file
                 if (string.IsNullOrEmpty(_kmlFolder))
                 {
-                    _kmlFolder = ConfigurationManager.AppSettings["KMLFolder"];
+                    _kmlFolder =  ConfigurationManager.AppSettings["KMLFolder"];
                 }
 
-                string path = _kmlFolder + "\\" + model.PrjName + "\\" + model.FileName;
+              //  string path = _kmlFolder +  model.PrjName + "\\" + model.FileName;
+                string path = Server.MapPath("/") + _kmlFolder + model.PrjName + "\\" + model.FileName;
+                path = path.Replace(".kml", ".xml");
+                Debug.WriteLine("path " +path);
                 if (System.IO.File.Exists(path))
                 {
                     System.IO.File.Delete(path);
@@ -124,46 +128,7 @@ namespace prjGeo.Web.Controllers
             var list = objBLL.GetList(string.Empty, ref errMsg);
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-        /// <summary>
-        /// 文件上传页面
-        /// </summary>
-        /// <param name="filedata"></param>
-        /// <returns></returns>
-        public ActionResult UploadifyFile(HttpPostedFileBase filedata)
-        {
-            if (filedata == null ||
-              String.IsNullOrEmpty(filedata.FileName) ||
-              filedata.ContentLength == 0)
-            {
-                return HttpNotFound();
-            }
 
-            string filename = System.IO.Path.GetFileName(filedata.FileName);
-            if (string.IsNullOrEmpty(_kmlFolder))
-            {
-                _kmlFolder = ConfigurationManager.AppSettings["KMLFolder"];
-            }
-
-            //string virtualPath = String.Format("~/File/{0}", filename);
-
-            // string path = Server.MapPath(virtualPath);
-
-            string path = _kmlFolder + DateTime.Now.ToString() + "\\";
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-
-            }
-            path = path + filename;
-
-
-            // 以下注释的代码 都可以获得文件属性
-            // System.Diagnostics.FileVersionInfo info = System.Diagnostics.FileVersionInfo.GetVersionInfo(path);
-            // FileInfo file = new FileInfo(filedata.FileName);
-
-            filedata.SaveAs(path);
-            return null;
-        }
 
 
         public ActionResult uploadKml()
