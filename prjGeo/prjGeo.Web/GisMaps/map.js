@@ -65,12 +65,14 @@ objMaps.addMap = function (flon, flat, objData, mapname) {
 
     var map = L.map('map', {
         crs: L.CRS.EPSG4326,
-        attributionControl:false,
         center: {
             lon: flon,
             lat: flat
         },
-        zoom: 15
+        trackResize:false,
+        minZoom:0,
+        maxZoom:18,
+        zoom: 10
     });
 
 
@@ -215,11 +217,16 @@ mapCls = {
         var mid = mapId ? mapId : 'map';
         ts.map = L.map(mid, {
             crs: L.CRS.EPSG4326,
+            attributionControl:false,
+            trackResize: false,
             center: {
                 lon: 114.31, //经度
                 lat: 30.59 // 纬度
             },
-            zoom: 13
+            minZoom:4,
+            maxZoom:18,
+            zoom: 7
+
         });
         ts.map.addLayer(img_layer);
         ts.map.addLayer(imganno_layer);
