@@ -230,7 +230,7 @@ mapCls = {
         });
         ts.map.addLayer(img_layer);
         ts.map.addLayer(imganno_layer);
-        L.control.scale({position:'bottomright'}).addTo(ts.map);
+        L.control.scale({position:'bottomright',imperial:false}).addTo(ts.map);
     },
     clearMap: function () {
         this.map.remove();
