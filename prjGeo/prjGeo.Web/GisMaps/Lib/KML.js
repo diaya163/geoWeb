@@ -145,7 +145,8 @@ L.Util.extend(L.KML, {
 	    var me = this;
 		var style = {}, poptions = {}, ioptions = {}, el, id;
 
-		var attributes = {color: true, width: true, Icon: true, href: true, hotSpot: true};
+	    //	var attributes = {color: true, width: true, Icon: true, href: true, hotSpot: true};
+		var attributes = { color: true, width: true, Icon: true, href: true, hotSpot: true, scale: true};//changed by cxy on 2018,6.14 for icon scale
 
 		function _parse (xml) {
 			var options = {};
@@ -177,10 +178,14 @@ L.Util.extend(L.KML, {
 						    options.href = newHref;//ioptions.href; //changed by cxy on 2018.5.8 for incon picture
 						    var img = new Image();
 						    img.src = options.href;
+						 //   console.log(options.href + " sizex:" + img.width + " sizey: " + img.height);
 						 
 						}
 					} else if (key === 'href') {
 					    options.href = value;
+					}
+					else if (key === "scale") {  //added by cxy on 2018,6.14 for icon scale
+					    options.scale = value;
 					}
 				}
 			}
@@ -196,15 +201,21 @@ L.Util.extend(L.KML, {
 		el = xml.getElementsByTagName('IconStyle');
 		if (el && el[0]) { ioptions = _parse(el[0]); }
 		if (ioptions.href) {
-		    var img = new Image();
-		    img.src = ioptions.href;
-		    var w = 24; //img.width > 0?img.width:15;
-		    var h = 24;//img.height > 0?img.height : 24;
+		    var w = 15, h = 24;
+		    if (ioptions.href != "/GisMaps/icon/defaultIcon.png") {
+		        var img = new Image();
+		        img.src = ioptions.href;
+		        var scale = ioptions.scale ? ioptions.scale : 1;
+		         w = img.width > 0 ? img.width * scale : 24;
+		         h = img.height > 0 ? img.height * scale : 24;
+		      //   console.log(ioptions.href + " iconstyle  sizex:" + w + " sizey: " + h + " scale: " + scale);
+		   }
+		   
 			style.icon = new L.KMLIcon({
 			    iconUrl: ioptions.href,
 			    iconSize: [w,h],
-			    iconAnchor: [img.width/2, img.height],
-			    popupAnchor: [0,-img.height],
+			    iconAnchor: [w/2, h],
+			    popupAnchor: [0,-h],
 			    shadowUrl: null,
 			    anchorRef: {x: ioptions.x, y: ioptions.y},
 				anchorType:	{x: ioptions.xunits, y: ioptions.yunits}
@@ -469,7 +480,8 @@ L.Util.extend(L.KML, {
 				latlonbox.getElementsByTagName('east')[0].childNodes[0].nodeValue
 			]
 		);
-		var attributes = {Icon: true, href: true, color: true};
+		var attributes = { Icon: true, href: true, color: true };
+defaultIcon
 		function _parse (xml) {
 			var options = {}, ioptions = {};
 			for (var i = 0; i < xml.childNodes.length; i++) {
