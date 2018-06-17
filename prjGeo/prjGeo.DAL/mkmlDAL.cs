@@ -67,8 +67,8 @@ namespace prjGeo.DAL
         {
             StringBuilder insCmd = new StringBuilder();
             insCmd.Append("insert into mKml");
-            insCmd.Append("(provinceName,cityName,countyName,longitude,latitude,isVisible,kmlPath,layerName,villageName,layerOrder,projId,prjName,fileName,fileSize,fileType)");
-            insCmd.Append("VALUES(@provinceName,@cityName,@countyName,@longitude,@latitude,@isVisible,@kmlPath,@layerName,@villageName,@layerOrder,@projId,@prjName,@fileName,@fileSize,@fileType)");
+            insCmd.Append("(provinceName,cityName,countyName,townName,longitude,latitude,isVisible,kmlPath,layerName,villageName,layerOrder,projId,prjName,fileName,fileSize,fileType)");
+            insCmd.Append("VALUES(@provinceName,@cityName,@countyName,@townName,@longitude,@latitude,@isVisible,@kmlPath,@layerName,@villageName,@layerOrder,@projId,@prjName,@fileName,@fileSize,@fileType)");
             insCmd.Append(";select @@IDENTITY");
             try
             {
@@ -100,6 +100,7 @@ namespace prjGeo.DAL
             updCmd.Append("provinceName=@provinceName");
             updCmd.Append(",cityName=@cityName");
             updCmd.Append(",countyName=@countyName");
+            updCmd.Append(",townName=@townName");
             updCmd.Append(",villageName=@villageName");
             updCmd.Append(",isVisible=@isVisible");
             updCmd.Append(",layerName=@layerName");
@@ -109,6 +110,7 @@ namespace prjGeo.DAL
             updCmd.Append(",fileName=@fileName");
             updCmd.Append(",fileSize=@fileSize");
             updCmd.Append(",fileType=@fileType");
+            updCmd.Append(",kmlPath=@kmlPath");
             updCmd.Append(" where id=@id");
 
             try

@@ -217,14 +217,15 @@ mapCls = {
         var mid = mapId ? mapId : 'map';
         ts.map = L.map(mid, {
             crs: L.CRS.EPSG4326,
-            attributionControl:false,
+            attributionControl: false,
+            renderer: L.canvas({padding:0.5}),
             trackResize: false,
             center: {
                 lon: 114.31, //经度
                 lat: 30.59 // 纬度
             },
             minZoom:4,
-            maxZoom:18,
+            maxZoom:16,
             zoom: 7
 
         });
