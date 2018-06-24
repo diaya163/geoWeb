@@ -1869,9 +1869,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
-    <Content Include="GisMaps\base.js" />
     <Content Include="GisMaps\Lib\KML.js" />
-    <Content Include="GisMaps\GisInfos.js" />
     <Content Include="GisMaps\Lib\leaflet\images\layers-2x.png" />
     <Content Include="GisMaps\Lib\leaflet\images\layers.png" />
     <Content Include="GisMaps\Lib\leaflet\images\marker-icon-2x.png" />
