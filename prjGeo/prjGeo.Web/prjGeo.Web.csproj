@@ -1877,8 +1877,7 @@
     <Content Include="GisMaps\Lib\leaflet\images\marker-icon-2x.png" />
     <Content Include="GisMaps\Lib\leaflet\images\marker-icon.png" />
     <Content Include="GisMaps\Lib\leaflet\images\marker-shadow.png" />
-    <Content Include="GisMaps\Lib\leaflet\leaflet-src.js" />
-    <Content Include="GisMaps\Lib\leaflet\leaflet-tilelayer-wmts-src.js" />
+    <Content Include="GisMaps\Lib\leaflet\leaflet-tilelayer-wmts.js" />
     <Content Include="GisMaps\Lib\leaflet\leaflet.css" />
     <Content Include="GisMaps\Lib\leaflet\leaflet.js" />
     <Content Include="GisMaps\map.js" />

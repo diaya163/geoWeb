@@ -8204,9 +8204,11 @@ var Polyline = Path.extend({
 		var bounds = this._renderer._bounds;
 
 		this._parts = [];
-		if (!this._pxBounds || !this._pxBounds.intersects(bounds)) {
-			return;
-		}
+	    //delete by cxy on 2018.6.24 for 多边形区域比较会有错，导致移动时区域有时无法显示
+		//if (!this._pxBounds || !this._pxBounds.intersects(bounds)) {
+		//	return;
+		//}
+        //delete end
 
 		if (this.options.noClip) {
 			this._parts = this._rings;
@@ -8417,9 +8419,11 @@ var Polygon = Polyline.extend({
 		bounds = new Bounds(bounds.min.subtract(p), bounds.max.add(p));
 
 		this._parts = [];
-		if (!this._pxBounds || !this._pxBounds.intersects(bounds)) {
-			return;
-		}
+	    //delete by cxy on 2018.6.24 for 多边形区域比较会有错，导致移动时区域有时无法显示
+		//if (!this._pxBounds || !this._pxBounds.intersects(bounds)) {
+		//	return;
+		//}
+        //delete end 
 
 		if (this.options.noClip) {
 			this._parts = this._rings;
