@@ -88,26 +88,26 @@ namespace prjGeo.BLL
             }
 
             List<mKml> lstData = (from k in queryData
-                                   select new mKml
-                                   {
-                                       id = k.id,
-                                       ProvinceName = k.ProvinceName,
-                                       CityName = k.CityName,
-                                       CountyName = k.CountyName,
-                                       TownName = k.TownName,
-                                       VillageName = k.VillageName,
-                                       Longitude = k.Longitude,
-                                       Latitude = k.Latitude,
-                                       IsVisible = k.IsVisible,
-                                       KmlPath = k.KmlPath,
-                                       LayerName = k.LayerName,
-                                       LayerOrder = k.LayerOrder,
-                                       ProjId = k.ProjId,
-                                       PrjName = k.PrjName,
-                                       FileName = k.FileName,
-                                       FileSize = k.FileSize,
-                                       FileType = k.FileType
-                                   }).ToList();
+                                  select new mKml
+                                  {
+                                      id = k.id,
+                                      ProvinceName = k.ProvinceName,
+                                      CityName = k.CityName,
+                                      CountyName = k.CountyName,
+                                      TownName = k.TownName,
+                                      VillageName = k.VillageName,
+                                      Longitude = k.Longitude,
+                                      Latitude = k.Latitude,
+                                      IsVisible = k.IsVisible,
+                                      KmlPath = k.KmlPath,
+                                      LayerName = k.LayerName,
+                                      LayerOrder = k.LayerOrder,
+                                      ProjId = k.ProjId,
+                                      PrjName = k.PrjName,
+                                      FileName = k.FileName,
+                                      FileSize = k.FileSize,
+                                      FileType = k.FileType
+                                  }).ToList();
             return lstData;
 
         }

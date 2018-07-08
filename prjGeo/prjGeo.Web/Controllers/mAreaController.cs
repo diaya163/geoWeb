@@ -20,7 +20,7 @@ namespace prjGeo.Web.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.Title = "分部维护";
+            ViewBag.Title = "中国分部维护";
             //List<mUsersModel> list =objUser.GetAllList(),
             var model = new
             {

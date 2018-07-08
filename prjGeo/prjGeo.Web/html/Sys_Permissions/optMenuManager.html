@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+
+    <link href="../../Content/reset.css" rel="stylesheet" />
+    <link href="../../Scripts/MiniUi/themes/default/miniui.css" rel="stylesheet" />
+    <link href="../../Scripts/MiniUi/themes/icons.css" rel="stylesheet" />
+
+    <script src="../../Scripts/jquery-1.8.2.js"></script>
+      
+    <script src="../../Scripts/jquery.json-2.4.js"></script>
+    <script src="../../Scripts/Custom/System.js"></script>
+
+    <script src="../../Scripts/MiniUI/miniuicr.js"></script>
+    <script src="../../Scripts/MiniUI/miniui.js"></script>
+    <style>
+        .tdlabel {
+            width: 100px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" method="post">
+        <input type="hidden" class="mini-hidden" name="Id">
+        <fieldset style="border:solid 1px #aaa;padding:3px;">
+            <legend>基本信息</legend>
+            <div style="padding:5px;">
+                <table style="table-layout:fixed;">
+                    <tbody>
+                        <tr>
+                            <td class="tdlabel">组别编号：</td>
+                            <td>
+                                <input type="text" class="mini-textbox" required="true" placeholder="请输入组别编号" name="FunCode" />
+                            </td> 
+                            <td class="tdlabel">组别名称：</td>
+                            <td>
+                                <input type="text" class="mini-textbox" required="true" placeholder="请输入组别名称" name="FunName" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tdlabel">组别英文名称：</td>
+                            <td>
+                                <input type="text" class="mini-textbox"  placeholder="请输入组别英文名称" name="FunName_En" />
+                            </td>
+                            <td class="tdlabel">是否启用：</td>
+                            <td>
+                                <input id="txtIsUse" name="IsUse" class="mini-combobox"
+                                       data="[{Value:true,Text:'是'},{Value:false,Text:'否'}]" valuefield="Value" textfield="Text" />
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+        
+        <div style="text-align:center;padding:10px;">
+            <a class="mini-button" onclick="onOk" style="width:60px;margin-right:20px;">确定</a>
+            <a class="mini-button" onclick="onCancel" style="width:60px;">取消</a>
+        </div>
+    </form>
+    <script type="text/javascript">
+        mini.parse();
+      
+        var form = new mini.Form("form1");
+
+        function SaveData() {
+            var o = form.getData();
+            form.validate();
+            if (form.isValid() == false) return;
+
+           
+            var msgId = mini.loading('数据保存中...');
+
+            $.ajax({
+                url: "/MenuManager/SaveData",
+                type: 'post',
+                data: $.toJSON({ action: actionData.action, model: o }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.errMsg != '') {
+                        mini.alert(data.errMsg);
+                        return;
+                    }
+                    CloseWindow("save");
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    mini.alert(jqXHR.responseText);
+                    //CloseWindow();
+                }, complete: function () {
+                    mini.hideMessageBox(msgId);
+                }
+            });
+        }
+        var actionData = [];
+        ////////////////////
+        //标准方法接口定义
+        function SetData(data) {
+            actionData = data;
+            if (data.action == "edit") {
+                data = mini.clone(data);
+                $.ajax({
+                    url: "/MenuManager/GetFunModelData",
+                    type: 'post',
+                    data: $.toJSON({ id: data.id }),
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (text) {
+                        var o = mini.decode(text);
+                        form.setData(o);
+                        form.setChanged(false);
+                    }
+                });
+            } else {
+                var data = form.getData();
+                mini.getbyName("IsUse").setValue(true);
+            }
+        }
+
+        function CloseWindow(action) {
+            if (action == "close" && form.isChanged()) {
+                mini.confirm("数据被修改了，是否先保存？", "询问", function (action) {
+                    if (action == "ok") {
+                    } else {
+                        if (window.CloseOwnerWindow) {
+                            return window.CloseOwnerWindow(action);
+                            console.log(action);
+                        }
+                        else {
+                            sys.winClose();
+                        }
+                    }
+                });
+            } else {
+                if (window.CloseOwnerWindow) {
+                    return window.CloseOwnerWindow(action);
+                    console.log(action);
+                }
+                else {
+                    sys.winClose();
+                }
+            }
+        }
+        function onOk(e) {
+            SaveData();
+        }
+        function onCancel(e) {
+            CloseWindow("cancel");
+        }
+    </script>
+
+</body>
+</html>

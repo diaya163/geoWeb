@@ -59,12 +59,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\EntityObject.cs" />
+    <Compile Include="HSAllSeqDAL.cs" />
     <Compile Include="mAreaDAL.cs" />
+    <Compile Include="mElementalAbundanceDAL.cs" />
     <Compile Include="mElementDAL.cs" />
     <Compile Include="menuDAL.cs" />
+    <Compile Include="mGeologyUnitDAL.cs" />
     <Compile Include="mkmlDAL.cs" />
     <Compile Include="mProjectDAL.cs" />
     <Compile Include="mUsersDAL.cs" />
+    <Compile Include="mZoneDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

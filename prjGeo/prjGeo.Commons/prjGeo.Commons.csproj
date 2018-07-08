@@ -34,6 +34,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Esquel.BaseManager">
+      <HintPath>..\DLL\Esquel.BaseManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Esquel.Framework">
+      <HintPath>..\DLL\Esquel.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Esquel.Utility">
+      <HintPath>..\DLL\Esquel.Utility.dll</HintPath>
+    </Reference>
+    <Reference Include="Esquel.WebBlock">
+      <HintPath>..\DLL\Esquel.WebBlock.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -62,12 +74,14 @@
     <Compile Include="BaseFunctions.cs" />
     <Compile Include="Base\LoginerBase.cs" />
     <Compile Include="ComCls.cs" />
+    <Compile Include="Controls\ComboxInfo.cs" />
     <Compile Include="Controls\TableInfo.cs" />
     <Compile Include="Core\FormsAuth.cs" />
     <Compile Include="CvtFunc.cs" />
     <Compile Include="DataFunction.cs" />
     <Compile Include="DataHelp.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="FiterCond.cs" />
     <Compile Include="GridPager.cs" />
     <Compile Include="LinqHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

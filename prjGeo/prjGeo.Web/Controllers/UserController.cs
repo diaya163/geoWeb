@@ -16,8 +16,9 @@ namespace prjGeo.Web.Controllers
     {
         //
         // GET: /User/
-        mUsersBLL objUser = new mUsersBLL();
-        
+        private mUsersBLL objUser = new mUsersBLL();
+        private string errMsg = string.Empty;
+
         public ActionResult Index()
         {            
             ViewBag.Title = "用户管理";
@@ -46,19 +47,43 @@ namespace prjGeo.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetList(GridPager pager)
+        public JsonResult GetList(GridPager pager, mUsersModel objModel)
         {
-            List<mUsersModel> list = objUser.GetIndexList(ref pager);
-            var json = new
-            {
-                total = pager.totalRows,
-                rows=list.ToArray()
-            };
+            errMsg = string.Empty;
+            List<mUsersModel> list = objUser.GetIndexList(objModel, ref errMsg, ref pager);
+            try {
+                var json = new
+                {
+                    total = pager.totalRows,
+                    rows = list.ToArray()
+                };
 
-            return Json(json,JsonRequestBehavior.AllowGet);
+                return Json(json, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex) { 
+                errMsg = ex.Message.ToString();
+                return null;
+            }
+
         }
 
- 
+        public ActionResult SaveData(string action, mUser model)
+        {
+            if (action.Equals("new"))
+            {
+                objUser.Add(model, ref errMsg);
+            }
+            else if (action.Equals("modify"))
+            {
+                objUser.Update(model, ref errMsg);
+            }
+            return Json(new { errMsg }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult Delete(mUser model)
+        {
+            objUser.Delete(model, ref errMsg);
+            return Json(new { errMsg }, JsonRequestBehavior.AllowGet);
+        }
 
 
 

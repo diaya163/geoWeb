@@ -24,7 +24,7 @@ namespace prjGeo.Web.Controllers
         private mKmlBLL objBLL = new mKmlBLL();
         public ActionResult Index()
         {
-            ViewBag.Title = "分部维护";
+            ViewBag.Title = "地图维护";
             //List<mUsersModel> list =objUser.GetAllList(),
             var model = new
             {
@@ -66,6 +66,6 @@ namespace prjGeo.Web.Controllers
         {
             var list = objBLL.GetList(string.Empty, ref errMsg);
             return Json(list, JsonRequestBehavior.AllowGet);
-        } 
+        }
     }
 }

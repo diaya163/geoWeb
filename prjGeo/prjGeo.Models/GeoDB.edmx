@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="GeoGisModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="GeoGisModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="mArea">
           <Key>
             <PropertyRef Name="id" />
@@ -42,6 +42,20 @@
           <Property Name="Attachment" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="Remarks" Type="nvarchar" MaxLength="500" Nullable="false" />
         </EntityType>
+        <EntityType Name="mElementalAbundance">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AbundanceVal" Type="float" Nullable="false" />
+          <Property Name="Custom1" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Custom2" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Custom3" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Custom4" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Custom5" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Element" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
         <EntityType Name="mForm">
           <Key>
             <PropertyRef Name="id" />
@@ -51,6 +65,18 @@
           <Property Name="FormName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="FormType" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="FormDesc" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="mGeologyUnit">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GeoCode" Type="varchar" MaxLength="50" />
+          <Property Name="GeoName" Type="varchar" MaxLength="100" />
+          <Property Name="GeoType" Type="varchar" MaxLength="50" />
+          <Property Name="ProCode" Type="varchar" MaxLength="50" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="500" />
+          <Property Name="GeoNameCHN" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="mGISArea">
           <Key>
@@ -180,6 +206,34 @@
           <Property Name="UpdatePerson" Type="varchar" MaxLength="20" />
           <Property Name="UpdateDate" Type="datetime" />
         </EntityType>
+        <EntityType Name="mZone">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Recid" Type="int" Nullable="false" />
+          <Property Name="Province" Type="nvarchar" MaxLength="100" />
+          <Property Name="City" Type="nvarchar" MaxLength="150" />
+          <Property Name="County" Type="nvarchar" MaxLength="150" />
+          <Property Name="Town" Type="nvarchar" MaxLength="150" />
+          <Property Name="Village" Type="nvarchar" MaxLength="150" />
+          <Property Name="MapNumber" Type="varchar" MaxLength="50" />
+          <Property Name="SampleNumber" Type="varchar" MaxLength="50" />
+          <Property Name="ProCode" Type="varchar" MaxLength="50" />
+          <Property Name="CSYSX" Type="float" />
+          <Property Name="CSYSY" Type="float" />
+          <Property Name="CSYSType" Type="varchar" MaxLength="20" />
+          <Property Name="Flon" Type="float" />
+          <Property Name="Flat" Type="float" />
+          <Property Name="Cale" Type="varchar" MaxLength="50" />
+          <Property Name="SampleNo" Type="varchar" MaxLength="50" />
+          <Property Name="Custom1" Type="varchar" MaxLength="250" />
+          <Property Name="Custom2" Type="varchar" MaxLength="250" />
+          <Property Name="Custom3" Type="varchar" MaxLength="250" />
+          <Property Name="Custom4" Type="varchar" MaxLength="250" />
+          <Property Name="Custom5" Type="varchar" MaxLength="250" />
+          <Property Name="Remarks" Type="nvarchar" MaxLength="500" />
+        </EntityType>
         <EntityType Name="Orders">
           <Key>
             <PropertyRef Name="OrderID" />
@@ -202,7 +256,9 @@
         <EntityContainer Name="GeoGisModelStoreContainer">
           <EntitySet Name="mArea" EntityType="Self.mArea" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mElement" EntityType="Self.mElement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mElementalAbundance" EntityType="Self.mElementalAbundance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mForm" EntityType="Self.mForm" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mGeologyUnit" EntityType="Self.mGeologyUnit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mGISArea" EntityType="Self.mGISArea" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mGrid" EntityType="Self.mGrid" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mKml" EntityType="Self.mKml" Schema="dbo" store:Type="Tables" />
@@ -210,6 +266,7 @@
           <EntitySet Name="mProject" EntityType="Self.mProject" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mSharp" EntityType="Self.mSharp" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mUser" EntityType="Self.mUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mZone" EntityType="Self.mZone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -227,6 +284,9 @@
           <EntitySet Name="mArea" EntityType="GeoGisModel.mArea" />
           <EntitySet Name="mElement" EntityType="GeoGisModel.mElement" />
           <EntitySet Name="mProject" EntityType="GeoGisModel.mProject" />
+          <EntitySet Name="mZone" EntityType="GeoGisModel.mZone" />
+          <EntitySet Name="mGeologyUnit" EntityType="GeoGisModel.mGeologyUnit" />
+          <EntitySet Name="mElementalAbundance" EntityType="GeoGisModel.mElementalAbundance" />
           <EntitySet Name="mKml" EntityType="GeoGisModel.mKml" />
         </EntityContainer>
         <EntityType Name="mForm">
@@ -400,6 +460,60 @@
           <Property Name="Town" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Village" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Remarks" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="mZone">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Recid" Type="Int32" Nullable="false" />
+          <Property Name="Province" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="County" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Town" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Village" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="MapNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SampleNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CSYSX" Type="Double" />
+          <Property Name="CSYSY" Type="Double" />
+          <Property Name="CSYSType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Flon" Type="Double" />
+          <Property Name="Flat" Type="Double" />
+          <Property Name="Cale" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SampleNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Custom1" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Custom2" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Custom3" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Custom4" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Custom5" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="mGeologyUnit">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GeoCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GeoName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="GeoType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="GeoNameCHN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="mElementalAbundance">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AbundanceVal" Type="Double" Nullable="false" />
+          <Property Name="Custom1" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Custom2" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Custom3" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Custom4" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Custom5" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Element" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Remarks" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="mKml">
           <Key>
@@ -611,6 +725,63 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="mZone">
+            <EntityTypeMapping TypeName="GeoGisModel.mZone">
+              <MappingFragment StoreEntitySet="mZone">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Custom5" ColumnName="Custom5" />
+                <ScalarProperty Name="Custom4" ColumnName="Custom4" />
+                <ScalarProperty Name="Custom3" ColumnName="Custom3" />
+                <ScalarProperty Name="Custom2" ColumnName="Custom2" />
+                <ScalarProperty Name="Custom1" ColumnName="Custom1" />
+                <ScalarProperty Name="SampleNo" ColumnName="SampleNo" />
+                <ScalarProperty Name="Cale" ColumnName="Cale" />
+                <ScalarProperty Name="Flat" ColumnName="Flat" />
+                <ScalarProperty Name="Flon" ColumnName="Flon" />
+                <ScalarProperty Name="CSYSType" ColumnName="CSYSType" />
+                <ScalarProperty Name="CSYSY" ColumnName="CSYSY" />
+                <ScalarProperty Name="CSYSX" ColumnName="CSYSX" />
+                <ScalarProperty Name="ProCode" ColumnName="ProCode" />
+                <ScalarProperty Name="SampleNumber" ColumnName="SampleNumber" />
+                <ScalarProperty Name="MapNumber" ColumnName="MapNumber" />
+                <ScalarProperty Name="Village" ColumnName="Village" />
+                <ScalarProperty Name="Town" ColumnName="Town" />
+                <ScalarProperty Name="County" ColumnName="County" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="Recid" ColumnName="Recid" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mGeologyUnit">
+            <EntityTypeMapping TypeName="GeoGisModel.mGeologyUnit">
+              <MappingFragment StoreEntitySet="mGeologyUnit">
+                <ScalarProperty Name="GeoNameCHN" ColumnName="GeoNameCHN" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="ProCode" ColumnName="ProCode" />
+                <ScalarProperty Name="GeoType" ColumnName="GeoType" />
+                <ScalarProperty Name="GeoName" ColumnName="GeoName" />
+                <ScalarProperty Name="GeoCode" ColumnName="GeoCode" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mElementalAbundance">
+            <EntityTypeMapping TypeName="GeoGisModel.mElementalAbundance">
+              <MappingFragment StoreEntitySet="mElementalAbundance">
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Element" ColumnName="Element" />
+                <ScalarProperty Name="Custom5" ColumnName="Custom5" />
+                <ScalarProperty Name="Custom4" ColumnName="Custom4" />
+                <ScalarProperty Name="Custom3" ColumnName="Custom3" />
+                <ScalarProperty Name="Custom2" ColumnName="Custom2" />
+                <ScalarProperty Name="Custom1" ColumnName="Custom1" />
+                <ScalarProperty Name="AbundanceVal" ColumnName="AbundanceVal" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="mKml">
             <EntityTypeMapping TypeName="GeoGisModel.mKml">
               <MappingFragment StoreEntitySet="mKml">
@@ -649,7 +820,7 @@
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
         <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>

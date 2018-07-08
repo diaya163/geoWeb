@@ -551,3 +551,15 @@ com.getSetting = function (name,defaults) {
     if (!parent.wrapper) return defaults;
     return parent.wrapper.settings[name] || defaults;
 };
+/* 将form表单中的元素值序列化成对象 by hlh **/
+com.serializeObject = function (form) {
+    var o = {};
+    $.each(form.serializeArray(), function (index) {
+        if (o[this['name']]) {
+            o[this['name']] = o[this['name']] + "," + this['value'];
+        } else {
+            o[this['name']] = this['value'];
+        }
+    });
+    return o;
+};

@@ -21,7 +21,7 @@ namespace prjGeo.Web.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.Title = "基本元素";
+            ViewBag.Title = "基本元素维护";
             //List<mUsersModel> list =objUser.GetAllList(),
             var model = new
             {

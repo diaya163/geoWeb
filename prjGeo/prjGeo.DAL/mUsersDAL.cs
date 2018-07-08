@@ -16,6 +16,10 @@ namespace prjGeo.DAL
 {
     public class mUsersDAL:IDisposable
     {
+        public mUsersDAL()
+        { 
+        }
+
         public IQueryable<mUser> GetAllList(GeoGisEntities db)
         {
             IQueryable<mUser> list = db.mUser.AsQueryable();

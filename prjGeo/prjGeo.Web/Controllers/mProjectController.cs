@@ -62,7 +62,7 @@ namespace prjGeo.Web.Controllers
         public JsonResult GetListByFilter(string PrjName, string PrjId, GridPager pager)
         {
             string filters = "";
-            if(!string.IsNullOrEmpty(PrjName))
+            if (!string.IsNullOrEmpty(PrjName))
             {
                 filters = "a.CName like '%" + PrjName + "%' ";
             }
@@ -76,7 +76,7 @@ namespace prjGeo.Web.Controllers
                 {
                     filters = " a.Ccode like '%" + PrjId + "%' ";
                 }
-               
+
             }
             var list = objBLL.GetIndexList(filters, ref errMsg, ref pager);
             var json = new

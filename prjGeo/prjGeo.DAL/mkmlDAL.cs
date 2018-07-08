@@ -18,7 +18,7 @@ namespace prjGeo.DAL
     {
         public void Dispose()
         {
-             
+
         }
         public mKmlDAL()
         {
@@ -153,6 +153,6 @@ namespace prjGeo.DAL
             return -1;
         }
 
-      
+
     }
 }

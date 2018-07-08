@@ -56,12 +56,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\BaseBLL.cs" />
+    <Compile Include="HSAllSeqBLL.cs" />
     <Compile Include="mAreaBLL.cs" />
+    <Compile Include="mElementalAbundanceBLL.cs" />
     <Compile Include="mElementBLL.cs" />
+    <Compile Include="mGeologyUnitBLL.cs" />
     <Compile Include="mKmlBLL.cs" />
     <Compile Include="mMenuBLL.cs" />
     <Compile Include="mProjectBLL.cs" />
     <Compile Include="mUsersBLL.cs" />
+    <Compile Include="mZoneBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

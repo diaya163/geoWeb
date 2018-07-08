@@ -1,0 +1,259 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+
+    <link href="../../Content/reset.css" rel="stylesheet" />
+    <link href="../../Scripts/MiniUi/themes/default/miniui.css" rel="stylesheet" />
+    <link href="../../Scripts/MiniUi/themes/icons.css" rel="stylesheet" />
+
+    <script src="../../Scripts/jquery-1.8.2.js"></script>
+    <script src="../../Scripts/jquery.json-2.4.js"></script>
+    <script src="../../Scripts/Custom/System.js"></script>
+
+    <script src="../../Scripts/MiniUI/miniuicr.js"></script>
+    <script src="../../Scripts/MiniUI/miniui.js"></script>
+
+</head>
+<body>
+    <form id="form1" method="post">
+        <input type="hidden" class="mini-hidden" name="Id">
+        <fieldset style="border:solid 1px #aaa;padding:3px;">
+            <legend>基本信息</legend>
+            <div style="padding:5px;">
+                <table style="table-layout:fixed;">
+                    <tbody>
+                        <tr>
+                            <td class="tdlabel">用户帐号：</td>
+                            <td>
+                                <input type="text" class="mini-textbox" required="true" placeholder="请输入用户帐号" name="LoginID" />
+                            </td>
+                            <td class="tdlabel">用户姓名：</td>
+                            <td>
+                                <input type="text" class="mini-textbox" required="true" placeholder="请输入用户姓名" name="LoginName" />
+                            </td>
+                        </tr>
+                        <!--<tr>
+                            <td class="tdlabel">用户密码：</td>
+                            <td>
+                                <input type="text" class="mini-password" required="true" placeholder="请输入用户密码" name="Password" />
+                            </td>
+                            <td class="tdlabel">确认密码：</td>
+                            <td>
+                                <input type="text" class="mini-password" required="true" placeholder="请输入确认密码" name="ConfirmPassword" onvalidation="onConfirmPasswordValidation" />
+                            </td>
+                        </tr>-->
+
+                        <tr>
+                            <td class="tdlabel">电子邮箱：</td>
+                            <td>
+                                <input type="text" class="mini-textbox"  placeholder="请输入电子邮箱" name="SecurityEmail"  />
+                            </td>
+                            <td class="tdlabel">联系号码：</td>
+                            <td>
+                                <input type="text" class="mini-textbox" placeholder="请输入联系号码" name="Cellphone"  />
+                            </td>
+
+                            <!--<td class="tdlabel">电子邮箱：</td>
+                            <td>
+                                <input type="text" class="mini-textbox" placeholder="请输入电子邮箱" name="Email" onvalidation="onEmailValid" />
+                            </td>-->
+                        </tr>
+
+                        <tr>
+                            <td class="tdlabel">所在部门：</td>
+                            <td>
+                                <input placeholder="请输入所在部门" name="DeptCode"
+                                       class="mini-treeselect" url="/DeptManager/GetData" multiselect="false"
+                                       textfield="DeptName" valuefield="DeptCode" parentfield="DeptCodeParent" checkrecursive="true" />
+                            </td>
+
+                            <td class="tdlabel">所在职务：</td>
+                            <td>
+                                <input type="text" class="mini-textbox" placeholder="请输入所在职务" name="JobTitle" />
+                            </td>
+
+                            <!--<td class="tdlabel">联系地址：</td>
+                            <td>
+                                <input type="text" class="mini-textbox" placeholder="请输入联系地址" name="Address" />
+                            </td>-->
+                        </tr>
+                        <tr>
+                            <td class="tdlabel">是否管理员：</td>
+                            <td>
+                                <input id="txtIsAdmin" name="IsAdmin" class="mini-combobox"
+                                       data="[{Value:true,Text:'是'},{Value:false,Text:'否'}]" valuefield="Value" textfield="Text" />
+                            </td>
+                            <td class="tdlabel">是否启用：</td>
+                            <td>
+                                <input id="txtIsUseStop" name="IsUseStop" class="mini-combobox"
+                                       data="[{Value:true,Text:'是'},{Value:false,Text:'否'}]" valuefield="Value" textfield="Text" />
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+        <div id="gridRole" class="mini-datagrid" style="width: 100%; height: 160px;" allowresize="false" url="/RoleManager/GetRoleUser" idfield="Id" showpager='false' multiselect="true" ondrawcell="drawCell">
+            <div property="columns">
+                <div field="RoleChecked" type="checkcolumn" width="20" headeralign="center" align="center" selectonload="true"></div>
+                <div field="RoleCode" width="80" headeralign="center" align="center">角色编号</div>
+                <div field="RoleName" width="100" headeralign="center" align="center">角色名称</div>
+                <div width="auto" headeralign="center" align="center"></div>
+            </div>
+        </div>
+        <div style="text-align:center;padding:10px;">
+            <a class="mini-button" onclick="onOk" style="width:60px;margin-right:20px;">确定</a>
+            <a class="mini-button" onclick="onCancel" style="width:60px;">取消</a>
+        </div>
+    </form>
+    <script type="text/javascript">
+        mini.parse();
+        var form = new mini.Form("form1");
+        onEmailValid = function (e) {
+            if (e.isValid) {
+                if (!sys.checkEmail(e.value)) {
+                    e.errorText = "电子邮箱格式不正确.";
+                    e.isValid = false;
+                }
+            }
+        }
+        onPhoneValid = function (e) {
+            if (e.isValid) {
+                if (!sys.checkMobile(e.value)) {
+                    e.errorText = "两次密码输入不一致.";
+                    e.isValid = false;
+                }
+            }
+        }
+        
+        onConfirmPasswordValidation = function (e) {
+            if (e.isValid) {
+                var pwd = mini.getbyName('Password').getValue();
+                if (pwd != e.value) {
+                    e.errorText = "两次密码输入不一致.";
+                    e.isValid = false;
+                }
+            }
+        }
+        drawCell = function (e) {
+            var field = e.field, value = e.value;
+            var index = e.rowIndex;
+            var dataGrid = mini.get("gridRole");
+            var row = dataGrid.getRow(index);
+            if (field == 'RoleChecked') {
+                if (e.value)
+                    dataGrid.select(index);
+            }
+        }
+
+        function SaveData() {
+            var o = form.getData();
+            form.validate();
+            if (form.isValid() == false) return;
+            //if (o.ComfigPassword != o.Password) {
+            //    mini.alert("两次密码输入不一致,请重试");
+
+            //    return;
+            //}
+            var dataGrid = mini.get("gridRole");
+            var selecteds = dataGrid.getSelecteds();
+            var roleData = [];
+            for (var i = 0; i < selecteds.length; i++) {
+                roleData.push({ Id: selecteds[i].Id });
+            }
+            var msgId = mini.loading('数据保存中...');
+
+            $.ajax({
+                url: "/UserManager/SaveUserData",
+                type: 'post',
+                data: $.toJSON({ action: actionData.action, model: o, listRoleModel: roleData }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.errMsg != '') {
+                        mini.alert(data.errMsg);
+                        return;
+                    }
+                    CloseWindow("save");
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    mini.alert(jqXHR.responseText);
+                    //CloseWindow();
+                }, complete: function () {
+                    mini.hideMessageBox(msgId);
+                }
+            });
+        }
+        var actionData = [];
+        ////////////////////
+        //标准方法接口定义
+        function SetData(data) {
+            actionData = data;
+            if (data.action == "edit") {
+                data = mini.clone(data);
+                $.ajax({
+                    url: "/UserManager/GetUserData",
+                    type: 'post',
+                    data: $.toJSON({ loginId: data.loginId }),
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (text) {
+                        var o = mini.decode(text);
+                        console.log(o);
+                        form.setData(o);
+
+                        form.setChanged(false);
+
+                        var grid = mini.get("gridRole");
+                        grid.load({ userID: data.loginId });
+
+                    }
+                });
+            } else {
+
+                var data = form.getData();
+                mini.getbyName("IsAdmin").setValue(false);
+                mini.getbyName("IsUseStop").setValue(true);
+
+                var grid = mini.get("gridRole");
+                grid.load({ userID: "" });
+            }
+        }
+
+        function CloseWindow(action) {
+            if (action == "close" && form.isChanged()) {
+                mini.confirm("数据被修改了，是否先保存？", "询问", function (action) {
+                    if (action == "ok") {
+                    } else {
+                        if (window.CloseOwnerWindow) {
+                            return window.CloseOwnerWindow(action);
+                            console.log(action);
+                        }
+                        else {
+                            sys.winClose();
+                        }
+                    }
+                });
+            } else {
+                if (window.CloseOwnerWindow) {
+                    return window.CloseOwnerWindow(action);
+                    console.log(action);
+                }
+                else {
+                    sys.winClose();
+                }
+            }
+        }
+        function onOk(e) {
+            SaveData();
+        }
+        function onCancel(e) {
+            CloseWindow("cancel");
+        }
+    </script>
+
+</body>
+</html>

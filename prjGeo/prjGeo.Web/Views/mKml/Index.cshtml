@@ -5,6 +5,8 @@
 @{
     Layout = "~/Views/Shared/_Index_Layout.cshtml";
 }
+
+@*KML管理*@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -100,7 +102,7 @@
                     <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm',iconCls:'icon-edit'" style="float:right">设置</a>
                 </div>
                 <div>
-                    查询: 
+                    查询:
                     <input class="easyui-textbox" id="findProjName" data-options="prompt:'请输入项目名'" style="width:150px">
                     <input class="easyui-textbox" id="findProjId" data-options="prompt:'请输入项目编号'" style="width:150px">
                     <input class="easyui-textbox" id="findLayerName" data-options="prompt:'请输入图层名'" style="width:150px">
@@ -110,59 +112,59 @@
 
         </div>
 
-        <div id="w" class="easyui-window" title="KML管理-新增/修改" data-options="modal:true,closed:true,iconcls:'icon-save'" style="width:600px;height:340px;padding:5px;">
-           <!--<form id="form" enctype="multipart/form-data">--> 
-                <table cellpadding="5">
-                    <tr>
-                        <td>项目编号:</td>
-                        <td><input class="easyui-combobox" id="txtProjId" data-options="required:true" /></td>
-                        <td>项目名称:</td>
-                        <td><input class="easyui-combobox" id="txtPrjName" data-options="required:true" /></td>
-                    </tr>
-                    <tr>
-                        <td>所在省:</td>
-                        <td><input class="easyui-textbox" id="txtProvinceName" data-options="required:true" /></td>
-                        <td>所在市:</td>
-                        <td><input class="easyui-textbox" id="txtCityName" data-options="required:true" /></td>
-                    </tr>
-                    <tr>
-                        <td>所在县:</td>
-                        <td><input class="easyui-textbox" id="txtCountyName" data-options="required:true" /></td>
-                        <td>所在镇/乡:</td>
-                        <td><input class="easyui-textbox" id="txtTownName" /></td>
+        <div id="w" class="easyui-window" title="图层管理-新增/修改" data-options="modal:true,closed:true,iconcls:'icon-save'" style="width:600px;height:340px;padding:5px;">
+            <!--<form id="form" enctype="multipart/form-data">-->
+            <table cellpadding="5">
+                <tr>
+                    <td>项目编号:</td>
+                    <td><input class="easyui-combobox" id="txtProjId" data-options="required:true" /></td>
+                    <td>项目名称:</td>
+                    <td><input class="easyui-combobox" id="txtPrjName" data-options="required:true" /></td>
+                </tr>
+                <tr>
+                    <td>所在省:</td>
+                    <td><input class="easyui-textbox" id="txtProvinceName" data-options="required:true" /></td>
+                    <td>所在市:</td>
+                    <td><input class="easyui-textbox" id="txtCityName" data-options="required:true" /></td>
+                </tr>
+                <tr>
+                    <td>所在县:</td>
+                    <td><input class="easyui-textbox" id="txtCountyName" data-options="required:true" /></td>
+                    <td>所在镇/乡:</td>
+                    <td><input class="easyui-textbox" id="txtTownName" /></td>
 
-                    </tr>
-                    <tr>
-                        <td>所在村:</td>
-                        <td colspan="3"><input class="easyui-textbox" id="txtVillageName" /></td>
-                    </tr>
-                    <tr>
-                        <td>KML文件:</td>
-                        <td colspan="3">
-                            <input type="file" id="browse" style="display:none;" accept="application/inkml+xml" />
-                            <input class="easyui-textbox" id="txtFileName" style="width:300px;" />
-                            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-folder_go'" onclick="btnBrowse();" style="width:80px">浏览上传</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>文件大小:</td>
-                        <td><input class="easyui-textbox" id="txtFileSize" readonly="true" data-options="required:true" /></td>
-                        <td>文件类型:</td>
-                        <td><input class="easyui-textbox" id="txtFileType" readonly="true" data-options="required:true" /></td>
-                    </tr>
-                    <tr>
-                        <td>图层名:</td>
-                        <td><input class="easyui-textbox" id="txtLayerName" data-options="required:true" /></td>
-                        <td>图层序号:</td>
-                        <td><input class="easyui-textbox" id="txtLayerOrder" data-options="required:true" /></td>
-                    </tr>
+                </tr>
+                <tr>
+                    <td>所在村:</td>
+                    <td colspan="3"><input class="easyui-textbox" id="txtVillageName" /></td>
+                </tr>
+                <tr>
+                    <td>图层文件:</td>
+                    <td colspan="3">
+                        <input type="file" id="browse" style="display:none;" accept="application/inkml+xml" />
+                        <input class="easyui-textbox" id="txtFileName" style="width:300px;" />
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-folder_go'" onclick="btnBrowse();" style="width:80px">浏览上传</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>文件大小:</td>
+                    <td><input class="easyui-textbox" id="txtFileSize" readonly="true" data-options="required:true" /></td>
+                    <td>文件类型:</td>
+                    <td><input class="easyui-textbox" id="txtFileType" readonly="true" data-options="required:true" /></td>
+                </tr>
+                <tr>
+                    <td>图层名:</td>
+                    <td><input class="easyui-textbox" id="txtLayerName" data-options="required:true" /></td>
+                    <td>图层序号:</td>
+                    <td><input class="easyui-textbox" id="txtLayerOrder" data-options="required:true" /></td>
+                </tr>
 
-                </table>
-                <div style="text-align:right;padding:5px">
-                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="save()" style="width:80px">上传保存</a>
-                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="$('#w').window('close')" style="width:80px">取消</a>
-                </div>
-        <!--    </form>-->
+            </table>
+            <div style="text-align:right;padding:5px">
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="save()" style="width:80px">上传保存</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="$('#w').window('close')" style="width:80px">取消</a>
+            </div>
+            <!--    </form>-->
         </div>
     </div>
 </body>

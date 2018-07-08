@@ -11,32 +11,31 @@
     <script src="~/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script> 
     <title>@ViewBag.Title</title>
     <style type="text/css">
-    table.gridtable {
-        font-family: verdana,arial,sans-serif;
-        font-size: 11px;
-        color: #333333;
-        border-width: 1px;
-        border-color: #666666;
-        border-collapse: collapse;
-    }
- 
-        table.gridtable th {
+        table.gridtable {
+            font-family: verdana,arial,sans-serif;
+            font-size: 11px;
+            color: #333333;
             border-width: 1px;
-            padding: 8px;
-            border-style: solid;
             border-color: #666666;
-            background-color: #dedede;
+            border-collapse: collapse;
         }
- 
-        table.gridtable td {
-            border-width: 1px;
-            padding: 8px;
-            border-style: solid;
-            border-color: #666666;
-            background-color: #ffffff;
-        }
-</style>
 
+            table.gridtable th {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #dedede;
+            }
+
+            table.gridtable td {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #ffffff;
+            }
+    </style>
 
     <script type="text/javascript">
         var modelData=@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
@@ -45,7 +44,7 @@
                 url: '/User/GetList',
                 //width: $(window).width()-100,
                 methord: 'post',
-                height: $(window).height() -133,
+                height: $(window).height() -3,
                 fitColumns: false,
                 sortName: 'id',
                 sortOrder: 'desc',
@@ -58,18 +57,6 @@
                 rownumbers: true,//行号
                 toolbar:'#tb',
                 columns: eval(modelData.GridInfo.ColInfo)
-                //onLoadSuccess: function (data) {   //隐藏表头的checkbox
-                //    $("#UserGrid").parent().find("div .datagrid-header-check").children("input[type=\"checkbox\"]").eq(0).attr("style", "display:none;");
-                    
-                //    if (data){
-                //        var rowData = data.rows;
-                //        $.each(rowData, function (idx, val) {
-                //            if (val.IsEnable) {
-                //                $("#UserGrid").datagrid("selectRow", idx);
-                //            }
-                //        });           
-                //    }
-                //}
             }); 
             InitGridSet(modelData.GridColInfo);
         });
@@ -117,13 +104,7 @@
                 $("#myTb").append('<tr>'+tr+'</tr>');                 
             });
             $('#myTb').append('</tbody>');
-
-            //$("#myTb").append('</tbody>');
-            //$("#myTb").append('<tr>');
-            //$("#myTb").append('<td></td>');
-            //$("#myTb").append('<td><input type="button" value="确定" id="btnOk" /></td>');
-            //$("#myTb").append('<td></td>');
-            //$("#myTb").append('</tr>');
+ 
         }
         //隐藏某列的方法：     $('#tt').datagrid('hideColumn', 'XXX');  -----其中 XXX 是隐藏列的  field 属性值
         //展示某列的方法：     $('#tt').datagrid('showColumn', 'XXX');  -----其中 XXX 是隐藏列的  field 属性值
@@ -180,60 +161,223 @@
 
             //vgrid.datagrid('hideColumn','OrganizeName');
         }
+        //下面是添加删除修改的操作
+        var action = '',id = -1;
+        function save(){
+            var UserCode =  $("#txtUserCode").textbox('getValue');
+            if(UserCode == ''){
+                $.messager.alert('系统提示','用户编号不能为空!');
+                return;
+            }
+            var UserName = $("#txtUserName").textbox('getValue');
+            if(UserName == ''){
+                $.messager.alert('系统提示','用户名称不能为空!');
+                return;
+            }
+            var Password = $("#txtPassword").textbox('getValue');
+            if(Password == ''){
+                $.messager.alert('系统提示','密码不能为空!');
+                return;
+            }
+            var DeptName = $("#txtDeptName").textbox('getValue');
+            if(DeptName == ''){
+                $.messager.alert('系统提示','所属部门不能为空!');
+                return;
+            }
+            var OrganizeName = $("#txtOrganizeName").textbox('getValue');
+            if(OrganizeName == ''){
+                $.messager.alert('系统提示','所属单位不能为空!');
+                return;
+            }
 
+            var IsEnable = $("#txtIsEnable").textbox('getValue');
+            if(IsEnable == ''){
+                $.messager.alert('系统提示','是否在职不能为空!');
+                return;
+            }
+            
+            var UserCode = $("#txtUserCode").textbox('getValue');
+            var UserName = $("#txtUserName").textbox('getValue');
+            var Password = $("#txtPassword").textbox('getValue');
+            var DeptName = $("#txtDeptName").textbox('getValue');
+            var OrganizeName = $("#txtOrganizeName").textbox('getValue');
+            var IsEnable = $("#txtIsEnable").textbox('getValue');
+            var Descr = $("#txtDescription").textbox('getValue');
+ 
+            var o = {UserCode:UserCode,
+                    UserName:UserName,
+                    Password:Password,
+                    DeptName:DeptName,
+                    OrganizeName:OrganizeName,
+                    IsEnable:IsEnable,
+                    Description:Descr};
+            $.ajax({
+                url: "/mUser/SaveData",
+                type: 'post',
+                data: $.toJSON({ action: action, model: o }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.errMsg != '') {
+                        $.messager.alert('保存出错',data.errMsg);
+                        return;
+                    }
+                    $('#w').window('close');
+                    $("#UserGrid").datagrid('reload');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }, complete: function () {
+
+                }
+            });
+        }
+
+        function rowOpt(a){
+            $("#txtUserCode").textbox('setValue');
+            $("#txtUserName").textbox('setValue');
+            $("#txtPassword").textbox('setValue');
+            $("#txtDeptName").textbox('setValue');
+            $("#txtOrganizeName").textbox('setValue','地球物理勘探设计院');
+            $("#txtIsEnable").textbox('setValue');
+            $("#txtDescription").textbox('setValue');
+ 
+
+            if(a == 'modify'){
+                var  row = $('#UserGrid').datagrid('getSelected');
+                if(row == undefined){
+                    $.messager.alert('系统提示','请选择要修改的行!');//2w+
+                    return;
+                }
+                id = row.id;
+                $("#txtUserCode").textbox('setValue',row.UserCode);
+                $("#txtUserName").textbox('setValue',row.UserName);
+                $("#txtPassword").textbox('setValue',row.Password);
+                $("#txtElementUnit").textbox('setValue',row.ElementUnit);
+                $("#txtDeptName").textbox('setValue',row.DeptName);
+                $("#txtOrganizeName").textbox('setValue',row.OrganizeName);
+                $("#txtIsEnable").textbox('setValue',row.IsEnable);
+                $("#txtDescription").textbox('setValue',row.Description);
+            }
+            action = a;
+            $('#w').window('open');
+        }
+        function rowDel(){
+            var row = $('#UserGrid').datagrid('getSelected');
+            if(row == undefined){
+                $.messager.alert('系统提示','请选择要删除的行!');
+                return;
+            }
+            $.messager.confirm('系统提示', '你确定要删除所选择的行吗?', function(r){
+                if (r){
+                    id = row.id;
+                    var o ={id:id};
+                    $.ajax({
+                        url: "/mUser/Delete",
+                        type: 'post',
+                        data: $.toJSON({ model: o }),
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            if (data.errMsg != '') {
+                                $.messager.alert('删除出错',data.errMsg);
+                                return;
+                            }
+                            $("#UserGrid").datagrid('reload');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+
+                        }, complete: function () {
+
+                        }
+                    });
+                }
+            });
+        }
     
     </script>                                                                                      
  
 </head>
 <body>
+    <div style="width:100%;height:100%;display:block;margin:-2px 0 0 -4px;">
+        <div id="cc" class="easyui-layout" fit="true">
+            <div id="UserGrid" data-options="region:'center'"></div>
+            <div id="tb">
+                <div style="margin-bottom:5px">
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="rowOpt('new')">添加</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="rowOpt('modify')">修改</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true" onclick="rowDel()">删除</a> 
+                </div>
+                <div>
+                    查询: <input class="easyui-textbox" type="text" id="txtUserCode" data-options="prompt:'请输入用户编码'" style="width:150px">
+                    <input class="easyui-textbox" type="text" id="txtUserName" data-options="prompt:'请输入用户名称'" style="width:150px">
+                    <input class="easyui-textbox" type="text" id="txtDept" data-options="prompt:'请输入部门名称'" style="width:150px">
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px">查询</a>
+                </div>
+            </div>
 
-<div id="tb">
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="">添加</a>    
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">修改</a>
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true">删除</a>
-    
-    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" style="float:right">帮助</a>
-    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm',iconCls:'icon-edit'" style="float:right">设置</a>   
-</div>
-<div id="mm" style="width:220px;">  
-    <div style="align-content:center">
- 
-        <label style="font-size:12px;line-height:21.3px"><b>表格列设置</b></label>
-    </div> 
-    <div class="menu-sep"></div> 
-    <table  id="myTb">
-    </table>  
-    <div class="menu-sep"></div>
-    <div style="align-items:center"><input type="button" value="确定" id="btnOk" onclick="SetGridStyle('UserGrid');"/></div>
-</div>  
+        </div>
 
-<div style="width:100%;height:100%;display:block;margin:-2px 0 0 -4px;">
- <div id="cc" class="easyui-layout" fit="true">   
-     <div data-options="region:'north',title:'用户查询',split:true,border:true,iconCls:'icon-search'" style="height:100px;padding:5px 0px 0px 0px;">
-         <table cellpadding="0" cellspacing="0" style="width:100%">
-             <tr>
-                 <td style="text-align:left">
-                    <input class="easyui-textbox" style="width:200px" data-options="label:'用户编码:' labelAlign:'right'  prompt:请输入用户编码."/> 
-                    <input class="easyui-textbox" style="width:200px" data-options="label:'用户名称:' labelAlign:'right'  prompt:请输入用户名称."/> 
-                 </td> 
-                 <td></td>
-                 <td></td>
-             </tr>
-             <tr>
-                 <td style="text-align:center">
-                     <a id="btnQuery" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
-                     <a id="btnClear" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete'">清空</a>
-                 </td>
-                 <td></td>
-                 <td></td>
-             </tr>
-         </table>
-     </div>  
-     <div data-options="region:'center',title:'用户信息',border:false,iconCls:'icon-user'" style="padding-top:2px;background:#eee;">  
-         <div id="UserGrid" data-options="region:'center'"></div>
+        <div id="w" class="easyui-window" title="用户管理-新增/修改" data-options="modal:true,closed:true,iconcls:'icon-save'" style="width:670px;height:380px;padding:5px;">
+            <table cellpadding="5">
+                <tr>
+                    <td>用户编码:</td>
+                    <td>
+                        <input class="easyui-textbox" id="txtUserCode" style="width:120px;" data-options="required:true" />
 
-     </div>
- </div>
-</div>
+                    <td>用户名称:</td>
+                    <td><input class="easyui-textbox" id="txtUserName" style="width:120px;" data-options="required:true" /></td>
+
+                    <td>用户密码:</td>
+                    <td><input class="easyui-textbox" id="txtPassword" style="width:120px;" data-options="required:true" /></td>
+                </tr>
+                <tr>
+                    <td>所属部门:</td>
+                    <td><input class="easyui-combobox" id="txtDeptName" style="width:120px;" data-options="
+                                                                                                   panelHeight:'auto',
+                                                                                                   required:true,
+                                                                                                   valueField: 'label',
+		                                                                                            textField: 'value',
+		                                                                                            data: [{
+			                                                                                            label: '化探所',
+			                                                                                            value: '化探所'
+		                                                                                            },{
+			                                                                                            label: '物探所',
+			                                                                                            value: '物探所'
+		                                                                                            } ]" /></td>
+
+                    <td>所属单位:</td>
+                    <td><input class="easyui-textbox" id="txtOrganizeName" style="width:120px;" value="地球物理勘探设计院"  data-options="required:true" /></td>
+
+                    <td>是否在职:</td>
+                    <td><input class="easyui-combobox" id="txtIsEnable" style="width:120px;" data-options="
+                                                                                                    panelHeight:'auto',
+		                                                                                            required:true,
+		                                                                                            valueField: 'label',
+		                                                                                            textField: 'value',
+		                                                                                            data: [{
+			                                                                                            label: '在职',
+			                                                                                            value: '在职'
+		                                                                                            },{
+			                                                                                            label: '离职',
+			                                                                                            value: '离职'
+		                                                                                            } ]" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>备注:</td>
+                    <td colspan="5"><input class="easyui-textbox" multiline="true"  id="txtDescription" style="width: 100%; height: 120px" /></td> 
+                </tr>
+            </table>
+            <div style="text-align:right;padding:5px">
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="save()" style="width:80px">保存</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="$('#w').window('close')" style="width:80px">取消</a>
+            </div>
+        </div>
+
+    </div>
+
 </body>
+
+
 </html>

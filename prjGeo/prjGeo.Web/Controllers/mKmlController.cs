@@ -29,7 +29,7 @@ namespace prjGeo.Web.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.Title = "分部维护";
+            ViewBag.Title = "图层管理";
             //List<mUsersModel> list =objUser.GetAllList(),
             var model = new
             {
@@ -90,13 +90,13 @@ namespace prjGeo.Web.Controllers
                 //delete kml file
                 if (string.IsNullOrEmpty(_kmlFolder))
                 {
-                    _kmlFolder =  ConfigurationManager.AppSettings["KMLFolder"];
+                    _kmlFolder = ConfigurationManager.AppSettings["KMLFolder"];
                 }
 
-              //  string path = _kmlFolder +  model.PrjName + "\\" + model.FileName;
+                //  string path = _kmlFolder +  model.PrjName + "\\" + model.FileName;
                 string path = Server.MapPath("/") + _kmlFolder + "\\" + model.PrjName + "\\" + model.FileName;
                 path = path.Replace(".kml", ".xml");
-                Debug.WriteLine("path " +path);
+                Debug.WriteLine("path " + path);
                 if (System.IO.File.Exists(path))
                 {
                     System.IO.File.Delete(path);
@@ -111,9 +111,9 @@ namespace prjGeo.Web.Controllers
                 return Json(new { ex.Message }, JsonRequestBehavior.AllowGet);
             }
 
-           
-           
-            
+
+
+
 
         }
         public ActionResult GetListDataById(string id)
@@ -139,7 +139,7 @@ namespace prjGeo.Web.Controllers
                 string action = Request.Form["action"];  //普通参数获取
                 string oldFile = Request.Form["oldFile"];//普通参数获取
                 string p1 = Request.Form["kmlData"];  //普通参数获取
-    
+
                 mKml kmlData = JsonConvert.DeserializeObject<mKml>(p1);
 
                 if (string.IsNullOrEmpty(_kmlFolder))
@@ -162,7 +162,7 @@ namespace prjGeo.Web.Controllers
                     filename = filename.Replace(".kml", ".xml");
                     string desPath = path + filename;
                     Debug.WriteLine("desPath " + desPath);
-                
+
                     file.SaveAs(desPath);
                     kmlData.KmlPath = "/" + _kmlFolder + "/" + kmlData.PrjName + "/" + filename;
                 }
@@ -170,7 +170,7 @@ namespace prjGeo.Web.Controllers
 
                 if (action.Equals("new"))
                 {
-                    
+
                     objBLL.Add(kmlData, ref errMsg);
                 }
                 else if (action.Equals("modify"))
@@ -194,7 +194,7 @@ namespace prjGeo.Web.Controllers
             {
                 return Json(new { ex.Message }, JsonRequestBehavior.AllowGet);
             }
-           
+
         }
 
 

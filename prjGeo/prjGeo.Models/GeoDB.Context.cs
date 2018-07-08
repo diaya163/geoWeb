@@ -35,6 +35,9 @@ namespace prjGeo.Models
         public DbSet<mArea> mArea { get; set; }
         public DbSet<mElement> mElement { get; set; }
         public DbSet<mProject> mProject { get; set; }
+        public DbSet<mZone> mZone { get; set; }
+        public DbSet<mGeologyUnit> mGeologyUnit { get; set; }
+        public DbSet<mElementalAbundance> mElementalAbundance { get; set; }
         public DbSet<mKml> mKml { get; set; }
     }
 }

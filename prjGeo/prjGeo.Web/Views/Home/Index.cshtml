@@ -2,11 +2,11 @@
     ViewBag.Title = "地质信息管理平台";
     Layout = null;
 }
-
- <html>
+b
+<html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <link href="~/jquery-easyui-1.5/themes/icon.css" rel="stylesheet" />    
+    <link href="~/jquery-easyui-1.5/themes/icon.css" rel="stylesheet" />
     <link href="~/Content/css/icon/icon.css" rel="stylesheet" />
     <link href="~/jquery-easyui-1.5/themes/default/easyui.css" rel="stylesheet" />
     <script src="~/jquery-easyui-1.5/jquery.min.js"></script>
@@ -18,26 +18,27 @@
     <script src="~/Content/js/core/common.js"></script>
     <link href="~/Content/mainPic.css" rel="stylesheet" />
     <link href="~/Content/css/hack/fix.css" rel="stylesheet" type="text/css" />
-    <link href="~/Content/css/page/index.css" rel="stylesheet" type="text/css" />   
+    <link href="~/Content/css/page/index.css" rel="stylesheet" type="text/css" />
     <script src="~/Content/js/viewModel/index.js"></script>
     <script src="~/Scripts/json2.js"></script>
-    	<style type="text/css">
-		.title{
-			font-size:16px;
-			font-weight:bold;
-			padding:20px 10px;
-			background:#eee;
-			overflow:hidden;
-			border-bottom:1px solid #ccc;
-		}
-		.t-list{
-			padding:5px;
-		}
-	</style>
+    <style type="text/css">
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 20px 10px;
+            background: #eee;
+            overflow: hidden;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .t-list {
+            padding: 5px;
+        }
+    </style>
     <script type="text/javascript">
         $(document).ready(function () {
             //进行菜单设置
-            $('#RightAccordion').accordion({ //初始化accordion     
+            $('#RightAccordion').accordion({ //初始化accordion
                 fillSpace: true,
                 fit: true,
                 border: false,
@@ -57,29 +58,30 @@
                            iconCls: e.iconCls//e.Icon
                        });
                        $.parser.parse();
-                       $.post("/Home/GetTreeByEasyui?id=" + id, function (data) {//循环创建树的项
+                       $.post("/Home/GetTreeMenuByEasyui?id=" + id, function (data) {//循环创建树的项
                            $("#tree" + id).tree({
                                data: data,
                                onBeforeExpand: function (node, param) {
-                                   $("#tree" + id).tree('options').url = "/Home/GetTreeByEasyui?id=" + node.id;
+                                   $("#tree" + id).tree('options').url = "/Home/GetTreeMenuByEasyui?id=" + node.id;
                                },
-                               onClick: function (node) {                                   
-                                   if (node.isLeft == true)
-                                   {
+                               onClick: function (node) {
+                                   if (node.isLeft == true) {
                                        var tabTitle = node.text;
+                                       var tabCode = node.id;
                                        var url = node.attributes;
                                        var icon = node.iconCls;
-                                       addTab(tabTitle, url, icon);
+                                       addTab(tabTitle, tabCode, url, icon);
                                    }
                                    if (node.state == 'closed') {
                                        $(this).tree('expand', node.target);
                                    } else if (node.state == 'open') {
                                        $(this).tree('collapse', node.target);
                                    } else {
-                                       var tabTitle = node.text;                                       
+                                       var tabCode = node.id;
+                                       var tabTitle = node.text;
                                        var url = node.attributes;
                                        var icon = node.iconCls;
-                                       addTab(tabTitle, url, icon);
+                                       addTab(tabTitle, tabCode, url, icon);
                                    }
                                }
                            });
@@ -95,22 +97,22 @@
             //});
             //add();
         });
-        function addTab(subtitle, url, icon) {
+        function addTab(subtitle, tabCode, url, icon) {
             if (!url || url == '#') return false;
             var $tab = $('#tabs');
             var tabCount = $tab.tabs('tabs').length;
             var hasTab = $tab.tabs('exists', subtitle);
             if ((tabCount <= 10) || hasTab) {
-                openTabHandler($tab, hasTab, subtitle, url, icon);
+                openTabHandler($tab, hasTab, subtitle, tabCode, url, icon);
             }
             else {
 
             }
         }
 
-        openTabHandler = function ($tab, hasTab, subtitle, url, icon) {
+        openTabHandler = function ($tab, hasTab, subtitle, tabCode, url, icon) {
             if (!hasTab) {
-                $tab.tabs('add', { title: subtitle, content: createFrame(url), closable: true, icon: icon });
+                $tab.tabs('add', { id: tabCode, title: subtitle, content: createFrame(url), closable: true, icon: icon });
             } else {
                 $tab.tabs('select', subtitle);
                 //wrapper.tabRefresh(url);   //选择TAB时刷新页面
@@ -148,58 +150,58 @@
     </script>
     <title>@ViewBag.Title</title>
 </head>
-     <body class="easyui-layout">
-<div region="north" class="head-north" split="true" border="false" style="height:70px;">
-            <span class="head head-right">
-                <a href="javascript:void(0)" class="easyui-menubutton" data-options="menu:'#mm_user',iconCls:'icon-user'">当前用户:@ViewBag.UserName</a>
-                <div id="mm_user" style="width:150px;">  
-                    <div data-options="iconCls:'icon-rainbow'" class="myconfig">个人设置</div>  
-                    <div data-options="iconCls:'icon-edit'" class="changepwd" >修改密码</div>  
-                    <div class="menu-sep"></div>  
-                    <div data-options="iconCls:'icon-user_go'" class="loginOut">安全退出</div>  
-                </div> 
-            </span>
-
-            <span class="head-left" >
-                @ViewBag.Title
-            </span>
-            
-            <div id="wnav"></div>
-</div>
-
-        <script type="text/html" id="password-template">
-             <div class="container_12" style="width:90%;margin:5%;">
-                <div class="grid_3 lbl">登陆名：</div>
-                <div class="grid_9 val"><input type="text" class="z-txt readonly " name="UserCode" disabled="disabled" value="@ViewBag.UserCode"/></div>
-                <div class="grid_3 lbl">原密码：</div>
-                <div class="grid_9 val"><input type="password" class="z-txt" /></div>
-                <div class="grid_3 lbl">新密码：</div>
-                <div class="grid_9 val"><input type="password" class="z-txt" /></div>
-                <div class="grid_3 lbl">确　认：</div>
-                <div class="grid_9 val"><input type="password" class="z-txt"  /></div>
-                <div class="clear"></div>
+<body class="easyui-layout">
+    <div region="north" class="head-north" split="true" border="false" style="height:70px;">
+        <span class="head head-right">
+            <a href="javascript:void(0)" class="easyui-menubutton" data-options="menu:'#mm_user',iconCls:'icon-user'">当前用户:@ViewBag.UserName</a>
+            <div id="mm_user" style="width:150px;">
+                <div data-options="iconCls:'icon-rainbow'" class="myconfig">个人设置</div>
+                <div data-options="iconCls:'icon-edit'" class="changepwd">修改密码</div>
+                <div class="menu-sep"></div>
+                <div data-options="iconCls:'icon-user_go'" class="loginOut">安全退出</div>
             </div>
+        </span>
 
-            <div style="text-align:center;" class="z-toolbar-dialog">
-                <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)"  id="pwd_confirm" >确定</a>  
-                <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" id="pwd_close">取消</a> 
-            </div>
-        </script>
+        <span class="head-left">
+            @ViewBag.Title
+        </span>
+
+        <div id="wnav"></div>
+    </div>
+
+    <script type="text/html" id="password-template">
+        <div class="container_12" style="width:90%;margin:5%;">
+            <div class="grid_3 lbl">登陆名：</div>
+            <div class="grid_9 val"><input type="text" class="z-txt readonly " name="UserCode" disabled="disabled" value="@ViewBag.UserCode" /></div>
+            <div class="grid_3 lbl">原密码：</div>
+            <div class="grid_9 val"><input type="password" class="z-txt" /></div>
+            <div class="grid_3 lbl">新密码：</div>
+            <div class="grid_9 val"><input type="password" class="z-txt" /></div>
+            <div class="grid_3 lbl">确　认：</div>
+            <div class="grid_9 val"><input type="password" class="z-txt" /></div>
+            <div class="clear"></div>
+        </div>
+
+        <div style="text-align:center;" class="z-toolbar-dialog">
+            <a class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)" id="pwd_confirm">确定</a>
+            <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)" id="pwd_close">取消</a>
+        </div>
+    </script>
 
 
-	<div data-options="region:'west',split:true,title:'导航菜单',iconCls:'icon-tip'" style="width:200px;">         
+    <div data-options="region:'west',split:true,title:'导航菜单',iconCls:'icon-tip'" style="width:200px;">
         <div id="RightAccordion" class="easyui-accordion"></div>
-	</div>	 
-	<div data-options="region:'south'" split="true" class="head-south" style="height:30px;background:#D2E0F2;padding:0px;">
+    </div>
+    <div data-options="region:'south'" split="true" class="head-south" style="height:30px;background:#D2E0F2;padding:0px;">
         <div class="footer">Copyright &copy; 2015 Tony, All Rights Reserved</div>
-	</div>
+    </div>
 
-	    <div region="center" id="mainPanle" style="background: #eee; overflow-y:hidden">
-		    <div id="tabs" class="easyui-tabs"  fit="true" border="false" >
-			    <div title="我的桌面" style="overflow:hidden;" id="home">
-                    <img src="~/Content/imgs/mainPic.png" id="mainpic"  style="border:none;background-repeat:no-repeat"/>
-			    </div>
-		    </div>
-	    </div>
+    <div region="center" id="mainPanle" style="background: #eee; overflow-y:hidden">
+        <div id="tabs" class="easyui-tabs" fit="true" border="false">
+            <div title="我的桌面" style="overflow:hidden;" id="home">
+                <img src="~/Content/imgs/mainPic.png" id="mainpic" style="border:none;background-repeat:no-repeat" />
+            </div>
+        </div>
+    </div>
 </body>
 </html>

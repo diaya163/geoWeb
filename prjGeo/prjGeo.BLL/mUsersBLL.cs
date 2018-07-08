@@ -17,8 +17,9 @@ namespace prjGeo.BLL
 {
     public class mUsersBLL : BaseBLL
     {
+        //mUsersDAL objUser = new mUsersDAL();
         mUsersDAL objUser = new mUsersDAL();
-
+        public mUsersBLL() { }
         public List<mUsersModel> GetAllList()
         {
             try
@@ -34,7 +35,7 @@ namespace prjGeo.BLL
             }
         }
 
-        public List<mUsersModel> GetIndexList(ref GridPager pager)
+        public List<mUsersModel> GetIndexList(mUsersModel objFilterModel, ref string errMsg, ref GridPager pager)
         {
             IQueryable<mUser> queryData = null;
             queryData = objUser.GetAllList(db);
@@ -107,5 +108,49 @@ namespace prjGeo.BLL
         {
              objUser.UpdateUserLoginCountAndDate(UserCode,db);
         }
+
+        #region 添加修改删除操作
+        /// <summary>
+        /// 新增数据
+        /// </summary>
+        /// <param name="model">实体类</param>
+        /// <param name="errMsg">错误信息</param>
+        /// <returns></returns>
+        public int Add(mUser model, ref string errMsg)
+        {
+            return 0;
+            //return dal.Add(model, db, ref errMsg);
+        }
+
+
+        /// <summary>
+        /// 修改数据
+        /// </summary>
+        /// <param name="model">实体类</param>
+        /// <param name="errMsg">错误信息</param>
+        /// <returns></returns>
+        public int Update(mUser model, ref string errMsg)
+        {
+            return 0;
+            //return dal.Update(model, db, ref errMsg);
+        }
+
+
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        /// <param name="model">实体类</param>
+        /// <param name="errMsg">错误信息</param>
+        /// <returns></returns>
+        public int Delete(mUser model, ref string errMsg)
+        {
+            return 0;
+            //return dal.Delete(model, db, ref errMsg);
+        }
+
+        #endregion
+
+
+
     }
 }

@@ -39,6 +39,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Esquel.BaseManager">
+      <HintPath>..\DLL\Esquel.BaseManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Esquel.Framework">
+      <HintPath>..\Esquel.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Esquel.WebBlock">
+      <HintPath>..\DLL\Esquel.WebBlock.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="prjGeo.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -132,15 +141,24 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="App_Start\webstack\JObjectModelBinder.cs" />
     <Compile Include="Areas\Sys\SysAreaRegistration.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HSAllSeqController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\mAreaController.cs" />
+    <Compile Include="Controllers\mElementalAbundanceController.cs" />
     <Compile Include="Controllers\mElementController.cs" />
+    <Compile Include="Controllers\MenuManagerController.cs" />
+    <Compile Include="Controllers\mGeologyUnitController.cs" />
     <Compile Include="Controllers\mKmlController.cs" />
     <Compile Include="Controllers\mMapController.cs" />
     <Compile Include="Controllers\mProjectController.cs" />
+    <Compile Include="Controllers\mZoneController.cs" />
+    <Compile Include="Controllers\RightManagerController.cs" />
+    <Compile Include="Controllers\RoleManagerController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\UserManagerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1937,6 +1955,10 @@
     <Content Include="GisMaps\mapView.js" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="html\Sys_Permissions\optMenuManager.html" />
+    <Content Include="html\Sys_Permissions\optRightDelegate.html" />
+    <Content Include="html\Sys_Permissions\optRoleManager.html" />
+    <Content Include="html\Sys_Permissions\optUserManager.html" />
     <Content Include="jquery-easyui-1.5\demo\accordion\datagrid_data1.json" />
     <Content Include="jquery-easyui-1.5\demo\combobox\combobox_data1.json" />
     <Content Include="jquery-easyui-1.5\demo\combobox\combobox_data2.json" />
@@ -2768,7 +2790,15 @@
     <Content Include="Views\mElement\Index.cshtml" />
     <Content Include="Views\mProject\Index.cshtml" />
     <Content Include="Views\mKml\Index.cshtml" />
+    <Content Include="Views\UserManager\Index.cshtml" />
+    <Content Include="Views\RoleManager\Index.cshtml" />
+    <Content Include="Views\RightManager\Index.cshtml" />
+    <Content Include="Views\mZone\Index.cshtml" />
+    <Content Include="Views\mGeologyUnit\Index.cshtml" />
+    <Content Include="Views\MenuManager\Index.cshtml" />
+    <Content Include="Views\mElementalAbundance\Index.cshtml" />
     <Content Include="Views\mMap\Index.cshtml" />
+    <Content Include="Views\HSAllSeq\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -2781,6 +2811,18 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Permission.BLL\Permission.BLL.csproj">
+      <Project>{75f93a62-74c3-4ce1-9e44-636c1d95642e}</Project>
+      <Name>Permission.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Permission.DAL\Permission.DAL.csproj">
+      <Project>{f656ea00-e23a-45b5-9ef6-8c4ca828fd52}</Project>
+      <Name>Permission.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Permission.Model\Permission.Model.csproj">
+      <Project>{aae4aa7d-3610-4569-8739-cc2ad2633876}</Project>
+      <Name>Permission.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\prjGeo.BLL\prjGeo.BLL.csproj">
       <Project>{7e578c0f-7ab8-488e-894b-640cb55b1a4a}</Project>
       <Name>prjGeo.BLL</Name>

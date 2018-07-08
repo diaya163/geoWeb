@@ -40,6 +40,24 @@ namespace prjGeo.BLL
         /// <returns></returns>
         public int Add(mElement model, ref string errMsg)
         {
+            model.Property1=model.Property1==null? "":model.Property1;
+            model.Property2 = model.Property2 == null ? "" : model.Property2;
+            model.Property3 = model.Property3 == null ? "" : model.Property3;
+            model.Property4 = model.Property4 == null ? "" : model.Property4;
+            model.Property5 = model.Property5 == null ? "" : model.Property5;
+            model.Property6 = model.Property6 == null ? "" : model.Property6;
+            model.Property7 = model.Property7 == null ? "" : model.Property7;
+            model.Property8 = model.Property8 == null ? "" : model.Property8;
+            model.Property9 = model.Property9 == null ? "" : model.Property9;
+            model.Property10 = model.Property10 == null ? "" : model.Property10;
+            model.Property11 = model.Property11 == null ? "" : model.Property11;
+            model.Property12 = model.Property12 == null ? "" : model.Property12;
+            model.Property13 = model.Property13 == null ? "" : model.Property13;
+            model.Property14 = model.Property14 == null ? "" : model.Property14;
+            model.Property15 = model.Property15 == null ? "" : model.Property15;
+            model.Attachment = model.Attachment == null ? "" : model.Attachment;
+            model.Remarks = model.Remarks == null ? "" : model.Remarks;
+
             return dal.Add(model, db, ref errMsg);
         }
 

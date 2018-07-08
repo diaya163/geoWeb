@@ -58,18 +58,6 @@
                 rownumbers: true,//行号
                 toolbar:'#tb',
                 columns: eval(modelData.GridInfo.ColInfo)
-                //onLoadSuccess: function (data) {   //隐藏表头的checkbox
-                //    $("#UserGrid").parent().find("div .datagrid-header-check").children("input[type=\"checkbox\"]").eq(0).attr("style", "display:none;");
-
-                //    if (data){
-                //        var rowData = data.rows;
-                //        $.each(rowData, function (idx, val) {
-                //            if (val.IsEnable) {
-                //                $("#UserGrid").datagrid("selectRow", idx);
-                //            }
-                //        });
-                //    }
-                //}
             });
             InitGridSet(modelData.GridColInfo);
         });
@@ -117,13 +105,6 @@
                 $("#myTb").append('<tr>'+tr+'</tr>');
             });
             $('#myTb').append('</tbody>');
-
-            //$("#myTb").append('</tbody>');
-            //$("#myTb").append('<tr>');
-            //$("#myTb").append('<td></td>');
-            //$("#myTb").append('<td><input type="button" value="确定" id="btnOk" /></td>');
-            //$("#myTb").append('<td></td>');
-            //$("#myTb").append('</tr>');
         }
         //隐藏某列的方法：     $('#tt').datagrid('hideColumn', 'XXX');  -----其中 XXX 是隐藏列的  field 属性值
         //展示某列的方法：     $('#tt').datagrid('showColumn', 'XXX');  -----其中 XXX 是隐藏列的  field 属性值
@@ -250,6 +231,7 @@
                 }
             });
         }
+
         function rowOpt(a){
             $("#txtElementSymbol").textbox('setValue');
             $("#txtElementName").textbox('setValue');

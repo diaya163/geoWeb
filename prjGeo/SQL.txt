@@ -16,19 +16,3 @@ mGrid表：
 108	120	3	ProjId	100	center	项目编号	0	False	ProjId	text	False	False	False	False	False	True
 109	120	4	PrjName	100	center	项目名称	0	False	PrjName	text	False	False	False	False	False	True
 111	120	8	TownName	100	center	所在镇/乡	0	False	TownName	text	False	False	False	False	False	True
-
-
-2018.4.3
-修改mKml表，加下面三个字段
-FileName	nvarchar(100)	Checked
-FileSize	nvarchar(50)	Checked
-FileType	nvarchar(50)	Checked
-
-在web工程中的web.config里 <appSettings>中加下面设置：
- <add key="KMLFolder" value="D:\work\geoWeb\geoWeb\prjGeo\prjGeo.Web\KMLFiles\" />
-
-
-mMenu中修改
-地图区域查询   对应的mURL: /mMap/Index
-
-
