@@ -39,16 +39,42 @@ namespace prjGeo.Web.Controllers
                     columns = new TableInfo().GetInitGridCols(112),
                     rows = new TableInfo().GetInitGridRows(112)
                 }
-
-
             };
             return View(model);
         }
 
-        [HttpPost]
-        public JsonResult GetList(GridPager pager)
+        private string QryCondi(mArea objModel)
         {
             string filters = string.Empty;
+            if (objModel != null)
+            {
+                if (objModel.Ccode != null || (objModel.Ccode + "").Trim() != "")
+                {
+                    filters =string.Format("   Ccode like '%{0}%'",objModel.Ccode.Trim());
+                }
+                if (objModel.Memo != null || (objModel.Memo + "").Trim() != "")
+                {
+                    if (filters.Length > 0)
+                    {
+                        filters =filters + string.Format("   or  Memo like '%{0}%'", objModel.Memo.Trim());
+                    }
+                    else
+                    {
+                        filters = string.Format("     Memo like '%{0}%'", objModel.Memo.Trim());
+                    }
+                }
+
+            }
+
+            return filters;
+        }
+
+        [HttpPost]
+        public JsonResult GetList(GridPager pager, mArea objModel)
+        {
+            string filters = string.Empty;
+
+            filters = QryCondi(objModel);
             var list = objBLL.GetIndexList(filters, ref errMsg, ref pager);
             var json = new
             {

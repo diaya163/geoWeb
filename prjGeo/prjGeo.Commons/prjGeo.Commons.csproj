@@ -96,6 +96,7 @@
     <Compile Include="String\ZString.cs" />
     <Compile Include="Suggestion.cs" />
     <Compile Include="ToJsonResult.cs" />
+    <Compile Include="UserInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\prjGeo.Models\prjGeo.Models.csproj">

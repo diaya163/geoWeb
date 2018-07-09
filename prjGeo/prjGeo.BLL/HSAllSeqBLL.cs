@@ -32,46 +32,45 @@ namespace prjGeo.BLL
         }
         public List<HSAllSeq> GetIndexList(HSAllSeq objFilterModel, ref string errMsg, ref GridPager pager)
         {
-            if (objFilterModel == null) return null;
+             
             string filters = string.Empty;
-
-            if (objFilterModel.HSID!=null || (objFilterModel.HSID+"").Trim()!="")
+            if (objFilterModel != null)
             {
-                filters="  where HSID like '%"+objFilterModel.HSID+"%'";
-            }
-            if (objFilterModel.GeCata != null )
-            {
-               // if (objFilterModel.GeCata.ToUpper().Equals("MSGCMB")) objFilterModel.GeCata = "";
-                if (!objFilterModel.GeCata.ToUpper().Equals("MSGCMB")) 
-                { 
-                    if (filters.Length>0)
-                    {
-                        filters=filters+" and GeCata='"+objFilterModel.GeCata+"'";
-                    }
-                    else
-                    {
-                        filters = "  where GeCata='" + objFilterModel.GeCata + "'";
-                    }
-                }
-            }
-         
-            if (objFilterModel.ValueCata != null )
-            {                
-                if (!objFilterModel.ValueCata.ToUpper().Equals("MSGCMB"))
+                if (objFilterModel.HSID != null || (objFilterModel.HSID + "").Trim() != "")
                 {
-                    if (filters.Length>0)
+                    filters = "  where HSID like '%" + objFilterModel.HSID + "%'";
+                }
+                if (objFilterModel.GeCata != null)
+                {
+                    // if (objFilterModel.GeCata.ToUpper().Equals("MSGCMB")) objFilterModel.GeCata = "";
+                    if (!objFilterModel.GeCata.ToUpper().Equals("MSGCMB"))
                     {
-                        filters =filters+ " and ValueCata='" + objFilterModel.ValueCata + "'";
-                    }
-                    else
-                    {
-                        filters = "   where  ValueCata='" + objFilterModel.ValueCata + "'";
+                        if (filters.Length > 0)
+                        {
+                            filters = filters + " and GeCata='" + objFilterModel.GeCata + "'";
+                        }
+                        else
+                        {
+                            filters = "  where GeCata='" + objFilterModel.GeCata + "'";
+                        }
                     }
                 }
 
-            }                
-                 
-     
+                if (objFilterModel.ValueCata != null)
+                {
+                    if (!objFilterModel.ValueCata.ToUpper().Equals("MSGCMB"))
+                    {
+                        if (filters.Length > 0)
+                        {
+                            filters = filters + " and ValueCata='" + objFilterModel.ValueCata + "'";
+                        }
+                        else
+                        {
+                            filters = "   where  ValueCata='" + objFilterModel.ValueCata + "'";
+                        }
+                    }
+                }
+            }
             var queryData = GetList(filters, ref errMsg);
             var Queryable = queryData.AsQueryable();
             var query = LinqHelper.DataSorting(Queryable, pager.sort, pager.order);

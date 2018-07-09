@@ -17,7 +17,7 @@ namespace prjGeo.Web.Controllers
         private string errMsg = string.Empty;
 
         private mZoneBLL objBLL = new mZoneBLL();
-
+        private readonly int intFormId = 115;
         public ActionResult Index()
         {
             ViewBag.Title = "全区基础数据维护";
@@ -31,23 +31,34 @@ namespace prjGeo.Web.Controllers
                 GridInfo = new
                 {
                     idField = "id",
-                    ColInfo = new TableInfo().GetGridColInfo(115, 0),
+                    ColInfo = new TableInfo().GetGridColInfo(intFormId, 0),
                     sortName = "id"
                 },
                 GridColInfo = new
                 {
-                    columns = new TableInfo().GetInitGridCols(115),
-                    rows = new TableInfo().GetInitGridRows(115)
+                    columns = new TableInfo().GetInitGridCols(intFormId),
+                    rows = new TableInfo().GetInitGridRows(intFormId)
                 }
             };
             return View(model);
         }
+        private string QryCondi(mZone objModel)
+        {
+            string filters = "";
+            if (!string.IsNullOrEmpty(objModel.SampleNumber))
+            {
+                filters = "SampleNumber like '%" + objModel.SampleNumber.Trim() + "%' ";
+            }
+ 
 
+            return filters;
+        }
         [HttpPost]
-        public JsonResult GetList(GridPager pager, string filter)
+        public JsonResult GetList(GridPager pager, string filter, mZone objModel)
         {
             //Request
             string filters = string.Empty;
+            filters=QryCondi(objModel);
             var list = objBLL.GetIndexList(filters, ref errMsg, ref pager);
             var json = new
             {

@@ -46,10 +46,37 @@ namespace prjGeo.Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public JsonResult GetList(GridPager pager)
+        private string QryCondi(mElement objModel)
         {
             string filters = string.Empty;
+            if (objModel != null)
+            {
+                if (objModel.ElementSymbol != null || (objModel.ElementSymbol + "").Trim() != "")
+                {
+                    filters = string.Format("   ElementSymbol like '%{0}%'", objModel.ElementSymbol.Trim());
+                }
+                if (objModel.ElementName != null || (objModel.ElementName + "").Trim() != "")
+                {
+                    if (filters.Length > 0)
+                    {
+                        filters = filters + string.Format("   or  ElementName like '%{0}%'", objModel.ElementName.Trim());
+                    }
+                    else
+                    {
+                        filters = string.Format("     ElementName like '%{0}%'", objModel.ElementName.Trim());
+                    }
+                }
+
+            }
+
+            return filters;
+        }
+
+        [HttpPost]
+        public JsonResult GetList(GridPager pager,mElement objModel)
+        {
+            string filters = string.Empty;
+            filters = QryCondi(objModel);
             var list = objBLL.GetIndexList(filters, ref errMsg, ref pager);
             var json = new
             {

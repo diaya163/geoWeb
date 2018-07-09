@@ -1,0 +1,242 @@
+﻿@using prjGeo.Commons;
+@using prjGeo.Models.Sys;
+@using prjGeo.Models;
+@using prjGeo.Web;
+@{
+    Layout = "~/Views/Shared/_Index_Layout.cshtml";
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
+    <title>@ViewBag.Title</title>
+    <style type="text/css">
+        table.gridtable {
+            font-family: verdana,arial,sans-serif;
+            font-size: 11px;
+            color: #333333;
+            border-width: 1px;
+            border-color: #666666;
+            border-collapse: collapse;
+        }
+
+            table.gridtable th {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #dedede;
+            }
+
+            table.gridtable td {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #ffffff;
+            }
+    </style>
+
+
+    <script type="text/javascript">
+        $(function () {
+            $('#RoleGrid').datagrid({
+                url: '/RoleManager/GetList',
+                methord: 'post',
+                height: $(window).height() - 30,
+                fitColumns: false,
+                sortName: 'id',
+                sortOrder: 'desc',
+                pageSize: 10,
+                pageList: [10, 20, 30, 40],
+                pagination: true,
+                striped: true, //奇偶行是否区分
+                singleSelect: true,
+                toolbar: '#tb',
+                onClickRow: function (index, field, value) {
+                    //先将回显数据全部清除
+                    var root = $("#tt").tree('getRoot');
+                    $("#tt").tree('uncheck', root.target);
+
+                    $.ajax({
+                        url: "/RightManager/GetMenuByRole",
+                        type: 'post',
+                        data: $.toJSON({ Id: field.Id }),
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            for (x in data) {
+                                var node = $('#tt').tree('find', data[x].MenuID);
+                                if (node != null)
+                                    $("#tt").tree("check", node.target);
+                            }
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+
+                        }, complete: function () {
+
+                        }
+                    });
+                }
+            });
+            showCategory();
+        });
+        function showCategory() {
+            var row = $('#RoleGrid').datagrid('getSelected');
+            $('#tt').tree({
+                checkbox: true,
+                animate: true,
+                url: '/RightManager/GetRightMenu',
+                onClick: function (node) {
+                    var row = $('#RoleGrid').datagrid('getSelected');
+                    if (row == null) {
+                        $.messager.alert('系统提示', '请选择角色名称');
+                        return;
+                    }
+                    var menuId = node.id;
+                    $('#MenuGrid').datagrid({
+                        url: '/MenuManager/GetRight?menuId=' + node.id,
+                        onLoadSuccess: function (node, data) {
+                            $.ajax({
+                                url: "/RightManager/GetRightValueByMenu",
+                                type: 'post',
+                                data: $.toJSON({ roleId: row.Id, menuId: menuId }),
+                                dataType: 'json',
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (data) {
+                                    var row = 0;
+                                    for (var i = data.length - 1; i >= 0 ; i--) {
+                                        if (data.substr(i, 1) == "1") {
+                                            $('#MenuGrid').datagrid('checkRow', row);
+                                        }
+                                        row++;
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                }
+
+            });
+        }
+
+        function selectedRow() {
+            var nodes = $('#tt').tree('getChecked');
+            var m = [];
+            var row = $('#RoleGrid').datagrid('getSelected');
+            for (var i = 0; i < nodes.length; i++) {
+                m.push({ MenuID: nodes[i].id, RoleID: row.Id });
+            }
+
+            $.ajax({
+                url: "/RightManager/SaveData",
+                type: 'post',
+                data: $.toJSON({ listRoleRight: m, roleId: row.Id }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.errMsg != '') {
+                        $.messager.alert('保存出错', data.errMsg);
+                        return;
+                    }
+                    $.messager.alert('系统提示', "操作成功");
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }, complete: function () {
+
+                }
+            });
+        }
+        function unSelectedRow() {
+            var nodes = $('#tt').tree('getSelected');
+            var m = [];
+            var Mright = $('#MenuGrid').datagrid('getChecked');
+            var row = $('#RoleGrid').datagrid('getSelected');
+            $.ajax({
+                url: "/RightManager/SaveRightData",
+                type: 'post',
+                data: $.toJSON({ listRoleRight: Mright, roleId: row.Id, menuId: nodes.id }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.errMsg != '') {
+                        $.messager.alert('保存出错', data.errMsg);
+                        return;
+                    }
+                    $.messager.alert('系统提示', "操作成功");
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }, complete: function () {
+
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+    <div id="cc" class="easyui-layout" fit="true">
+        <div data-options="region:'west',split:true" title="系统角色" style="width:30%;">
+            <div style="width:100%;height:100%;display:block">
+                <div id="cc" class="easyui-layout" fit="true">
+                    <table id="RoleGrid" class="easyui-datagrid">
+                        <thead>
+                            <tr>
+                                <th field="UserChecked" checkbox="true"></th>
+                                <th data-options="field:'Id',width:80,hidden:'true' ">Id</th>
+                                <th data-options="field:'RoleCode',width:80">角色编码</th>
+                                <th data-options="field:'RoleName',width:120">角色名称</th>
+                                <th data-options="field:'IsUse',width:50">有效否</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <div id="tb">
+                        <div style="margin-bottom:5px">
+                            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="rowOpt('new')">添加</a>
+                            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="rowOpt('modify')">修改</a>
+                            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true" onclick="rowDel()">删除</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div data-options="region:'center',split:true" title="菜单管理" style="width:30%;">
+            <div id="tb">
+                <div style="margin-bottom:5px">
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="selectedRow()">保存</a>
+                </div>
+            </div>
+            <div class="easyui-panel" style="padding:5px">
+                <ul id="tt" class="easyui-tree"></ul>
+            </div>
+        </div>
+        <div data-options="region:'east',split:true" title="权限值管理" style="width:30%;">
+            <div id="tb">
+                <div style="margin-bottom:5px">
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="unSelectedRow()">保存</a>
+                </div>
+
+            </div>
+            <table id="MenuGrid" class="easyui-datagrid">
+                <thead>
+                    <tr>
+                        <th data-options="field:'RoleChecked',width:60" checkbox="true">选择</th>
+                        <th data-options="field:'Id',width:80,hidden:'true' ">Id</th>
+                        <th data-options="field:'RightName',width:200,editor:'textbox'">按钮名称</th>
+                        <th data-options="field:'RightValue',width:80,editor:'numberbox'">权限值</th>
+                    </tr>
+                </thead>
+
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

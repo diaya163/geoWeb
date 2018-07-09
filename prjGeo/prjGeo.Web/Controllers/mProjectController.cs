@@ -45,10 +45,34 @@ namespace prjGeo.Web.Controllers
             return View(model);
         }
 
+        private string QryCondi(mProject objModel)
+        {
+            string filters = "";
+            if (!string.IsNullOrEmpty(objModel.CName))
+            {
+                filters = "a.CName like '%" + objModel.CName.Trim() + "%' ";
+            }
+            if (!string.IsNullOrEmpty(objModel.Ccode))
+            {
+                if (!string.IsNullOrEmpty(filters))
+                {
+                    filters += " or a.Ccode like '%" + objModel.Ccode.Trim() + "%' ";
+                }
+                else
+                {
+                    filters = " a.Ccode like '%" + objModel.Ccode.Trim() + "%' ";
+                }
+
+            }
+
+            return filters;
+        }
+
         [HttpPost]
-        public JsonResult GetList(GridPager pager)
+        public JsonResult GetList(GridPager pager, mProject objModel)
         {
             string filters = string.Empty;
+            filters = QryCondi(objModel);
             var list = objBLL.GetIndexList(filters, ref errMsg, ref pager);
             var json = new
             {
@@ -59,7 +83,7 @@ namespace prjGeo.Web.Controllers
             return Json(json, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetListByFilter(string PrjName, string PrjId, GridPager pager)
+        private JsonResult GetListByFilter(string PrjName, string PrjId, GridPager pager)
         {
             string filters = "";
             if (!string.IsNullOrEmpty(PrjName))

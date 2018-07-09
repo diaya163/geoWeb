@@ -45,7 +45,7 @@
                 url: '/mArea/GetList',
                 //width: $(window).width()-100,
                 methord: 'post',
-                height: $(window).height() - 4,
+                height: $(window).height(),
                 fitColumns: false,
                 sortName: 'id',
                 sortOrder: 'desc',
@@ -58,18 +58,6 @@
                 rownumbers: true,//行号
                 toolbar:'#tb',
                 columns: eval(modelData.GridInfo.ColInfo)
-                //onLoadSuccess: function (data) {   //隐藏表头的checkbox
-                //    $("#UserGrid").parent().find("div .datagrid-header-check").children("input[type=\"checkbox\"]").eq(0).attr("style", "display:none;");
-
-                //    if (data){
-                //        var rowData = data.rows;
-                //        $.each(rowData, function (idx, val) {
-                //            if (val.IsEnable) {
-                //                $("#UserGrid").datagrid("selectRow", idx);
-                //            }
-                //        });
-                //    }
-                //}
             });
             InitGridSet(modelData.GridColInfo);
             initRight();
@@ -88,21 +76,21 @@
                 success: function (data) {
                     console.log(data);
                     var flg = (data.length > 0 && data[0] == '1') ? true : false;
-                    if(flg){
-                        $('#btnAdd').show();
-                    }else
-                        $('#btnAdd').hide();
+                    //////if(flg){
+                    //////    $('#btnAdd').show();
+                    //////}else
+                    //////    $('#btnAdd').hide();
 
-                    flg = (data.length > 1 && data[1] == '1') ? true : false;
-                    if(flg){
-                        $('#btnEdit').show();
-                    }else
-                        $('#btnEdit').hide();
-                    flg = (data.length > 2 && data[2] == '1') ? true : false;
-                    if(flg){
-                        $('#btnDel').show();
-                    }else
-                        $('#btnDel').hide();
+                    //////flg = (data.length > 1 && data[1] == '1') ? true : false;
+                    //////if(flg){
+                    //////    $('#btnEdit').show();
+                    //////}else
+                    //////    $('#btnEdit').hide();
+                    //////flg = (data.length > 2 && data[2] == '1') ? true : false;
+                    //////if(flg){
+                    //////    $('#btnDel').show();
+                    //////}else
+                    //////    $('#btnDel').hide();
                 },
                 error: function (XMLHttpRequest, textStatus) {
                 }
@@ -279,11 +267,21 @@
             });
         }
 
+        function DoQuery()
+        {
+            var queryParams = $('#mAreaGrid').datagrid('options').queryParams;  
+            queryParams={
+                Ccode:$("#txtArea").textbox('getValue'),
+                Memo:$("#txtArea").textbox('getValue')
+            };
+            $("#mAreaGrid").datagrid('load',queryParams); 
+        }
+
     </script>
 
 </head>
 <body>
-    <div id="mm" style="width:220px;">
+    @*<div id="mm" style="width:220px;">
         <div style="align-content:center">
             <label style="font-size:12px;line-height:21.3px"><b>表格列设置</b></label>
         </div>
@@ -291,9 +289,9 @@
         <table id="myTb"></table>
         <div class="menu-sep"></div>
         <div style="align-items:center"><input type="button" value="确定" id="btnOk" onclick="SetGridStyle('mAreaGrid');" /></div>
-    </div>
+    </div>*@
 
-    <div style="width:100%;height:100%;display:block;margin:-2px 0 0 -4px;">
+    <div style="width:100%;height:100%;display:block;margin:-8px 0 0 -9px;">
         <div id="cc" class="easyui-layout" fit="true">
             <div id="mAreaGrid" data-options="region:'center'"></div>
             <div id="tb">
@@ -301,13 +299,12 @@
                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" id="btnAdd" onclick="rowOpt('new')">添加</a>
                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" id="btnEdit" onclick="rowOpt('modify')">修改</a>
                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true" id="btnDel" onclick="rowDel()">删除</a>
-
-                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" style="float:right">帮助</a>
-                    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm',iconCls:'icon-edit'" style="float:right">设置</a>
+                    @*<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" style="float:right">帮助</a>
+                    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm',iconCls:'icon-edit'" style="float:right">设置</a>*@
                 </div>
                 <div>
-                    查询: <input class="easyui-textbox" data-options="prompt:'请输入分部编码\名称'" style="width:150px">
-                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px">查询</a>
+                    查询: <input class="easyui-textbox" id="txtArea" data-options="prompt:'请输入分部编码\名称'" style="width:150px">
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px" onclick="DoQuery()">查询</a>
                 </div>
             </div>
 

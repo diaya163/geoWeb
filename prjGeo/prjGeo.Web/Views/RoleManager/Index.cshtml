@@ -1,0 +1,470 @@
+﻿@using prjGeo.Commons;
+@using prjGeo.Models.Sys;
+@using prjGeo.Models;
+@using prjGeo.Web;
+@{
+    Layout = "~/Views/Shared/_Index_Layout.cshtml";
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
+    <title>@ViewBag.Title</title>
+    <style type="text/css">
+        table.gridtable {
+            font-family: verdana,arial,sans-serif;
+            font-size: 11px;
+            color: #333333;
+            border-width: 1px;
+            border-color: #666666;
+            border-collapse: collapse;
+        }
+
+            table.gridtable th {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #dedede;
+            }
+
+            table.gridtable td {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #ffffff;
+            }
+    </style>
+
+
+    <script type="text/javascript">
+        var modelData=@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        $(function () {
+            $('#RoleGrid').datagrid({
+                url: '/RoleManager/GetList',
+                methord: 'post',
+                height: $(window).height() -30,
+                fitColumns: false,
+                sortName: 'id',
+                sortOrder: 'desc',
+                idField: modelData.GridInfo.idField,
+                pageSize: 10,
+                pageList: [10, 20, 30, 40],
+                pagination: true,
+                striped: true, //奇偶行是否区分
+                singleSelect: true,//单选模式
+                rownumbers: true,//行号
+                toolbar:'#tb',
+                onClickRow: function(index,field,value){
+                    GetUnRoleUser(field.Id,"");
+                    GetRoleUser(field.Id,"");
+                }
+            });
+
+            InitGridSet(modelData.GridColInfo);
+            //initUser();
+
+        });
+
+        function InitGridSet(json)
+        {
+            if (json==undefined) return;
+
+            var th='';
+            $.each(json.columns, function (colIndex, col) {
+                if (col.Title!=undefined)
+                {
+                    th+='<th style="font-size:12px; line-height:21.3px">' + col.Title + '</th>';
+                }
+            });
+
+            $("#myTb").append("<tr>" + th + "</tr>");
+            //行遍历
+            $('#myTb').append('<tbody id="lstCols">')
+            $.each(json.rows, function (rowIndex, row) {
+                var tr='';
+
+                //列遍历
+                if (row.fldType='CHK')
+                {
+                    tr+='<td><input type="checkbox" id="chksel" /></td>';
+                }
+                if (row.Title!=undefined)
+                {
+                    tr+='<td align="left" style="font-size:10px; line-height:21.3px">'+row.Title+'</td>';
+                }
+                else
+                {
+                    tr+='<td align="center" style="font-size:10px; line-height:21.3px"></td>';
+                }
+                if (row.fldName!=undefined)
+                {
+                    tr+='<td align="left" style="font-size:10px; line-height:21.3px">'+row.fldName+'</td>';
+                }
+                else
+                {
+                    tr+='<td align="center" style="font-size:10px; line-height:21.3px"></td>';
+                }
+
+                $("#myTb").append('<tr>'+tr+'</tr>');
+            });
+            $('#myTb').append('</tbody>');
+
+            //$("#myTb").append('</tbody>');
+            //$("#myTb").append('<tr>');
+            //$("#myTb").append('<td></td>');
+            //$("#myTb").append('<td><input type="button" value="确定" id="btnOk" /></td>');
+            //$("#myTb").append('<td></td>');
+            //$("#myTb").append('</tr>');
+        }
+        //隐藏某列的方法：     $('#tt').datagrid('hideColumn', 'XXX');  -----其中 XXX 是隐藏列的  field 属性值
+        //展示某列的方法：     $('#tt').datagrid('showColumn', 'XXX');  -----其中 XXX 是隐藏列的  field 属性值
+        function SetGridStyle(grid)
+        {
+            var mytable = document.getElementById('myTb');
+            var data = [];
+            var cols=[];
+            var strCol="";
+            debugger
+            for(var i=1,rows=mytable.rows.length; i<rows; i++){
+                for(var j=0,cells=mytable.rows[i].cells.length; j<cells; j++){
+                    if(!data[i]){
+                        data[i] = new Array();
+                    }
+                    if (j==0)
+                    {
+                        if (document.getElementById('chksel').checked)
+                        {
+                            strCol=mytable.rows[i].cells[2].innerHTML;
+                            $("'#RoleGrid").datagrid('hideColumn',''+strCol);
+                        }
+                        else
+                        {
+                            data[i][j] =0;
+                        }
+                    }
+                    else
+                    {
+                        data[i][j] = mytable.rows[i].cells[j].innerHTML;
+                    }
+                }
+            }
+            return data;
+
+
+            //var strVar='';
+            //debugger
+            //var vTable=$("#myTb");
+
+            //var chkSel=$('lstCols').find('input:checked') ;
+            //$("#myTb").each(function (){
+            //   // var thisObj = this.parentNode.parentNode;
+            //    var a = $("#myTb").children();
+            //    for(var i=0;i<a.length;i++){
+            //        if (chkSel.is('input:checked'))
+            //        {
+            //            strVar=a.eq(i).text();
+            //        }
+            //    }
+
+            //});
+
+
+            //vgrid.datagrid('hideColumn','OrganizeName');
+        }
+
+        function GetUnRoleUser(Id,keyword){
+            $('#UserGrid').datagrid({
+                url: '/RoleManager/GetUserList?Id='+Id+'&keyword='+keyword,
+                methord: 'post',
+                fitColumns: false,
+                sortName: 'id',
+                pageSize:20,
+                pageList: [20, 50,100],
+                pagination: true,
+                striped: true, //奇偶行是否区分
+                rownumbers: true,//行号
+            });
+        }
+        function GetRoleUser(Id,keyword){
+            $('#UserRoleGrid').datagrid({
+                url: '/RoleManager/GetUserRoleList?Id='+Id+'&keyword='+keyword,
+                methord: 'post',
+                fitColumns: false,
+                sortName: 'id',
+                pageSize:10,
+                pageList: [10, 50,100],
+                pagination: true,
+                striped: true, //奇偶行是否区分
+                rownumbers: true,//行号
+            });
+        }
+        function QueryUser(){
+            var row = $('#RoleGrid').datagrid('getSelected');
+            GetUnRoleUser(row.Id,$("#txtFitler").textbox('getValue'));
+        }
+        function QueryUnUser(){
+            var row = $('#RoleGrid').datagrid('getSelected');
+            GetRoleUser(row.Id,$("#txtKeyWord").textbox('getValue'));
+        }
+        var action = '',id = -1;
+        function save(){
+            var Ccode= $("#txtCcode").textbox('getValue') ;
+            if(Ccode == ''){
+                $.messager.alert('系统提示','角色编码不能为空!');
+                return;
+            }
+            var Memo= $("#txtRole").textbox('getValue')  ;
+            if(Memo == ''){
+                $.messager.alert('系统提示','角色名称不能为空!');
+                return;
+            }
+            var Remarks= $("#txtRemarks").textbox('getValue') ;
+
+            var o ={RoleCode :Ccode,RoleName:Memo,Remark:Remarks,id:id,IsUse: $("#txtIsUse").prop('checked')};
+            $.ajax({
+                url: "/RoleManager/SaveData",
+                type: 'post',
+                data: $.toJSON({ action: action, model: o }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.errMsg != '') {
+                        $.messager.alert('保存出错',data.errMsg);
+                        return;
+                    }
+                    $('#w').window('close');
+                    $("#RoleGrid").datagrid('reload');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }, complete: function () {
+
+                }
+            });
+        }
+        function rowOpt(a){
+            $("#txtCcode").textbox('setValue');
+            $("#txtRole").textbox('setValue');
+            $("#txtRemarks").textbox('setValue');
+            if(a == 'modify'){
+                var  row = $('#RoleGrid').datagrid('getSelected');
+                if(row == undefined){
+                    $.messager.alert('系统提示','请选择要修改的行!');//2w+
+                    return;
+                }
+                id = row.Id;
+                $("#txtCcode").textbox('setValue',row.RoleCode);
+                $("#txtRole").textbox('setValue',row.RoleName);
+                $("#txtRemarks").textbox('setValue',row.Remark);
+                $("#txtIsUse").prop('checked',row.IsUse);//$("#txtIsUse").prop('checked')
+            }
+            action = a;
+            $('#w').window('open');
+        }
+        function rowDel(){
+            var row = $('#RoleGrid').datagrid('getSelected');
+            if(row == undefined){
+                $.messager.alert('系统提示','请选择要删除的行!');
+                return;
+            }
+            $.messager.confirm('系统提示', '你确定要删除所选择的行吗?', function(r){
+                if (r){
+                    id = row.id;
+                    var o ={id:id};
+                    $.ajax({
+                        url: "/RoleManager/Delete",
+                        type: 'post',
+                        data: $.toJSON({ model: o }),
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            if (data.errMsg != '') {
+                                $.messager.alert('删除出错',data.errMsg);
+                                return;
+                            }
+                            $("#RoleGrid").datagrid('reload');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+
+                        }, complete: function () {
+
+                        }
+                    });
+                }
+            });
+        }
+
+        function selectedRow(){
+
+            var selectedRow = $('#UserGrid').datagrid('getChecked');
+            var row = $('#RoleGrid').datagrid('getSelected');
+
+            $.ajax({
+                url: "/RoleManager/SaveRoleUse",
+                type: 'post',
+                data: $.toJSON({  lstRoleUser: selectedRow ,roleId:row.Id}),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.errMsg != '') {
+                        $.messager.alert('删除出错',data.errMsg);
+                        return;
+                    }
+                    $("#UserGrid").datagrid('reload');
+                    $("#UserRoleGrid").datagrid('reload');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }, complete: function () {
+
+                }
+            });
+
+            //var objRow = $('#UserGrid').datagrid("getRows");
+            //$.each(objRow, function (idex, row) {
+            //    var rol1 = "";
+            //});
+        }
+
+        function unSelectedRow(){
+            var selectedRow = $('#UserRoleGrid').datagrid('getChecked');
+            $.ajax({
+                url: "/RoleManager/DeleteUserRoleList",
+                type: 'post',
+                data: $.toJSON({  lstRoleUser: selectedRow }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.errMsg != '') {
+                        $.messager.alert('删除出错',data.errMsg);
+                        return;
+                    }
+                    $("#UserGrid").datagrid('reload');
+                    $("#UserRoleGrid").datagrid('reload');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }, complete: function () {
+
+                }
+            });
+
+            //var objRow = $('#UserGrid').datagrid("getRows");
+            //$.each(objRow, function (idex, row) {
+            //    var rol1 = "";
+            //});
+        }
+
+    </script>
+
+</head>
+<body>
+    <div id="cc" class="easyui-layout" fit="true">
+        <div data-options="region:'west',split:true" title="系统角色" style="width:30%;">
+            <div style="width:100%;height:100%;display:block">
+                <div id="cc" class="easyui-layout" fit="true">
+                    <table id="RoleGrid" class="easyui-datagrid">
+                        <thead>
+                            <tr>
+                                <th field="UserChecked" checkbox="true"></th>
+                                <th data-options="field:'Id',width:80,hidden:'true' ">Id</th>
+                                <th data-options="field:'RoleCode',width:80">角色编码</th>
+                                <th data-options="field:'RoleName',width:120">角色名称</th>
+                                <th data-options="field:'IsUse',width:50">有效否</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                    <div id="tb">
+                        <div style="margin-bottom:5px">
+                            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="rowOpt('new')">添加</a>
+                            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="rowOpt('modify')">修改</a>
+                            <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true" onclick="rowDel()">删除</a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="w" class="easyui-window" title="角色维护-新增/修改" data-options="modal:true,closed:true,iconcls:'icon-save'" style="width:400px;height:230px;padding:5px;">
+                    <table cellpadding="5">
+                        <tr>
+                            <td>角色编码:</td>
+                            <td><input class="easyui-textbox" id="txtCcode" data-options="required:true" /></td>
+
+                        </tr>
+                        <tr>
+                            <td>角色名称:</td>
+                            <td><input class="easyui-textbox" id="txtRole" data-options="required:true" /></td>
+                        </tr>
+                        <tr>
+                            <td>备注:</td>
+                            <td><input class="easyui-textbox" id="txtRemarks" /></td>
+                        </tr>
+                        <tr>
+                            <td>是否有效:</td>
+                            <td><input type="checkbox" id="txtIsUse" /></td>
+                        </tr>
+
+                    </table>
+                    <div style="text-align:right;padding:5px">
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="save()" style="width:80px">保存</a>
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="$('#w').window('close')" style="width:80px">取消</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div data-options="region:'center',split:true" title="用户管理" style="width:30%;">
+            <div id="tb">
+                <div style="margin-bottom:5px">
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="selectedRow()">添加</a>
+                </div>
+            </div>
+            <div>
+                查询: <input class="easyui-textbox" id="txtFitler" data-options="prompt:'请输入用户编码\名称'" style="width:150px">
+                <a href="#" onclick="QueryUser()" class="easyui-linkbutton" iconcls="icon-search" style="width:80px">查询</a>
+            </div>
+            <table id="UserGrid" class="easyui-datagrid">
+                <thead>
+                    <tr>
+                        <th field="UserChecked" checkbox="true"></th>
+                        <th data-options="field:'id',width:80,hidden:'true' ">Id</th>
+                        <th data-options="field:'DeptName',width:100">所属部门</th>
+                        <th data-options="field:'UserCode',width:80">用户编码</th>
+                        <th data-options="field:'UserName',width:120">用户名称</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div data-options="region:'east',split:true" title="用户角色" style="width:30%;">
+            <div id="tb">
+                <div style="margin-bottom:5px">
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true" onclick="unSelectedRow()">删除</a>
+                </div>
+
+            </div>
+            <div>
+                查询: <input class="easyui-textbox" id="txtKeyWord" data-options="prompt:'请输入用户编码\名称'" style="width:150px">
+                <a href="#" onclick="QueryUnUser()" class="easyui-linkbutton" iconcls="icon-search" style="width:80px">查询</a>
+            </div>
+
+            <table id="UserRoleGrid" class="easyui-datagrid">
+                <thead style="width:100%;">
+                    <tr>
+                        <th field="UserChecked" checkbox="true"></th>
+                        <th data-options="field:'RoleID',width:80,hidden:'true'">roleId</th>
+                        <th data-options="field:'DeptName',width:100">所属部门</th>
+                        <th data-options="field:'UserCode',width:80">用户编码</th>
+                        <th data-options="field:'UserName',width:100">用户名称</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

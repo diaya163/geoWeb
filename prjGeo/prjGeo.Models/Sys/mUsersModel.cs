@@ -16,6 +16,7 @@ namespace prjGeo.Models.Sys
         public string UserCode { get; set; }
         public string UserSeq { get; set; }
         public string UserName { get; set; }
+        public string DeptName { get; set; }
         public string Description { get; set; }
         public string Password { get; set; }
         public string RoleName { get; set; }

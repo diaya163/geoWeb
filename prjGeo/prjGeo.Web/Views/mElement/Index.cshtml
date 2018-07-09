@@ -48,10 +48,10 @@
                 height: $(window).height() -3,
                 fitColumns: false,
                 sortName: 'id',
-                sortOrder: 'desc',
+                sortOrder: 'Asc',
                 idField: modelData.GridInfo.idField,
-                pageSize: 10,
-                pageList: [ 10, 20, 30, 40],
+                pageSize: 50,
+                pageList: [ 10, 30, 50, 70],
                 pagination: true,
                 striped: true, //奇偶行是否区分
                 singleSelect: true,//单选模式
@@ -376,12 +376,26 @@
 
         }
 
+        function DoQuery()
+        {
+            var queryParams = $('#mElementGrid').datagrid('options').queryParams;  
+            queryParams={
+                ElementSymbol:$("#txtElement").textbox('getValue'),
+                ElementName:$("#txtElement").textbox('getValue')
+            };
+            $("#mElementGrid").datagrid('load',queryParams); 
+        }
+        function DoClean(){
+            $("#txtElement").textbox('setValue',''); 
+        }
+        
+
     </script>
 
 </head>
 <body>
 
-    <div id="mm" style="width:220px;">
+    @*<div id="mm" style="width:220px;">
         <div style="align-content:center">
 
             <label style="font-size:12px;line-height:21.3px"><b>表格列设置</b></label>
@@ -390,8 +404,8 @@
         <table id="myTb"></table>
         <div class="menu-sep"></div>
         <div style="align-items:center"><input type="button" value="确定" id="btnOk" onclick="SetGridStyle('mElementGrid');" /></div>
-    </div>
-    <div style="width:100%;height:100%;display:block;margin:-2px 0 0 -4px;">
+    </div>*@
+    <div style="width:100%;height:100%;display:block;margin:-8px 0 0 -9px;">
         <div id="cc" class="easyui-layout" fit="true">
             <div id="mElementGrid" data-options="region:'center'"></div>
             <div id="tb">
@@ -400,13 +414,14 @@
                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="rowOpt('modify')">修改</a>
                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true" onclick="rowDel()">删除</a>
                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-file',plain:true" onclick="importClick()">上传附件</a>
-                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" style="float:right">帮助</a>
-                    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm',iconCls:'icon-edit'" style="float:right">设置</a>
+                    @*<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" style="float:right">帮助</a>
+                    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm',iconCls:'icon-edit'" style="float:right">设置</a>*@
                 </div>
                 <div>
-                    查询: <input class="easyui-textbox" data-options="prompt:'请输入元素符号\名称\单位'" style="width:150px">
+                    查询: <input class="easyui-textbox" id="txtElement" name="Element" data-options="prompt:'请输入元素符号或名称'" style="width:150px">
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px" onclick="DoQuery()">查询</a>
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-clear" style="width:80px" onclick="DoClean()">清除</a>
 
-                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px">查询</a>
                 </div>
             </div>
         </div>

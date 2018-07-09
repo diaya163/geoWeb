@@ -76,11 +76,15 @@
         });
         InitGridSet(modelData.GridColInfo);
     });
-
+    function DoClean(){
+        $("#findProjName").textbox('setValue','');
+        $("#findProjId").textbox('setValue','');
+        $("#findLayerName").textbox('setValue','');        
+    }
     </script>
 </head>
 <body>
-    <div id="mm" style="width:220px;">
+    @*<div id="mm" style="width:220px;">
         <div style="align-content:center">
             <label style="font-size:12px;line-height:21.3px"><b>表格列设置</b></label>
         </div>
@@ -88,7 +92,7 @@
         <table id="myTb"></table>
         <div class="menu-sep"></div>
         <div style="align-items:center"><input type="button" value="确定" id="btnOk" onclick="SetGridStyle('mKmlGrid');" /></div>
-    </div>
+    </div>*@
 
     <div style="width:100%;height:100%;display:block;margin:-2px 0 0 -4px;">
         <div id="cc" class="easyui-layout" fit="true">
@@ -98,8 +102,8 @@
                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="rowOpt('new')">添加</a>
                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="rowOpt('modify')">修改</a>
                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true" onclick="rowDel()">删除</a>
-                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" style="float:right">帮助</a>
-                    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm',iconCls:'icon-edit'" style="float:right">设置</a>
+                    @*<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" style="float:right">帮助</a>
+                    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm',iconCls:'icon-edit'" style="float:right">设置</a>*@
                 </div>
                 <div>
                     查询:
@@ -107,6 +111,7 @@
                     <input class="easyui-textbox" id="findProjId" data-options="prompt:'请输入项目编号'" style="width:150px">
                     <input class="easyui-textbox" id="findLayerName" data-options="prompt:'请输入图层名'" style="width:150px">
                     <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px" onclick="onBtnFind()">查询</a>
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px" onclick="DoClean()">清除</a>
                 </div>
             </div>
 

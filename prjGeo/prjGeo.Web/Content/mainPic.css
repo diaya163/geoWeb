@@ -8,3 +8,14 @@
     background-image:url(~/Content/imgs/mainPic.png);
     background-repeat:no-repeat;     
 } 
+
+ 
+#errorpic
+{
+    overflow: hidden;
+    width:100%;
+    height: 100%;
+    background: #2076C3 ;
+    background-image:url(~/Content/imgs/404.png);
+    background-repeat:no-repeat;     
+} 

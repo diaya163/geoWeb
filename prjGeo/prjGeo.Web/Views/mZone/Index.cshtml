@@ -1,0 +1,503 @@
+﻿@*全区基础维护*@
+
+@using prjGeo.Commons;
+@using prjGeo.Models.Sys;
+@using prjGeo.Models;
+@using prjGeo.Web;
+@{
+    Layout = "~/Views/Shared/_Index_Layout.cshtml";
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
+    <title>@ViewBag.Title</title>
+    <style type="text/css">
+        table.gridtable {
+            font-family: verdana,arial,sans-serif;
+            font-size: 11px;
+            color: #333333;
+            border-width: 1px;
+            border-color: #666666;
+            border-collapse: collapse;
+        }
+
+            table.gridtable th {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #dedede;
+            }
+
+            table.gridtable td {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #ffffff;
+            }
+    </style>
+
+
+    <script type="text/javascript">
+        var modelData=@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        $(function () {
+            $('#mZoneGrid').datagrid({
+                url: '/mZone/GetList',
+                //width: $(window).width()-100,
+                methord: 'post',
+                height: $(window).height() -3,
+                fitColumns: false,
+                sortName: 'id',
+                sortOrder: 'desc',
+                idField: modelData.GridInfo.idField,
+                pageSize: 10,
+                pageList: [ 10, 20, 30, 40],
+                pagination: true,
+                striped: true, //奇偶行是否区分
+                singleSelect: true,//单选模式
+                rownumbers: true,//行号
+                toolbar:'#tb',
+                queryParams:{},
+                columns: eval(modelData.GridInfo.ColInfo)
+
+            });
+            InitGridSet(modelData.GridColInfo);
+        });
+
+        //function query(){
+        //    $('#mZoneGrid').datagrid('load',{
+        //        filter:$('#txtfilter').textbox('getValue')
+        //    });
+        //}
+        function InitGridSet(json)
+        {
+            if (json==undefined) return;
+
+            var th='';
+            $.each(json.columns, function (colIndex, col) {
+                if (col.Title!=undefined)
+                {
+                    th+='<th style="font-size:12px; line-height:21.3px">' + col.Title + '</th>';
+                }
+            });
+
+            $("#myTb").append("<tr>" + th + "</tr>");
+            //行遍历
+            $('#myTb').append('<tbody id="lstCols">')
+            $.each(json.rows, function (rowIndex, row) {
+                var tr='';
+
+                //列遍历
+                if (row.fldType='CHK')
+                {
+                    tr+='<td><input type="checkbox" id="chksel" /></td>';
+                }
+                if (row.Title!=undefined)
+                {
+                    tr+='<td align="left" style="font-size:10px; line-height:21.3px">'+row.Title+'</td>';
+                }
+                else
+                {
+                    tr+='<td align="center" style="font-size:10px; line-height:21.3px"></td>';
+                }
+                if (row.fldName!=undefined)
+                {
+                    tr+='<td align="left" style="font-size:10px; line-height:21.3px">'+row.fldName+'</td>';
+                }
+                else
+                {
+                    tr+='<td align="center" style="font-size:10px; line-height:21.3px"></td>';
+                }
+
+                $("#myTb").append('<tr>'+tr+'</tr>');
+            });
+            $('#myTb').append('</tbody>');
+
+            //$("#myTb").append('</tbody>');
+            //$("#myTb").append('<tr>');
+            //$("#myTb").append('<td></td>');
+            //$("#myTb").append('<td><input type="button" value="确定" id="btnOk" /></td>');
+            //$("#myTb").append('<td></td>');
+            //$("#myTb").append('</tr>');
+        }
+        //隐藏某列的方法：     $('#tt').datagrid('hideColumn', 'XXX');  -----其中 XXX 是隐藏列的  field 属性值
+        //展示某列的方法：     $('#tt').datagrid('showColumn', 'XXX');  -----其中 XXX 是隐藏列的  field 属性值
+        function SetGridStyle(grid)
+        {
+            var mytable = document.getElementById('myTb');
+            var data = [];
+            var cols=[];
+            var strCol="";
+            debugger
+            for(var i=1,rows=mytable.rows.length; i<rows; i++){
+                for(var j=0,cells=mytable.rows[i].cells.length; j<cells; j++){
+                    if(!data[i]){
+                        data[i] = new Array();
+                    }
+                    if (j==0)
+                    {
+                        if (document.getElementById('chksel').checked)
+                        {
+                            strCol=mytable.rows[i].cells[2].innerHTML;
+                            $("'#mZoneGrid").datagrid('hideColumn',''+strCol);
+                        }
+                        else
+                        {
+                            data[i][j] =0;
+                        }
+                    }
+                    else
+                    {
+                        data[i][j] = mytable.rows[i].cells[j].innerHTML;
+                    }
+                }
+            }
+            return data;
+        }
+
+        var action = '',id = -1;
+        function save(){
+            var Recid= $("#txtRecid").combobox('getValue') ;
+            if(Recid == ''){
+                $.messager.alert('系统提示','分部名称不能为空!');
+                return;
+            }
+            var txtProvince= $("#txtProvince").textbox('getValue') ;
+            if(txtProvince == ''){
+                $.messager.alert('系统提示','所在省不能为空!');
+                return;
+            }
+            var txtCity= $("#txtCity").textbox('getValue')  ;
+            if(txtCity == ''){
+                $.messager.alert('系统提示','所在市不能为空!');
+                return;
+            }
+            var txtCounty= $("#txtCounty").textbox('getValue')  ;
+            if(txtCounty == ''){
+                $.messager.alert('系统提示','所在县不能为空!');
+                return;
+            }
+            var txtTown= $("#txtTown").textbox('getValue')  ;
+            if(txtTown == ''){
+                $.messager.alert('系统提示','所在镇/乡不能为空!');
+                return;
+            }
+            var txtVillage= $("#txtVillage").textbox('getValue')  ;
+            if(txtVillage == ''){
+                $.messager.alert('系统提示','所在村不能为空!');
+                return;
+            }
+            var txtSampleNumber= $("#txtSampleNumber").textbox('getValue')  ;
+            if(txtSampleNumber == ''){
+                $.messager.alert('系统提示','送样号不能为空!');
+                return;
+            }
+            var txtProCode= $("#txtProCode").combobox('getValue')  ;
+            if(txtProCode == ''){
+                $.messager.alert('系统提示','项目名称不能为空!');
+                return;
+            }
+            var txtCSYSX= $("#txtCSYSX").numberbox('getValue')  ;
+            if(txtCSYSX == ''){
+                $.messager.alert('系统提示','坐标x不能为空!');
+                return;
+            }
+            var txtCSYSY= $("#txtCSYSY").numberbox('getValue')  ;
+            if(txtCSYSY == ''){
+                $.messager.alert('系统提示','坐标y不能为空!');
+                return;
+            }
+            var txtCSYSType= $("#txtCSYSType").textbox('getValue');
+            if(txtCSYSType == ''){
+                $.messager.alert('系统提示','坐标类型不能为空!');
+                return;
+            }
+            var txtSampleNo= $("#txtSampleNo").textbox('getValue')  ;
+            if(txtSampleNo == ''){
+                $.messager.alert('系统提示','样品类型不能为空!');
+                return;
+            }
+
+            var o ={Recid:Recid
+                ,Province:txtProvince
+                ,City:txtCity
+                ,County:txtCounty
+                ,Town:txtTown
+                ,SampleNumber:txtSampleNumber
+                ,SampleNo:txtSampleNo
+                ,ProCode:txtProCode
+                ,CSYSX:txtCSYSX
+                ,CSYSY:txtCSYSY
+                ,CSYSType:txtCSYSType
+                ,Flon:$("#txtFlon").numberbox('getValue')
+                ,Flat:$("#txtFlat").numberbox('getValue')
+                ,Cale:$("#txtCale").textbox('getValue')
+                ,MapNumber:$("#txtMapNumber").textbox('getValue')
+                ,Village:$("#txtVillage").textbox('getValue')
+                ,Custom1:$("#txtCustom1").textbox('getValue')
+                ,Custom2:$("#txtCustom2").textbox('getValue')
+                ,Custom3:$("#txtCustom3").textbox('getValue')
+                ,Custom4:$("#txtCustom4").textbox('getValue')
+                ,Custom5:$("#txtCustom5").textbox('getValue')
+                ,Remarks:$("#txtRemarks").textbox('getValue')
+                ,id:id};
+            $.ajax({
+                url: "/mZone/SaveData",
+                type: 'post',
+                data: $.toJSON({ action: action, model: o }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.errMsg != '') {
+                        $.messager.alert('保存出错',data.errMsg);
+                        return;
+                    }
+                    $('#w').window('close');
+                    $("#mZoneGrid").datagrid('reload');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }, complete: function () {
+
+                }
+            });
+        }
+        function rowOpt(a){
+            $("#txtRecid").combobox('setValue');
+            $("#txtProvince").textbox('setValue');
+            $("#txtCity").textbox('setValue');
+            $("#txtCounty").textbox('setValue');
+            $("#txtTown").textbox('setValue');
+            $("#txtVillage").textbox('setValue');
+            $("#txtMapNumber").textbox('setValue');
+            $("#txtSampleNumber").textbox('setValue');
+            $("#txtProCode").combobox('setValue');
+            $("#txtCSYSX").numberbox('setValue');
+            $("#txtCSYSY").numberbox('setValue');
+            $("#txtCSYSType").textbox('setValue');
+            $("#txtFlon").numberbox('setValue');
+            $("#txtFlat").numberbox('setValue');
+            $("#txtCale").textbox('setValue');
+            $("#txtSampleNo").textbox('setValue');
+            $("#txtCustom1").textbox('setValue');
+            $("#txtCustom2").textbox('setValue');
+            $("#txtCustom3").textbox('setValue');
+            $("#txtCustom4").textbox('setValue');
+            $("#txtCustom5").textbox('setValue');
+            $("#txtRemarks").textbox('setValue');
+
+            $('#txtRecid').combobox({
+                url:"/mArea/GetListData",
+                required: true,
+                valueField: 'id',
+                textField: 'Memo'
+            });
+            $('#txtProCode').combobox({
+                url:"/mProject/GetListData",
+                required: true,
+                valueField: 'Ccode',
+                textField: 'Cname'
+            });
+            if(a == 'modify'){
+                var  row = $('#mZoneGrid').datagrid('getSelected');
+                if(row == undefined){
+                    $.messager.alert('系统提示','请选择要修改的行!');//2w+
+                    return;
+                }
+                id = row.id;
+                $("#txtRecid").combobox('setValue',row.Recid);
+                $("#txtProvince").textbox('setValue',row.Province);
+                $("#txtCity").textbox('setValue',row.City);
+                $("#txtCounty").textbox('setValue',row.County);
+                $("#txtTown").textbox('setValue',row.Town);
+                $("#txtVillage").textbox('setValue',row.Village);
+                $("#txtMapNumber").textbox('setValue',row.MapNumber);
+                $("#txtSampleNumber").textbox('setValue',row.SampleNumber);
+                $("#txtProCode").combobox('setValue',row.ProCode);
+                $("#txtCSYSX").numberbox('setValue',row.CSYSX);
+                $("#txtCSYSY").numberbox('setValue',row.CSYSY);
+                $("#txtCSYSType").textbox('setValue',row.CSYSType);
+                $("#txtFlon").numberbox('setValue',row.Flon);
+                $("#txtFlat").numberbox('setValue',row.Flat);
+                $("#txtCale").textbox('setValue',row.Cale);
+                $("#txtSampleNo").textbox('setValue',row.SampleNo);
+                $("#txtCustom1").textbox('setValue',row.Custom1);
+                $("#txtCustom2").textbox('setValue',row.Custom2);
+                $("#txtCustom3").textbox('setValue',row.Custom3);
+                $("#txtCustom4").textbox('setValue',row.Custom4);
+                $("#txtCustom5").textbox('setValue',row.Custom5);
+                $("#txtRemarks").textbox('setValue',row.Remarks);
+            }
+            action = a;
+            $('#w').window('open');
+        }
+        function rowDel(){
+            var row = $('#mZoneGrid').datagrid('getSelected');
+            if(row == undefined){
+                $.messager.alert('系统提示','请选择要删除的行!');
+                return;
+            }
+            $.messager.confirm('系统提示', '你确定要删除所选择的行吗?', function(r){
+                if (r){
+                    id = row.id;
+                    var o ={id:id};
+                    $.ajax({
+                        url: "/mZone/Delete",
+                        type: 'post',
+                        data: $.toJSON({ model: o }),
+                        dataType: 'json',
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            if (data.errMsg != '') {
+                                $.messager.alert('删除出错',data.errMsg);
+                                return;
+                            }
+                            $("#mZoneGrid").datagrid('reload');
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+
+                        }, complete: function () {
+
+                        }
+                    });
+                }
+            });
+        }
+
+        function DoQuery()
+        {
+            var queryParams = $('#mZoneGrid').datagrid('options').queryParams;  
+            queryParams={
+                SampleNumber:$("#txtfilter").textbox('getValue')
+      
+            };
+            $("#mZoneGrid").datagrid('load',queryParams); 
+        }
+    </script>
+
+
+</head>
+<body>
+    @*<div id="mm" style="width:220px;">
+        <div style="align-content:center">
+
+            <label style="font-size:12px;line-height:21.3px"><b>表格列设置</b></label>
+        </div>
+        <div class="menu-sep"></div>
+        <table id="myTb"></table>
+        <div class="menu-sep"></div>
+        <div style="align-items:center"><input type="button" value="确定" id="btnOk" onclick="SetGridStyle('UserGrid');" /></div>
+    </div>*@
+
+    <div style="width:100%;height:100%;display:block;margin:-2px 0 0 -4px;">
+        <div id="cc" class="easyui-layout" fit="true">
+            <div id="mZoneGrid" data-options="region:'center'"></div>
+            <div id="tb">
+                <div style="margin-bottom:5px">
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="rowOpt('new')">添加</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="rowOpt('modify')">修改</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true" onclick="rowDel()">删除</a>
+                    @*<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true" style="float:right">帮助</a>
+                    <a href="javascript:void(0)" id="mb" class="easyui-menubutton" data-options="menu:'#mm',iconCls:'icon-edit'" style="float:right">设置</a>*@
+                </div>
+                <div>
+                    查询: <input class="easyui-textbox" type="text" id="txtfilter" data-options="prompt:'请输入送样号'" style="width:150px">
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px" onclick="DoQuery()">查询</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="w" class="easyui-window" title="全区基础维护-新增/修改" data-options="modal:true,closed:true,iconcls:'icon-save'" style="width:670px;height:380px;padding:5px;">
+            <table cellpadding="5">
+                <tr>
+                    <td>分部名称:</td>
+                    <td>
+                        <input class="easyui-combobox"
+                               id="txtRecid" style="width:120px;" data-options="required:true" />
+
+                    <td>所在省:</td>
+                    <td><input class="easyui-textbox" id="txtProvince" style="width:120px;" data-options="required:true" /></td>
+
+                    <td>所在市:</td>
+                    <td><input class="easyui-textbox" id="txtCity" style="width:120px;" data-options="required:true" /></td>
+                </tr>
+                <tr>
+                    <td>所在县:</td>
+                    <td><input class="easyui-textbox" id="txtCounty" style="width:120px;" data-options="required:true" /></td>
+
+                    <td>所在镇\乡:</td>
+                    <td><input class="easyui-textbox" id="txtTown" style="width:120px;" data-options="required:true" /></td>
+
+                    <td>所在村:</td>
+                    <td><input class="easyui-textbox" id="txtVillage" style="width:120px;" data-options="required:true" /></td>
+                </tr>
+                <tr>
+
+                    <td>送样号:</td>
+                    <td><input class="easyui-textbox" id="txtSampleNumber" style="width:120px;" data-options="required:true" /></td>
+
+                    <td>项目编码:</td>
+                    <td><input class="easyui-combobox" id="txtProCode" style="width:120px;" data-options="required:true" /></td>
+
+                    <td>坐标x:</td>
+                    <td><input class="easyui-numberbox" precision="6" id="txtCSYSX" style="width:120px;" data-options="required:true" /></td>
+                </tr>
+                <tr>
+                    <td>坐标y:</td>
+                    <td><input class="easyui-numberbox" precision="6" id="txtCSYSY" style="width:120px;" data-options="required:true" /></td>
+                    <td>坐标类型:</td>
+                    <td><input class="easyui-textbox" id="txtCSYSType" style="width:120px;" data-options="required:true" /></td>
+
+                    <td>样品类型:</td>
+                    <td><input class="easyui-textbox" id="txtSampleNo" style="width:120px;" data-options="required:true" /></td>
+
+                </tr>
+                <tr>
+
+                    <td>图幅号:</td>
+                    <td><input class="easyui-textbox" id="txtMapNumber" style="width:120px;" /></td>
+                    <td>经度:</td>
+                    <td><input class="easyui-numberbox" precision="6" id="txtFlon" style="width:120px;" /></td>
+                    <td>纬度:</td>
+                    <td><input class="easyui-numberbox" precision="6" id="txtFlat" style="width:120px;" /></td>
+
+
+                </tr>
+                <tr>
+                    <td>比例尺:</td>
+                    <td><input class="easyui-textbox" id="txtCale" style="width:120px;" /></td>
+
+                    <td>预留1:</td>
+                    <td><input class="easyui-textbox" id="txtCustom1" style="width:120px;" /></td>
+                    <td>预留2:</td>
+                    <td><input class="easyui-textbox" id="txtCustom2" style="width:120px;" /></td>
+                </tr>
+                <tr>
+                    <td>预留3:</td>
+                    <td><input class="easyui-textbox" id="txtCustom3" style="width:120px;" /></td>
+                    <td>预留4:</td>
+                    <td><input class="easyui-textbox" id="txtCustom4" style="width:120px;" /></td>
+
+                    <td>预留5:</td>
+                    <td><input class="easyui-textbox" id="txtCustom5" style="width:120px;" /></td>
+                </tr>
+                <tr>
+                    <td>备注:</td>
+                    <td colspan="5"><input class="easyui-textbox" id="txtRemarks" style="width:100%;" /></td>
+                </tr>
+            </table>
+            <div style="text-align:right;padding:5px">
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="save()" style="width:80px">保存</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="$('#w').window('close')" style="width:80px">取消</a>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+
+</html>

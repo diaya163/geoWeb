@@ -1,0 +1,334 @@
+﻿@using prjGeo.Commons;
+@using prjGeo.Models.Sys;
+@using prjGeo.Models;
+@using prjGeo.Web;
+@{
+    Layout = "~/Views/Shared/_Index_Layout.cshtml";
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="~/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js"></script>
+    <title>@ViewBag.Title</title>
+    <style type="text/css">
+        table.gridtable {
+            font-family: verdana,arial,sans-serif;
+            font-size: 11px;
+            color: #333333;
+            border-width: 1px;
+            border-color: #666666;
+            border-collapse: collapse;
+        }
+
+            table.gridtable th {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #dedede;
+            }
+
+            table.gridtable td {
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #666666;
+                background-color: #ffffff;
+            }
+    </style>
+
+
+    <script type="text/javascript">
+        var modelData=@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+        $(document).ready(function(){
+            showCategory();
+        });
+        var _node=null;
+        function showCategory(){
+            $('#tt').tree({
+                checkbox: true,
+                animate:true,
+                url: '/MenuManager/GetMenu',
+                onClick:function(node){
+                    _node = node;
+                    var obj = node.id.split('|');
+                    Id = obj[0];
+                    mCode = obj[1];
+                    $("#txtMenuCode").textbox('setValue',mCode);
+                    $("#txtMenuName").textbox('setValue', obj[2]);
+                    $("#txtAssemblyUrl").textbox('setValue', obj[3]);
+                    $("#txtIsUse").prop("checked",obj[4]=="True"?true:false);
+
+                    //   $("#txtIsUse").textbox('setValue', obj[4]);
+                    setReadOnly(true);
+
+                    $('#MenuGrid').datagrid({
+                        url: '/MenuManager/GetRight?menuId='+node.id,
+                        iconCls: 'icon-edit',
+                        singleSelect: true,
+                    });
+                    //var state=node.state;
+                    //if(!state){                  //判断当前选中的节点是否为根节点
+                    //    currentId=node.id;
+                    //    $("#chooseOk").attr( "disabled" , false );  //如果为根节点 则OK按钮可用
+                    //}else{
+                    //    $("#chooseOk").attr( "disabled" , true );  //如果不为根节点 则OK按钮不可用
+                    //}
+                }
+                ,onLoadSuccess:function(node, data){
+                    if(_node !=null){
+                        $('#tt').tree('select', _node.target);
+                        $('#MenuGrid').datagrid({
+                            url: '/MenuManager/GetRight?menuId='+_node.id,
+                            iconCls: 'icon-edit',
+                            singleSelect: true,
+                        });
+                    }
+                }
+            });
+        }
+        var editIndex = undefined;
+        function endEditing(){
+            if (editIndex == undefined){return true}
+            if ($('#MenuGrid').datagrid('validateRow', editIndex)){
+                // var ed = $('#MenuGrid').datagrid('getEditor', {index:editIndex,field:'Iden'});
+                //var productname = $(ed.target).combobox('getText');
+                $('#MenuGrid').datagrid('endEdit', editIndex);
+                editIndex = undefined;
+                return true;
+            } else {
+                return false;
+            }
+        }
+        function append(){
+            if (endEditing()){
+                var objRow = $('#MenuGrid').datagrid('getRows');
+                var rowLen = objRow.length;
+                var rightVal = 1;
+                if(objRow.length > 0){
+                    rightVal = objRow[rowLen-1]['RightValue'] ;
+                    rightVal = parseInt(rightVal) * 2;
+                }
+                $('#MenuGrid').datagrid('appendRow',{RightName:'按钮'+(rowLen+1),RightValue:rightVal});
+                editIndex = $('#MenuGrid').datagrid('getRows').length -1;
+
+                $('#MenuGrid').datagrid('selectRow', editIndex)
+						.datagrid('beginEdit', editIndex);
+            }
+        }
+        function onClickRow(index){
+            if(action =="")return;
+            if (editIndex != index){
+                if (endEditing()){
+                    $('#MenuGrid').datagrid('selectRow', index)
+							.datagrid('beginEdit', index);
+                    editIndex = index;
+                } else {
+                    $('#MenuGrid').datagrid('selectRow', editIndex);
+                }
+            }
+        }
+        function removeit(){
+            if (editIndex == undefined){return}
+            $('#MenuGrid').datagrid('cancelEdit', editIndex)
+					.datagrid('deleteRow', editIndex);
+            editIndex = $('#MenuGrid').datagrid('getRows').length -1;
+            $('#MenuGrid').datagrid('selectRow', editIndex);
+
+        }
+        function accept(){
+            if (endEditing()){
+                $('#MenuGrid').datagrid('acceptChanges');
+            }
+        }
+        var action = "";
+        var mCode,Id;
+        function fnAdd(){
+            var node = $('#tt').tree('getSelected');
+            if (!node){
+                $.messager.alert('系统提示','请选中节点!');
+                return;
+            }
+
+            setReadOnly(false);
+            $('#txtMenuCode').textbox('setValue');
+            $('#txtMenuName').textbox('setValue');
+            $('#txtAssemblyUrl').textbox('setValue');
+
+            action = "add";
+
+            var childNode =  node.children;
+            if (childNode ==null) {
+                mCode += "01";
+                $('#txtMenuCode').textbox('setValue',mCode);
+            } else {
+                var parentNode = $('#tt').tree('getParent', node.target);
+                $.ajax({
+                    url: "/MenuManager/GetMenuCode",
+                    type: 'post',
+                    data: $.toJSON({  menuCode: mCode, isRoot: (parentNode == null ? true : false) }),
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        $('#txtMenuCode').textbox('setValue',data);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+
+                    }, complete: function () {
+
+                    }
+                });
+
+            }
+        }
+        function setReadOnly(flg){
+            $('#txtMenuCode').textbox('textbox').attr('readonly',flg);
+            $('#txtMenuName').textbox('textbox').attr('readonly',flg);
+            $('#txtAssemblyUrl').textbox('textbox').attr('readonly',flg);
+            var edit = flg?"disable":"enable";
+            $('#btnAddRow').linkbutton(edit);
+            $('#btnDelRow').linkbutton(edit);
+            $('#btnAccept').linkbutton(edit);
+
+            $('#btnNew').linkbutton(flg?"enable":"disable");
+            $('#btnModify').linkbutton(flg?"enable":"disable");
+            $('#btnDelete').linkbutton(flg?"enable":"disable");
+
+            $('#btnSave').linkbutton(edit);
+            $('#btnCancel').linkbutton(edit);
+        }
+        function fnModify(){
+            action = "edit";
+            setReadOnly(false);
+        }
+        function fnDelete(){
+            var node = $('#tt').tree('getSelected');
+            if (!node){
+                $.messager.alert('系统提示','请选中节点!');
+                return;
+            }
+            $.ajax({
+                url: "/MenuManager/DeleteData",
+                type: 'post',
+                data: $.toJSON({  id:Id }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.errMsg != '') {
+                        $.messager.alert('保存出错',data.errMsg);
+                        return;
+                    }
+                    action ="";
+                    showCategory();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }, complete: function () {
+
+                }
+            });
+
+        }
+        function fnSave(){
+            var funId = "";
+            accept();
+            var model = {MenuCode:$('#txtMenuCode').textbox('getValue')
+                        ,MenuName:$('#txtMenuName').textbox('getValue')
+                        ,AssemblyUrl:$('#txtAssemblyUrl').textbox('getValue')
+                        ,IsUse:$("#txtIsUse").prop("checked"),
+                Id:Id};
+
+            var objRow = $('#MenuGrid').datagrid('getRows');
+
+            $.ajax({
+                url: "/MenuManager/SaveMenuData",
+                type: 'post',
+                data: $.toJSON({  action: action, model:model,funId:funId ,menuCode:mCode,lstRight:objRow }),
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.errMsg != '') {
+                        $.messager.alert('保存出错',data.errMsg);
+                        return;
+                    }
+                    action ="";
+                    showCategory();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                }, complete: function () {
+
+                }
+            });
+
+            setReadOnly(true);
+
+        }
+        function fnCancel(){
+            setReadOnly(true);
+        }
+    </script>
+
+</head>
+<body>
+    <div style="width:100%;height:100%;display:block;margin:-2px 0 0 -4px;">
+        <div id="cc" class="easyui-layout" fit="true" style="height:500px;">
+            <div data-options="region:'west',split:true" title="系统菜单" style="width:400px;">
+                <div class="easyui-panel" style="padding:5px">
+                    <ul id="tt" class="easyui-tree"></ul>
+                </div>
+            </div>
+
+            <div data-options="region:'center'">
+                <div data-options="region:'south',split:true" style="height:200px;">
+                    <div style="margin-bottom:5px">
+                        <a id="btnNew" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="fnAdd()">添加</a>
+                        <a id="btnModify" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="fnModify()">修改</a>
+                        <a id="btnDelete" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true" onclick="fnDelete()">删除</a>
+                        <a id="btnSave" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true,disabled:true" onclick="fnSave()">保存</a>
+                        <a id="btnCancel" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true,disabled:true" onclick="fnCancel()">取消</a>
+                    </div>
+                    <table>
+                        <tr>
+                            <td>菜单编码:</td>
+                            <td><input class="easyui-textbox" id="txtMenuCode" data-options="required:true" style="width:250px;" /></td>
+
+                        </tr>
+                        <tr>
+                            <td>菜单名称:</td>
+                            <td><input class="easyui-textbox" id="txtMenuName" data-options="required:true" style="width:250px;" /></td>
+                        </tr>
+                        <tr>
+                            <td>Url路径:</td>
+                            <td><input class="easyui-textbox" id="txtAssemblyUrl" style="width:400px;" /></td>
+                        </tr>
+                        <tr>
+                            <td>是否有效:</td>
+                            <td><input type="checkbox" id="txtIsUse" /></td>
+                        </tr>
+                    </table>
+
+                </div>
+                <div id="tb">
+                    <div style="margin-bottom:5px">
+                        <a id="btnAddRow" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true,disabled:true" onclick="append()">增行</a>
+                        <a id="btnDelRow" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true,disabled:true" onclick="removeit()">删行</a>
+                    </div>
+
+                </div>
+                <table id="MenuGrid" class="easyui-datagrid" data-options=" onClickRow: onClickRow">
+                    <thead>
+                        <tr>
+                            <th data-options="field:'Id',width:80,hidden:'true' ">Id</th>
+                            <th data-options="field:'RightName',width:200,editor:'textbox'">按钮名称</th>
+                            <th data-options="field:'RightValue',width:80,editor:'numberbox'">权限值</th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

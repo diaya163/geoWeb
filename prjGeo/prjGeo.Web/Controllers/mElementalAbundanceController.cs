@@ -45,10 +45,24 @@ namespace prjGeo.Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public JsonResult GetList(GridPager pager)
+        private string QryCondi(mElementalAbundance objModel)
         {
             string filters = string.Empty;
+            if (objModel != null)
+            {
+                if (objModel.Element != null || (objModel.Element + "").Trim() != "")
+                {
+                    filters = string.Format("   Element like '%{0}%'", objModel.Element.Trim());
+                }
+            }
+            return filters;
+        }
+
+        [HttpPost]
+        public JsonResult GetList(GridPager pager, mElementalAbundance objModel)
+        {
+            string filters = string.Empty;
+            filters = QryCondi(objModel);
             var list = objBLL.GetIndexList(filters, ref errMsg, ref pager);
             var json = new
             {

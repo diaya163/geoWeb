@@ -17,7 +17,7 @@ namespace prjGeo.Web.Controllers
         private string errMsg = string.Empty;
 
         private mGeologyUnitBLL objBLL = new mGeologyUnitBLL();
-         
+        private readonly int intFormId = 110; 
         public ActionResult Index()
         {
             ViewBag.Title = "地质单元维护";
@@ -31,24 +31,50 @@ namespace prjGeo.Web.Controllers
                 GridInfo = new
                 {
                     idField = "id",
-                    ColInfo = new TableInfo().GetGridColInfo(110, 0),
+                    ColInfo = new TableInfo().GetGridColInfo(intFormId, 0),
                     sortName = "id"
                 },
                 GridColInfo = new
                 {
-                    columns = new TableInfo().GetInitGridCols(110),
-                    rows = new TableInfo().GetInitGridRows(110)
+                    columns = new TableInfo().GetInitGridCols(intFormId),
+                    rows = new TableInfo().GetInitGridRows(intFormId)
+                },
+                DropInfo=new
+                {
+                    mGeoType = new ComboxInfo().GetDropList(intFormId, "geotype", "请选择地质类型", ref errMsg),  
                 }
-
 
             };
             return View(model);
         }
+        private string QryCondi(mGeologyUnit objModel)
+        {
+            string filters = "";
 
+            if (!string.IsNullOrEmpty(objModel.GeoNameCHN))
+            {
+                filters = "GeoNameCHN like '%" + objModel.GeoNameCHN.Trim() + "%' ";
+            }
+            if (!string.IsNullOrEmpty(objModel.GeoType))
+            {
+                if (!string.IsNullOrEmpty(filters))
+                {
+                    filters += " and GeoType like '%" + objModel.GeoType.Trim() + "%' ";
+                }
+                else
+                {
+                    filters = " GeoType like '%" + objModel.GeoType.Trim() + "%' ";
+                }
+
+            }
+
+            return filters;
+        }
         [HttpPost]
-        public JsonResult GetList(GridPager pager)
+        public JsonResult GetList(GridPager pager, mGeologyUnit objModel)
         {
             string filters = string.Empty;
+            filters = QryCondi(objModel);
             var list = objBLL.GetIndexList(filters, ref errMsg, ref pager);
             var json = new
             {

@@ -166,7 +166,7 @@
         function save(){
             var UserCode =  $("#txtUserCode").textbox('getValue');
             if(UserCode == ''){
-                $.messager.alert('系统提示','用户编号不能为空!');
+                $.messager.alert('系统提示','用户编码不能为空!');
                 return;
             }
             var UserName = $("#txtUserName").textbox('getValue');
@@ -195,13 +195,18 @@
                 $.messager.alert('系统提示','是否在职不能为空!');
                 return;
             }
-            
             var UserCode = $("#txtUserCode").textbox('getValue');
             var UserName = $("#txtUserName").textbox('getValue');
             var Password = $("#txtPassword").textbox('getValue');
             var DeptName = $("#txtDeptName").textbox('getValue');
             var OrganizeName = $("#txtOrganizeName").textbox('getValue');
             var IsEnable = $("#txtIsEnable").textbox('getValue');
+            if (IsEnable=='在职'){
+                IsEnable='true';
+            }else{
+                IsEnable='false';
+            }
+
             var Descr = $("#txtDescription").textbox('getValue');
  
             var o = {UserCode:UserCode,
@@ -210,9 +215,10 @@
                     DeptName:DeptName,
                     OrganizeName:OrganizeName,
                     IsEnable:IsEnable,
-                    Description:Descr};
+                    Description:Descr,
+                    id:id};
             $.ajax({
-                url: "/mUser/SaveData",
+                url: "/User/SaveData",
                 type: 'post',
                 data: $.toJSON({ action: action, model: o }),
                 dataType: 'json',
@@ -238,7 +244,7 @@
             $("#txtUserName").textbox('setValue');
             $("#txtPassword").textbox('setValue');
             $("#txtDeptName").textbox('setValue');
-            $("#txtOrganizeName").textbox('setValue','地球物理勘探设计院');
+            $("#txtOrganizeName").textbox('setValue');
             $("#txtIsEnable").textbox('setValue');
             $("#txtDescription").textbox('setValue');
  
@@ -250,10 +256,12 @@
                     return;
                 }
                 id = row.id;
-                $("#txtUserCode").textbox('setValue',row.UserCode);
+                $("#txtUserCode").textbox('setValue',row.UserCode); 
+                $('#txtUserCode').textbox('textbox').attr('readonly',true);  //设置输入框为禁用
                 $("#txtUserName").textbox('setValue',row.UserName);
-                $("#txtPassword").textbox('setValue',row.Password);
-                $("#txtElementUnit").textbox('setValue',row.ElementUnit);
+                $("#txtUserName").textbox('textbox').attr('readOnly',true);
+
+                $("#txtPassword").textbox('setValue',row.Password);                 
                 $("#txtDeptName").textbox('setValue',row.DeptName);
                 $("#txtOrganizeName").textbox('setValue',row.OrganizeName);
                 $("#txtIsEnable").textbox('setValue',row.IsEnable);
@@ -273,7 +281,7 @@
                     id = row.id;
                     var o ={id:id};
                     $.ajax({
-                        url: "/mUser/Delete",
+                        url: "/User/Delete",
                         type: 'post',
                         data: $.toJSON({ model: o }),
                         dataType: 'json',
@@ -295,6 +303,18 @@
             });
         }
     
+        function DoQuery()
+        {
+            var queryParams = $('#UserGrid').datagrid('options').queryParams;  
+            queryParams={
+                UserCode:$("#txtUCode").textbox('getValue'),
+                UserName:$("#txtUName").textbox('getValue'),
+                DeptName:$("#txtDept").textbox('getValue')
+          
+            };
+            $("#UserGrid").datagrid('load',queryParams); 
+        }
+
     </script>                                                                                      
  
 </head>
@@ -309,10 +329,10 @@
                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true" onclick="rowDel()">删除</a> 
                 </div>
                 <div>
-                    查询: <input class="easyui-textbox" type="text" id="txtUserCode" data-options="prompt:'请输入用户编码'" style="width:150px">
-                    <input class="easyui-textbox" type="text" id="txtUserName" data-options="prompt:'请输入用户名称'" style="width:150px">
+                    查询: <input class="easyui-textbox" type="text" id="txtUCode" data-options="prompt:'请输入用户编码'" style="width:150px">
+                    <input class="easyui-textbox" type="text" id="txtUName" data-options="prompt:'请输入用户名称'" style="width:150px">
                     <input class="easyui-textbox" type="text" id="txtDept" data-options="prompt:'请输入部门名称'" style="width:150px">
-                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px">查询</a>
+                    <a href="#" class="easyui-linkbutton" iconcls="icon-search" style="width:80px" onclick="DoQuery()">查询</a>
                 </div>
             </div>
 
@@ -323,17 +343,17 @@
                 <tr>
                     <td>用户编码:</td>
                     <td>
-                        <input class="easyui-textbox" id="txtUserCode" style="width:120px;" data-options="required:true" />
+                        <input class="easyui-textbox" type="text"  id="txtUserCode" style="width:120px;" data-options="required:true" />
 
                     <td>用户名称:</td>
-                    <td><input class="easyui-textbox" id="txtUserName" style="width:120px;" data-options="required:true" /></td>
+                    <td><input class="easyui-textbox" type="text" id="txtUserName" style="width:120px;" data-options="required:true" /></td>
 
                     <td>用户密码:</td>
-                    <td><input class="easyui-textbox" id="txtPassword" style="width:120px;" data-options="required:true" /></td>
+                    <td><input class="easyui-textbox" type="text" id="txtPassword" style="width:120px;" data-options="required:true" /></td>
                 </tr>
                 <tr>
                     <td>所属部门:</td>
-                    <td><input class="easyui-combobox" id="txtDeptName" style="width:120px;" data-options="
+                    <td><input class="easyui-combobox" type="text" id="txtDeptName" style="width:120px;" data-options="
                                                                                                    panelHeight:'auto',
                                                                                                    required:true,
                                                                                                    valueField: 'label',
@@ -347,10 +367,14 @@
 		                                                                                            } ]" /></td>
 
                     <td>所属单位:</td>
-                    <td><input class="easyui-textbox" id="txtOrganizeName" style="width:120px;" value="地球物理勘探设计院"  data-options="required:true" /></td>
+                    <td><input class="easyui-combobox" type="text" id="txtOrganizeName" style="width:120px;" data-options="required:true,
+                                                                                                                panelHeight:'auto',
+                                                                                                                valueField:'label',
+                                                                                                                textField: 'value',
+                                                                                                                data:[{label:'地球物理勘探设计院',value:'地球物理勘探设计院'}]" /></td>
 
                     <td>是否在职:</td>
-                    <td><input class="easyui-combobox" id="txtIsEnable" style="width:120px;" data-options="
+                    <td><input class="easyui-combobox" type="text"  id="txtIsEnable" style="width:120px;" data-options="
                                                                                                     panelHeight:'auto',
 		                                                                                            required:true,
 		                                                                                            valueField: 'label',
